@@ -98,6 +98,57 @@
     }
 
     /* ============================
+       3.2 搜索框样式
+       ============================ */
+    /* 搜索框容器 */
+    .search-container {
+      position: relative;
+      margin-left: 15px;
+    }
+
+    /* 搜索输入框 */
+    .search-input {
+      padding: 8px 35px 8px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-size: 13px;
+      border-radius: 20px;
+      outline: none;
+      width: 160px;
+      transition: all 0.3s ease;
+    }
+
+    .search-input::placeholder {
+      color: #666;
+    }
+
+    .search-input:focus {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.1);
+      width: 200px;
+    }
+
+    /* 搜索图标 */
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    /* 搜索结果计数 */
+    .search-results-count {
+      text-align: center;
+      padding: 15px;
+      color: #888;
+      font-size: 14px;
+    }
+
+    /* ============================
        3.1 下拉菜单样式
        ============================ */
     /* 下拉菜单容器 */
@@ -933,6 +984,12 @@
 
       <!-- 导航按钮区域 -->
       <div class="nav-links">
+        <!-- 搜索框 -->
+        <div class="search-container">
+          <input type="text" class="search-input" id="searchInput" placeholder="搜索鞋款...">
+          <span class="search-icon">🔍</span>
+        </div>
+
         <!-- 全部按钮 -->
         <button class="nav-btn active" data-category="all">全部</button>
 
@@ -1030,6 +1087,9 @@
   <div class="section-header">
     <p class="section-title">全部鞋款</p>
   </div>
+
+  <!-- 搜索结果提示 -->
+  <div class="search-results-count" id="searchResultsCount" style="display: none;"></div>
 
   <!-- 图片展示区：JS 会动态往这里插入卡片 -->
   <section class="gallery" id="gallery"></section>
@@ -1328,8 +1388,9 @@
     /* ============================
        11.2 变量定义
        ============================ */
-    
+
     let currentCategory = 'all';  // 当前选中的分类，默认是"全部"
+    let currentSearchTerm = '';     // 当前搜索关键词
 
     // 获取页面上的元素（用 ID 找到它们）
     const gallery = document.getElementById('gallery');      // 图片展示区容器
@@ -1340,6 +1401,8 @@
     const modalClose = document.getElementById('modalClose'); // 弹窗关闭按钮
     const navBtns = document.querySelectorAll('.nav-btn');   // 所有导航按钮
     const sectionTitle = document.querySelector('.section-title'); // 分类标题
+    const searchInput = document.getElementById('searchInput'); // 搜索输入框
+    const searchResultsCount = document.getElementById('searchResultsCount'); // 搜索结果计数
 
     /* ============================
        11.3 渲染图片函数【已修改】
@@ -1394,6 +1457,76 @@
           openModal(id);  // 打开弹窗显示这张大图
         });
       });
+
+      // 更新搜索结果计数
+      if (currentSearchTerm) {
+        searchResultsCount.textContent = `搜索 "${currentSearchTerm}" 找到 ${filtered.length} 个结果`;
+        searchResultsCount.style.display = 'block';
+      } else {
+        searchResultsCount.style.display = 'none';
+      }
+    }
+
+    /* ============================
+       11.4 搜索功能函数
+
+       功能：根据关键词搜索鞋款名称
+       搜索会匹配名称和价格
+    ============================ */
+    function performSearch(keyword) {
+      currentSearchTerm = keyword.trim().toLowerCase();
+
+      if (!currentSearchTerm) {
+        // 空关键词，显示当前分类的全部
+        renderGallery(currentCategory);
+        return;
+      }
+
+      // 先按分类筛选
+      let filtered = shoes;
+      if (currentCategory !== 'all') {
+        const categoryList = currentCategory.includes(',')
+          ? currentCategory.split(',')
+          : [currentCategory];
+        filtered = shoes.filter(shoe => categoryList.includes(shoe.category));
+      }
+
+      // 再按关键词筛选（匹配名称和价格）
+      filtered = filtered.filter(shoe => {
+        const nameMatch = shoe.name.toLowerCase().includes(currentSearchTerm);
+        const priceMatch = shoe.price.toLowerCase().includes(currentSearchTerm);
+        const categoryMatch = shoe.category.toLowerCase().includes(currentSearchTerm);
+        return nameMatch || priceMatch || categoryMatch;
+      });
+
+      // 显示结果
+      if (filtered.length === 0) {
+        gallery.innerHTML = '<div class="empty-state">没有找到匹配的商品</div>';
+        searchResultsCount.textContent = `搜索 "${currentSearchTerm}" 没有找到结果`;
+        searchResultsCount.style.display = 'block';
+      } else {
+        gallery.innerHTML = filtered.map(shoe => `
+          <div class="card" data-id="${shoe.id}">
+            <img class="card-image" src="${getShoeImage(shoe)}" alt="${shoe.name}" loading="lazy">
+            <div class="card-info">
+              <h3 class="card-name">${shoe.name}</h3>
+              <p class="card-price">${shoe.price}</p>
+              <span class="card-category">${shoe.category}</span>
+            </div>
+          </div>
+        `).join('');
+
+        // 绑定点击事件
+        document.querySelectorAll('.card').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = parseInt(card.dataset.id);
+            openModal(id);
+          });
+        });
+
+        searchResultsCount.textContent = `搜索 "${currentSearchTerm}" 找到 ${filtered.length} 个结果`;
+        searchResultsCount.style.display = 'block';
+      }
     }
 
     /* ============================
@@ -1518,7 +1651,22 @@
     renderGallery('all');
 
     /* ============================
-       11.9 联系按钮功能
+       11.9 搜索功能初始化
+       ============================ */
+    // 监听搜索框输入
+    searchInput.addEventListener('input', (e) => {
+      performSearch(e.target.value);
+    });
+
+    // 按回车搜索
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performSearch(e.target.value);
+      }
+    });
+
+    /* ============================
+       11.10 联系按钮功能
        ============================ */
 
     // 点击页面其他地方，关闭所有联系弹窗
