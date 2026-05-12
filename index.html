@@ -938,7 +938,7 @@
 
         <!-- Nike 品牌下拉菜单 -->
         <div class="nav-dropdown">
-          <button class="nav-btn nav-dropbtn" data-category="nike">
+          <button class="nav-btn nav-dropbtn" data-category="nike" data-children="乔一,空军,小空军,开拓者">
             Nike <span class="nav-arrow">▼</span>
           </button>
           <div class="nav-dropdown-content">
@@ -951,17 +951,19 @@
 
         <!-- Adidas 品牌下拉菜单 -->
         <div class="nav-dropdown">
-          <button class="nav-btn nav-dropbtn" data-category="adidas">
+          <button class="nav-btn nav-dropbtn" data-category="adidas" data-children="阿迪,德讯,贝壳头">
             Adidas <span class="nav-arrow">▼</span>
           </button>
           <div class="nav-dropdown-content">
             <button class="nav-btn" data-category="阿迪">阿迪</button>
+            <button class="nav-btn" data-category="德讯">德讯</button>
+            <button class="nav-btn" data-category="贝壳头">贝壳头</button>
           </div>
         </div>
 
         <!-- Puma 品牌下拉菜单 -->
         <div class="nav-dropdown">
-          <button class="nav-btn nav-dropbtn" data-category="puma">
+          <button class="nav-btn nav-dropbtn" data-category="puma" data-children="彪马">
             Puma <span class="nav-arrow">▼</span>
           </button>
           <div class="nav-dropdown-content">
@@ -971,7 +973,7 @@
 
         <!-- Wans 品牌下拉菜单 -->
         <div class="nav-dropdown">
-          <button class="nav-btn nav-dropbtn" data-category="wans">
+          <button class="nav-btn nav-dropbtn" data-category="wans" data-children="wans">
             Wans <span class="nav-arrow">▼</span>
           </button>
           <div class="nav-dropdown-content">
@@ -981,7 +983,7 @@
 
         <!-- LV 品牌下拉菜单 -->
         <div class="nav-dropdown">
-          <button class="nav-btn nav-dropbtn" data-category="lv">
+          <button class="nav-btn nav-dropbtn" data-category="lv" data-children="lv">
             LV <span class="nav-arrow">▼</span>
           </button>
           <div class="nav-dropdown-content">
@@ -1344,13 +1346,24 @@
        功能：根据传入的分类，筛选并显示对应的鞋子卡片
        
        参数：category - 要显示的分类名，'all' 表示显示全部
+       或者传入逗号分隔的字符串，如 "乔一,空军,小空军"
     */
-    function renderGallery(category) {
+    function renderGallery(categories) {
+      // 支持传入数组或逗号分隔的字符串
+      let categoryList;
+      if (Array.isArray(categories)) {
+        categoryList = categories;
+      } else if (typeof categories === 'string' && categories.includes(',')) {
+        categoryList = categories.split(',');
+      } else {
+        categoryList = [categories];
+      }
+
       // 筛选数据
       // 如果是 'all'，返回所有鞋子；否则只返回该分类的鞋子
-      const filtered = category === 'all' 
-        ? shoes 
-        : shoes.filter(shoe => shoe.category === category);
+      const filtered = categories === 'all'
+        ? shoes
+        : shoes.filter(shoe => categoryList.includes(shoe.category));
 
       // 如果没有内容，显示空状态提示
       if (filtered.length === 0) {
@@ -1418,7 +1431,7 @@
        
        参数：category - 要切换到的分类名
     */
-    function switchCategory(category) {
+    function switchCategory(category, brandName) {
       currentCategory = category;  // 更新当前分类变量
 
       // 关闭所有下拉菜单
@@ -1433,7 +1446,13 @@
       });
 
       // 更新分类标题文字
-      sectionTitle.textContent = category === 'all' ? '全部鞋款' : category;
+      if (category === 'all') {
+        sectionTitle.textContent = '全部鞋款';
+      } else if (brandName) {
+        sectionTitle.textContent = brandName;
+      } else {
+        sectionTitle.textContent = category;
+      }
 
       // 重新渲染图片
       renderGallery(category);
@@ -1450,12 +1469,15 @@
         btn.addEventListener('click', (e) => {
           e.stopPropagation(); // 阻止冒泡
           const dropdown = btn.closest('.nav-dropdown');
-          // 关闭其他下拉菜单
-          document.querySelectorAll('.nav-dropdown.active').forEach(d => {
-            if (d !== dropdown) d.classList.remove('active');
-          });
-          // 切换当前下拉菜单
-          dropdown.classList.toggle('active');
+          const children = btn.dataset.children; // 获取子分类列表
+
+          // 检查是否点击的是品牌名称部分（不在箭头附近）
+          // 如果有子分类，点击主按钮显示所有子分类图片
+          if (children) {
+            // 获取品牌名称（如 "Nike"）
+            const brandName = btn.textContent.replace('▼', '').trim();
+            switchCategory(children, brandName);
+          }
         });
       } else {
         // 普通导航按钮
