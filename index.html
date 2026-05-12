@@ -2,380 +2,1047 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <!-- viewport 适配手机屏幕，确保在手机上正常显示 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJ5 - Jordan Shoes Gallery</title>
+  <title>SHOES GALLERY</title>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+    /* ============================
+       1. 基础样式重置
+       ============================ */
+    * {
+      margin: 0;           /* 清除浏览器默认的外边距 */
+      padding: 0;           /* 清除浏览器默认的内边距 */
+      box-sizing: border-box; /* 让 width/height 包含 padding 和 border */
+    }
 
-    /* 导航栏 */
+    /* ============================
+       2. 页面整体样式
+       ============================ */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;  /* 深黑色背景 */
+      color: #fff;         /* 白色文字 */
+      min-height: 100vh;   /* 至少占满整个屏幕高度 */
+    }
+
+    /* ============================
+       3. 顶部导航栏
+       ============================ */
     .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    .nav-logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #e94560;
-      text-decoration: none;
-    }
-    .nav-contact {
-      background: #e94560;
-      color: white;
-      border: none;
-      padding: 10px 25px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s;
-    }
-    .nav-contact:hover { background: #ff6b6b; transform: scale(1.05); }
-
-    /* 横幅 */
-    .banner {
-      margin-top: 70px;
-      height: 300px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .banner::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: url('https://images.unsplash.com/photo-1556906781-9a412961c28c?w=1920') center/cover;
-      opacity: 0.3;
-    }
-    .banner-content { position: relative; text-align: center; color: white; }
-    .banner-content h1 { font-size: 48px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-    .banner-content p { font-size: 18px; opacity: 0.9; }
-
-    /* 筛选按钮 */
-    .filters {
-      display: flex;
-      gap: 10px;
-      padding: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      background: white;
-      position: sticky;
-      top: 70px;
-      z-index: 100;
-    }
-    .filter-btn {
-      padding: 8px 20px;
-      border: 2px solid #e94560;
-      background: white;
-      color: #e94560;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-weight: 500;
-    }
-    .filter-btn:hover, .filter-btn.active {
-      background: #e94560;
-      color: white;
-    }
-
-    /* 画廊网格 */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
-      padding: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .card {
-      background: white;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    }
-    .card-image {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      background: #f0f0f0;
-    }
-    .card-info { padding: 15px; }
-    .card-name { font-size: 16px; font-weight: bold; margin-bottom: 5px; color: #333; }
-    .card-price { font-size: 18px; color: #e94560; font-weight: bold; margin-bottom: 8px; }
-    .card-category {
-      display: inline-block;
-      padding: 4px 12px;
-      background: #f0f0f0;
-      border-radius: 12px;
-      font-size: 12px;
-      color: #666;
-    }
-
-    /* 模态框 */
-    .modal {
-      display: none;
-      position: fixed;
+      position: fixed;     /* 固定在页面顶部，滚动时不动 */
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 2000;
+      right: 0;
+      z-index: 100;        /* 确保在最上层 */
+      background: rgba(10, 10, 10, 0.95); /* 半透明黑色背景 */
+      backdrop-filter: blur(10px);         /* 背景模糊效果 */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 底部细线 */
+      padding: 0 20px;
+    }
+
+    /* 导航栏内部容器，限制最大宽度并居中 */
+    .nav-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* logo在左，导航按钮在右 */
+      height: 70px;
+    }
+
+    /* Logo 文字样式 */
+    .logo {
+      font-size: 24px;           /* 字号 */
+      font-weight: 800;          /* 字重（粗体） */
+      letter-spacing: 3px;        /* 字间距 */
+      /* 渐变色文字效果 */
+      background: linear-gradient(135deg, #fff 0%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* 导航按钮容器 */
+    .nav-links {
+      display: flex;             /* 横向排列按钮 */
+      gap: 8px;                  /* 按钮之间的间距 */
+      flex-wrap: wrap;           /* 空间不够时换行 */
+      justify-content: center;  /* 居中对齐 */
+    }
+
+    /* 单个导航按钮样式 */
+    .nav-btn {
+      padding: 8px 16px;        /* 上下8px，左右16px的内边距 */
+      border: 1px solid rgba(255, 255, 255, 0.2); /* 边框颜色 */
+      background: transparent;  /* 透明背景 */
+      color: #888;              /* 灰色文字 */
+      font-size: 13px;           /* 字号 */
+      cursor: pointer;           /* 鼠标变成手型 */
+      border-radius: 20px;      /* 圆角按钮 */
+      transition: all 0.3s ease; /* 过渡动画 */
+      white-space: nowrap;       /* 文字不换行 */
+    }
+
+    /* 导航按钮：鼠标悬停效果 */
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      color: #fff;
+    }
+
+    /* 导航按钮：选中状态（当前分类） */
+    .nav-btn.active {
+      background: #fff;          /* 白色背景 */
+      color: #0a0a0a;           /* 深色文字 */
+      border-color: #fff;
+    }
+
+    /* ============================
+       B. 顶部导航栏 - 联系购买按钮
+       ============================ */
+    .nav-contact {
+      padding: 10px 24px;       /* 比普通按钮稍大更醒目 */
+      background: linear-gradient(135deg, #07c160 0%, #06ad56 100%); /* 微信绿 */
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(7, 193, 96, 0.3);
+      white-space: nowrap;
+      margin-left: 16px;         /* 和分类按钮拉开一点距离 */
+    }
+
+    .nav-contact:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(7, 193, 96, 0.4);
+    }
+
+    /* 顶部联系卡片的弹窗 */
+    .nav-contact-popup {
+      position: absolute;
+      top: 80px;
+      right: 20px;
+      width: 210px;
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 200;
+    }
+
+    .nav-contact-popup.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* 小三角箭头 */
+    .nav-contact-popup::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      right: 30px;
+      width: 14px;
+      height: 14px;
+      background: #1a1a1a;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+    }
+
+    .nav-popup-title {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* 导航弹窗二维码 */
+    .nav-popup-qr {
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      background: #fff;
+      padding: 6px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 12px;
+    }
+
+    .nav-popup-id {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .nav-popup-icon {
+      width: 36px;
+      height: 36px;
+      background: #07c160;
+      border-radius: 10px;
+      display: flex;
       align-items: center;
       justify-content: center;
     }
-    .modal.active { display: flex; }
-    .modal-content {
-      background: white;
-      border-radius: 20px;
-      max-width: 900px;
-      width: 95%;
-      max-height: 90vh;
-      overflow: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .modal-header {
-      padding: 20px;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 30px;
-      cursor: pointer;
-      color: #999;
-    }
-    .modal-body {
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-    }
-    .modal-image {
-      width: 100%;
-      max-height: 500px;
-      object-fit: contain;
-      border-radius: 10px;
-      background: #f5f5f5;
-    }
-    .modal-info { padding: 20px 0; }
-    .modal-name { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
-    .modal-price { font-size: 24px; color: #e94560; font-weight: bold; margin-bottom: 20px; }
-    .modal-contact {
-      background: #e94560;
-      color: white;
-      border: none;
-      padding: 15px 40px;
-      border-radius: 25px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .modal-contact:hover { background: #ff6b6b; }
 
-    /* 底部联系栏 */
+    .nav-popup-icon img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    .nav-popup-id span {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      word-break: break-all;
+    }
+
+    .nav-popup-btn {
+      width: 100%;
+      padding: 12px;
+      background: #07c160;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .nav-popup-btn:hover {
+      background: #06ad56;
+    }
+
+    .nav-popup-btn.copied {
+      background: #333;
+    }
+
+    .nav-popup-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* ============================
+       A. 底部固定联系栏
+       ============================ */
     .bottom-bar {
       position: fixed;
       bottom: 0;
       left: 0;
-      width: 100%;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 15px 30px;
+      right: 0;
+      height: 64px;
+      background: rgba(10, 10, 10, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      transform: translateY(100%);
-      transition: transform 0.3s;
-      z-index: 1000;
+      justify-content: center;
+      gap: 40px;
+      z-index: 100;
+      transform: translateY(100%); /* 默认隐藏，往上偏移 */
+      transition: transform 0.4s ease;
     }
-    .bottom-bar.show { transform: translateY(0); }
-    .bottom-bar-text { color: white; font-size: 14px; }
-    .bottom-bar-contact {
-      background: #e94560;
-      color: white;
-      border: none;
-      padding: 10px 25px;
-      border-radius: 25px;
+
+    /* 页面滚动超过300px后显示底部栏 */
+    .bottom-bar.show {
+      transform: translateY(0);
+    }
+
+    .bottom-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #888;
+      font-size: 14px;
+      transition: color 0.3s;
       cursor: pointer;
     }
 
-    /* 微信联系弹窗 */
-    .wechat-popup {
-      display: none;
-      position: fixed;
-      top: 50%;
+    .bottom-bar-item:hover {
+      color: #fff;
+    }
+
+    .bottom-bar-item img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .bottom-bar-wechat {
+      color: #07c160;
+    }
+
+    .bottom-bar-wechat:hover {
+      color: #06ad56;
+    }
+
+    .bottom-bar-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .bottom-bar-phone {
+      color: #fff;
+      font-weight: 600;
+    }
+    .bottom-wechat-popup {
+      position: absolute;
+      bottom: 75px;
       left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      z-index: 3000;
+      transform: translateX(-50%) translateY(10px);
+      width: 210px;
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     }
-    .wechat-popup.show { display: block; }
-    .wechat-popup img { width: 150px; height: 150px; margin-bottom: 15px; }
-    .wechat-popup p { font-size: 18px; margin-bottom: 15px; }
-    .wechat-popup button {
-      background: #e94560;
-      color: white;
+
+    .bottom-wechat-popup.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .bottom-wechat-popup::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      margin-left: -8px;
+      width: 14px;
+      height: 14px;
+      background: #1a1a1a;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+    }
+
+    .bottom-popup-title {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* 底部弹窗二维码 */
+    .bottom-popup-qr {
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      background: #fff;
+      padding: 6px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 12px;
+    }
+
+    .bottom-popup-id {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+      word-break: break-all;
+    }
+
+    .bottom-popup-btn {
+      width: 100%;
+      padding: 12px;
+      background: #07c160;
       border: none;
-      padding: 10px 30px;
-      border-radius: 20px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
-    .overlay {
-      display: none;
+
+    .bottom-popup-btn:hover {
+      background: #06ad56;
+    }
+
+    .bottom-popup-btn.copied {
+      background: #333;
+    }
+
+    .bottom-popup-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* 页面底部留出空间（防止内容被底部栏遮挡） */
+    .page-content {
+      padding-bottom: 80px;
+    }
+
+    /* ============================
+       4. Banner 横幅区域
+       ============================ */
+    .banner {
+      margin-top: 70px;         /* 顶部导航占用的空间 */
+      height: 500px;            /* 高度 */
+      background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); /* 渐变背景 */
+      display: flex;
+      align-items: center;       /* 垂直居中 */
+      justify-content: center;   /* 水平居中 */
+      position: relative;        /* 用于叠加背景图 */
+      overflow: hidden;           /* 超出部分隐藏 */
+    }
+
+    /* Banner 背景图：叠加在渐变上方 */
+    .banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      /* 这是一个示例图片地址，你可以替换成自己的图片链接 */
+      background: url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1920') center/cover;
+      opacity: 0.3;              /* 30% 透明度 */
+    }
+
+    /* Banner 文字内容 */
+    .banner-content {
+      position: relative;        /* 位于背景图之上 */
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .banner-title {
+      font-size: 48px;           /* 大标题字号 */
+      font-weight: 800;
+      letter-spacing: 4px;
+      margin-bottom: 16px;       /* 下方间距 */
+      text-transform: uppercase; /* 全大写 */
+    }
+
+    .banner-subtitle {
+      font-size: 18px;           /* 副标题字号 */
+      color: #888;               /* 灰色文字 */
+      letter-spacing: 2px;
+    }
+
+    /* ============================
+       5. 分类标题区域
+       ============================ */
+    .section-header {
+      max-width: 1400px;
+      margin: 60px auto 30px;    /* 上60px，下30px，左右自动 */
+      padding: 0 20px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: #666;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ============================
+       6. 图片网格展示区
+       ============================ */
+    .gallery {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px 60px;      /* 左右20px，下方60px */
+      /* CSS Grid 布局：自动填充，每列最小280px */
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;                 /* 卡片之间的间距 */
+    }
+
+    /* 单个卡片样式 */
+    .card {
+      background: #1a1a1a;       /* 卡片背景色 */
+      border-radius: 16px;       /* 圆角 */
+      overflow: hidden;          /* 图片超出部分隐藏 */
+      cursor: pointer;           /* 手型光标 */
+      transition: all 0.3s ease; /* 过渡动画 */
+      border: 1px solid rgba(255, 255, 255, 0.05); /* 细边框 */
+    }
+
+    /* 卡片：鼠标悬停效果（向上浮起） */
+    .card:hover {
+      transform: translateY(-8px);              /* 向上移动8px */
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); /* 阴影效果 */
+    }
+
+    /* 卡片内的图片：正方形比例 */
+    .card-image {
+      width: 100%;
+      aspect-ratio: 1;           /* 宽高比1:1（正方形） */
+      object-fit: cover;         /* 图片填充并裁剪 */
+      display: block;
+    }
+
+    /* 卡片内的文字区域 */
+    .card-info {
+      padding: 20px;
+    }
+
+    /* 鞋子名称 */
+    .card-name {
+      font-size: 15px;
+      font-weight: 600;           /* 粗体 */
+      margin-bottom: 8px;
+      color: #fff;
+      line-height: 1.4;          /* 行高 */
+    }
+
+    /* 鞋子价格 */
+    .card-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* 分类标签（小标签显示在卡片上） */
+    .card-category {
+      display: inline-block;     /* 行内块元素 */
+      margin-top: 10px;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
+      border-radius: 12px;
+      font-size: 11px;
+      color: #888;
+    }
+
+    /* ============================
+       C. 卡片下方的咨询购买按钮
+       ============================ */
+    .card-buy-btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid rgba(7, 193, 96, 0.5);
+      border-radius: 10px;
+      color: #07c160;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .card-buy-btn:hover {
+      background: #07c160;
+      color: #fff;
+      border-color: #07c160;
+    }
+
+    .card-buy-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* ============================
+       7. 点击放大弹窗
+       ============================ */
+    .modal {
+      display: none;             /* 默认隐藏 */
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 2500;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95); /* 半透明黑色背景 */
+      z-index: 1000;             /* 位于所有内容之上 */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
     }
-    .overlay.show { display: block; }
 
-    /* 空状态 */
+    /* 弹窗：显示状态（通过 JS 添加 .active 类来显示） */
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      max-width: 90%;            /* 最大宽度90% */
+      max-height: 90%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 弹窗内的大图 */
+    .modal-image {
+      max-width: 100%;
+      max-height: 55vh;          /* 最大高度55%的视口高度，给联系区留空间 */
+      border-radius: 12px;
+      display: block;
+    }
+
+    .modal-info {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .modal-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .modal-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* 弹窗内的咨询购买区域 */
+    .modal-contact {
+      margin-top: 24px;
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      width: 240px;
+    }
+
+    .modal-contact-title {
+      font-size: 12px;
+      color: #888;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* 二维码图片样式 */
+    .modal-qr {
+      width: 180px;
+      height: 180px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      background: #fff;          /* 白色背景让二维码更清晰 */
+      padding: 8px;             /* 周围留白 */
+      object-fit: contain;
+    }
+
+    .modal-wechat-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .modal-wechat-id {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+      word-break: break-all;
+    }
+
+    /* 复制按钮 */
+    .modal-copy-btn {
+      width: 100%;
+      padding: 12px;
+      background: #07c160;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .modal-copy-btn:hover {
+      background: #06ad56;
+    }
+
+    .modal-copy-btn.copied {
+      background: #333;
+    }
+
+    .modal-copy-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* 弹窗关闭按钮 */
+    .modal-close {
+      position: absolute;
+      top: -50px;               /* 位于图片上方 */
+      right: 0;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 32px;
+      cursor: pointer;
+      padding: 10px;
+      transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+      color: #fff;
+    }
+
+    /* ============================
+       8. 空状态（当某个分类没有内容时显示）
+       ============================ */
     .empty-state {
+      grid-column: 1 / -1;       /* 横跨整行 */
       text-align: center;
       padding: 60px 20px;
-      color: #999;
+      color: #666;
     }
-    .empty-state-icon { font-size: 60px; margin-bottom: 20px; }
 
-    /* 响应式 */
+    /* 右下角悬浮按钮已移除 */
+
+    /* ============================
+       11. 响应式设计（适配手机/平板）
+       ============================ */
+
+    /* 平板尺寸（宽度 <= 768px） */
     @media (max-width: 768px) {
-      .banner-content h1 { font-size: 32px; }
-      .filters { padding: 15px; gap: 8px; }
-      .filter-btn { padding: 6px 15px; font-size: 13px; }
-      .gallery { padding: 15px; gap: 15px; }
-      .modal-content { border-radius: 15px; }
-      .modal-name { font-size: 22px; }
+      .nav-content {
+        flex-direction: column;  /* 导航栏改为上下排列 */
+        height: auto;
+        padding: 15px 0;
+        gap: 15px;
+      }
+
+      .navbar {
+        position: relative;     /* 移动端不固定导航栏 */
+      }
+
+      .banner {
+        margin-top: 0;           /* 去掉顶部间距 */
+        height: 350px;           /* Banner 高度减小 */
+      }
+
+      .banner-title {
+        font-size: 28px;
+      }
+
+      .banner-subtitle {
+        font-size: 14px;
+      }
+
+      /* 图片网格：每列最小160px（适应小屏幕） */
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+      }
+
+      .card-info {
+        padding: 14px;
+      }
+
+      .card-name {
+        font-size: 13px;
+      }
+
+      .card-price {
+        font-size: 16px;
+      }
+
+      .section-header {
+        margin-top: 30px;
+      }
+
+      /* 顶部联系按钮在手机上隐藏（用底部栏代替） */
+      .nav-contact {
+        display: none;
+      }
+
+      /* 底部栏手机适配 */
+      .bottom-bar {
+        height: auto;
+        padding: 12px 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .bottom-bar-divider {
+        display: none;
+      }
+
+      .bottom-bar-item span {
+        font-size: 13px;
+      }
     }
+
+    /* 手机尺寸（宽度 <= 480px） */
     @media (max-width: 480px) {
-      .navbar { padding: 10px 15px; }
-      .nav-logo { font-size: 20px; }
-      .banner { height: 200px; }
+      /* 图片网格：固定2列布局 */
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .banner-title {
+        font-size: 22px;
+      }
+
+      .nav-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- ============================
+       10. HTML 结构部分
+       ============================ -->
+
+  <!-- 顶部导航栏 -->
   <nav class="navbar">
-    <a href="#" class="nav-logo">AJ5</a>
-    <button class="nav-contact" onclick="showWechat()">联系方式</button>
-  </nav>
+    <div class="nav-content">
+      <!-- Logo 文字，可自行修改为你的品牌名 -->
+      <div class="logo">SHOES GALLERY</div>
 
-  <div class="banner">
-    <div class="banner-content">
-      <h1>Jordan Shoes Gallery</h1>
-      <p>精选球鞋 / 品质保证 / 诚信交易</p>
-    </div>
-  </div>
+      <!-- 导航按钮区域 -->
+      <div class="nav-links">
+        <!--
+          每个 button 按钮：
+          - class="nav-btn" 控制样式
+          - class="active" 表示当前选中的分类（默认"全部"有）
+          - data-category 是关键属性，JS 通过它知道点击的是哪个分类
 
-  <div class="filters">
-    <button class="filter-btn active" data-category="全部">全部</button>
-    <button class="filter-btn" data-category="乔一">乔一</button>
-    <button class="filter-btn" data-category="空军">空军</button>
-    <button class="filter-btn" data-category="小空军">小空军</button>
-    <button class="filter-btn" data-category="开拓者">开拓者</button>
-    <button class="filter-btn" data-category="阿迪">阿迪</button>
-    <button class="filter-btn" data-category="彪马">彪马</button>
-    <button class="filter-btn" data-category="wans">wans</button>
-    <button class="filter-btn" data-category="lv">lv</button>
-  </div>
-
-  <div class="gallery" id="gallery"></div>
-
-  <div class="bottom-bar" id="bottomBar">
-    <span class="bottom-bar-text">如需购买或咨询，请添加微信</span>
-    <button class="bottom-bar-contact" onclick="showWechat()">联系方式</button>
-  </div>
-
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>商品详情</h2>
-        <button class="modal-close" onclick="closeModal()">&times;</button>
+          修改分类的方法：
+          1. 直接改 button 的文字（如把 "乔一" 改成 "AJ系列"）
+          2. 对应的 data-category 值也要改成 JS 数据里的一致
+        -->
+        <button class="nav-btn active" data-category="all">全部</button>
+        <button class="nav-btn" data-category="乔一">乔一</button>
+        <button class="nav-btn" data-category="空军">空军</button>
+        <button class="nav-btn" data-category="小空军">小空军</button>
+        <button class="nav-btn" data-category="开拓者">开拓者</button>
+        <button class="nav-btn" data-category="阿迪">阿迪</button>
+        <button class="nav-btn" data-category="彪马">彪马</button>
+        <button class="nav-btn" data-category="wans">wans</button>
+        <button class="nav-btn" data-category="lv">lv</button>
       </div>
-      <div class="modal-body">
-        <img class="modal-image" id="modalImage" src="" alt="">
-        <div class="modal-info">
-          <h3 class="modal-name" id="modalName"></h3>
-          <p class="modal-price" id="modalPrice"></p>
-          <button class="modal-contact" onclick="showWechat()">添加微信咨询</button>
+
+      <!-- B. 顶部导航栏 - 联系购买按钮 -->
+      <div style="position: relative;">
+        <button class="nav-contact" onclick="toggleNavContact()">联系购买</button>
+        <!-- 顶部联系卡片弹窗 -->
+        <div class="nav-contact-popup" id="navContactPopup">
+          <p class="nav-popup-title">扫码添加微信</p>
+          <!-- 微信二维码 -->
+          <img class="nav-popup-qr" src="wechat-qr.png" alt="微信二维码">
+          <div class="nav-popup-id">
+            <div class="nav-popup-icon">
+              <img src="wechat-icon.png" alt="微信">
+            </div>
+            <span id="navWechatId">xdq880406</span>
+          </div>
+          <button class="nav-popup-btn" id="navCopyBtn" onclick="copyNavWechat()">
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            复制微信号
+          </button>
         </div>
       </div>
     </div>
+  </nav>
+
+  <!-- Banner 横幅区 -->
+  <section class="banner">
+    <div class="banner-content">
+      <!-- 可修改 Banner 标题 -->
+      <h1 class="banner-title">潮流鞋款展示</h1>
+      <!-- 可修改 Banner 副标题 -->
+      <p class="banner-subtitle">精选 Nike & 乔一 系列</p>
+    </div>
+  </section>
+
+  <!-- 分类标题（会随筛选动态变化） -->
+  <div class="section-header">
+    <p class="section-title">全部鞋款</p>
   </div>
 
-  <div class="overlay" id="overlay" onclick="hideWechat()"></div>
-  <div class="wechat-popup" id="wechatPopup">
-    <img src="wechat-qr.png" alt="微信二维码">
-    <p>微信号：<strong id="wechatId">xdq880406</strong></p>
-    <button onclick="copyWechat()">复制微信号</button>
+  <!-- 图片展示区：JS 会动态往这里插入卡片 -->
+  <section class="gallery" id="gallery"></section>
+
+  <!-- 点击图片后的放大弹窗 -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <!-- 关闭按钮（× 号） -->
+      <button class="modal-close" id="modalClose">&times;</button>
+      <!-- 大图展示 -->
+      <img class="modal-image" id="modalImage" src="" alt="">
+      <!-- 图片下方的文字信息 -->
+      <div class="modal-info">
+        <h2 class="modal-name" id="modalName"></h2>
+        <p class="modal-price" id="modalPrice"></p>
+      </div>
+      <!-- 咨询购买区域：二维码 + 微信ID + 复制按钮 -->
+      <div class="modal-contact">
+        <p class="modal-contact-title">扫码联系客服</p>
+        <!--
+          二维码图片：
+          把 src 改成你自己的微信二维码图片地址
+          支持本地路径（如 wechat-qr.png）或网络图片地址
+        -->
+        <img class="modal-qr" id="modalQr" src="wechat-qr.png" alt="微信二维码">
+        <!-- 微信ID（和右侧弹窗共用同一个ID，复制功能通用） -->
+        <p class="modal-wechat-label">微信号</p>
+        <p class="modal-wechat-id" id="wechatId">xdq880406</p>
+        <!-- 复制按钮 -->
+        <button class="modal-copy-btn" onclick="copyWechat()">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          复制微信号
+        </button>
+      </div>
+    </div>
   </div>
+
+  <!-- ============================
+       A. 底部固定联系栏
+       ============================ -->
+  <div class="bottom-bar" id="bottomBar">
+    <!-- 微信咨询 -->
+    <div class="bottom-bar-item bottom-bar-wechat" onclick="toggleBottomWechat()">
+      <img src="wechat-icon.png" alt="微信">
+      <span>微信咨询</span>
+    </div>
+
+    <!-- 底部微信弹窗 -->
+    <div class="bottom-wechat-popup" id="bottomWechatPopup">
+      <p class="bottom-popup-title">扫码添加微信</p>
+      <!-- 微信二维码 -->
+      <img class="bottom-popup-qr" src="wechat-qr.png" alt="微信二维码">
+      <p class="bottom-popup-id" id="bottomWechatId">xdq880406</p>
+      <button class="bottom-popup-btn" id="bottomCopyBtn" onclick="copyBottomWechat()">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        复制微信号
+      </button>
+    </div>
+  </div>
+
 
   <script>
-    // ============================
-    // 1. 数据配置区
-    // ============================
-    // const shoes = []; // 运行时自动生成
+    /* ============================
+       11. JavaScript 逻辑部分
+       ============================ */
+
+    /* ============================
+       11.1 鞋子数据配置
+       ============================
+       
+       这是最重要的数据部分，修改图片和内容都在这里改！
+       
+       每双鞋的数据结构：
+       {
+         id: 数字,                    // 唯一编号，不能重复
+         name: "鞋子名称",             // 显示在卡片上的名字
+         category: "分类名",          // 必须和上方导航按钮的 data-category 一致
+         price: "¥价格",              // 显示的价格
+         image: "图片链接"            // 鞋子图片的 URL 地址
+       }
+       
+       如何添加新鞋子：
+       在大括号后加逗号，然后加一个新的大括号即可
+       
+       如何修改图片：
+       把 image 的值换成你自己的图片链接（支持网络图片或本地相对路径）
+    */
+    const shoes = [
+  { id: 1, name: "乔一 #1", category: "乔一", imgIndex: 1, price: "面议", image: "images/乔一/1-江浸月.jpg" }
+];
 
     // ============================
-    // 2. 图片路径自动生成函数（已修改）
-    // 规则：如果数据中有 image 字段，使用它；否则使用默认规则
+    //    图片路径自动生成函数【已修改】
+    //    规则：优先使用数据中的 image 字段，否则使用默认规则
+    //    images/分类名/编号.jpg
     // ============================
     function getShoeImage(shoe) {
       return shoe.image || `images/${shoe.category}/${shoe.imgIndex}.jpg`;
     }
 
-    // ============================
-    // 3. 数据过滤和展示函数
-    // ============================
-    let currentCategory = '全部';
+    /* ============================
+       11.2 变量定义
+       ============================ */
+    
+    let currentCategory = 'all';  // 当前选中的分类，默认是"全部"
 
-    function renderGallery() {
-      const filtered = currentCategory === '全部' 
+    // 获取页面上的元素（用 ID 找到它们）
+    const gallery = document.getElementById('gallery');      // 图片展示区容器
+    const modal = document.getElementById('modal');         // 弹窗
+    const modalImage = document.getElementById('modalImage'); // 弹窗里的大图
+    const modalName = document.getElementById('modalName');  // 弹窗里的名称
+    const modalPrice = document.getElementById('modalPrice'); // 弹窗里的价格
+    const modalClose = document.getElementById('modalClose'); // 弹窗关闭按钮
+    const navBtns = document.querySelectorAll('.nav-btn');   // 所有导航按钮
+    const sectionTitle = document.querySelector('.section-title'); // 分类标题
+
+    /* ============================
+       11.3 渲染图片函数【已修改】
+       
+       功能：根据传入的分类，筛选并显示对应的鞋子卡片
+       
+       参数：category - 要显示的分类名，'all' 表示显示全部
+    */
+    function renderGallery(category) {
+      // 筛选数据
+      // 如果是 'all'，返回所有鞋子；否则只返回该分类的鞋子
+      const filtered = category === 'all' 
         ? shoes 
-        : shoes.filter(s => s.category === currentCategory);
+        : shoes.filter(shoe => shoe.category === category);
 
-      const gallery = document.getElementById('gallery');
-      
+      // 如果没有内容，显示空状态提示
       if (filtered.length === 0) {
-        gallery.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-state-icon">👟</div>
-            <h3>暂无商品</h3>
-            <p>该分类下暂无商品上架</p>
-          </div>
-        `;
+        gallery.innerHTML = '<div class="empty-state">暂无该分类的鞋款</div>';
         return;
       }
 
+      // 生成卡片 HTML
+      // map 会遍历每个鞋子，生成对应的 HTML 字符串
+      // join('') 把所有字符串合并成一个
       gallery.innerHTML = filtered.map(shoe => `
         <div class="card" data-id="${shoe.id}">
-          <img class="card-image" src="${getShoeImage(shoe)}" alt="${shoe.name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'280\\' height=\\'280\\'%3E%3Crect fill=\\'%23f0f0f0\\' width=\\'100%25\\' height=\\'100%25\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%23999\\' font-size=\\'40\\'%3E👟%3C/text%3E%3C/svg%3E'">
+          <img class="card-image" src="${getShoeImage(shoe)}" alt="${shoe.name}" loading="lazy">
           <div class="card-info">
             <h3 class="card-name">${shoe.name}</h3>
             <p class="card-price">${shoe.price}</p>
@@ -384,58 +1051,174 @@
         </div>
       `).join('');
 
+      // 给每个卡片绑定点击事件（打开弹窗）
       document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('click', () => openModal(parseInt(card.dataset.id)));
+        card.addEventListener('click', () => {
+          // 获取卡片的 data-id 属性值，转成数字
+          const id = parseInt(card.dataset.id);
+          openModal(id);  // 打开弹窗显示这张大图
+        });
       });
     }
 
-    // ============================
-    // 4. 模态框功能
-    // ============================
-    const modal = document.getElementById('modal');
-    const modalImage = document.getElementById('modalImage');
-    const modalName = document.getElementById('modalName');
-    const modalPrice = document.getElementById('modalPrice');
-
+    /* ============================
+       11.4 打开弹窗函数【已修改】
+       
+       功能：显示点击的鞋子的大图和详细信息
+       
+       参数：id - 鞋子的编号
+    */
     function openModal(id) {
+      // 从 shoes 数组中找到对应 id 的鞋子
       const shoe = shoes.find(s => s.id === id);
-      if (!shoe) return;
+      if (!shoe) return;  // 没找到就退出
 
+      // 使用大图路径
       modalImage.src = getShoeImage(shoe);
-      modalName.textContent = shoe.name;
-      modalPrice.textContent = shoe.price;
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      modalName.textContent = shoe.name;      // 设置名称文字
+      modalPrice.textContent = shoe.price;    // 设置价格文字
+      modal.classList.add('active');          // 显示弹窗（添加 .active 类）
+      document.body.style.overflow = 'hidden'; // 禁止页面滚动
     }
 
+    /* ============================
+       11.5 关闭弹窗函数
+       ============================ */
     function closeModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
+      modal.classList.remove('active');        // 隐藏弹窗
+      document.body.style.overflow = '';       // 恢复页面滚动
     }
 
+    /* ============================
+       11.6 切换分类函数
+       ============================
+       
+       功能：点击导航按钮时，更新选中状态并刷新图片展示
+       
+       参数：category - 要切换到的分类名
+    */
+    function switchCategory(category) {
+      currentCategory = category;  // 更新当前分类变量
+      
+      // 更新导航按钮的选中状态
+      navBtns.forEach(btn => {
+        // 如果这个按钮的 data-category 等于当前分类，就加上 .active
+        btn.classList.toggle('active', btn.dataset.category === category);
+      });
+
+      // 更新分类标题文字
+      sectionTitle.textContent = category === 'all' ? '全部鞋款' : category;
+
+      // 重新渲染图片
+      renderGallery(category);
+    }
+
+    /* ============================
+       11.7 事件监听（给按钮绑定点击功能）
+       ============================ */
+
+    // 给所有导航按钮绑定点击事件
+    navBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 获取按钮上的 data-category 属性值
+        switchCategory(btn.dataset.category);
+      });
+    });
+
+    // 点击关闭按钮关闭弹窗
+    modalClose.addEventListener('click', closeModal);
+
+    // 点击弹窗背景也能关闭弹窗
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal();
     });
 
+    // 按 ESC 键关闭弹窗
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
 
-    // ============================
-    // 5. 筛选功能
-    // ============================
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentCategory = btn.dataset.category;
-        renderGallery();
-      });
+    /* ============================
+       11.8 初始化（页面加载时执行）
+       ============================ */
+    // 页面打开时，默认显示所有鞋子
+    renderGallery('all');
+
+    /* ============================
+       11.9 联系按钮功能
+       ============================ */
+
+    // 点击页面其他地方，关闭所有联系弹窗
+    document.addEventListener('click', (e) => {
+      const navPopup = document.getElementById('navContactPopup');
+      const navBtn = document.querySelector('.nav-contact');
+      const bottomPopup = document.getElementById('bottomWechatPopup');
+      const bottomWechat = document.querySelector('.bottom-bar-wechat');
+
+      if (!navBtn?.contains(e.target) && !navPopup?.contains(e.target)) {
+        navPopup?.classList.remove('show');
+      }
+      if (!bottomWechat?.contains(e.target) && !bottomPopup?.contains(e.target)) {
+        bottomPopup?.classList.remove('show');
+      }
     });
 
-    // ============================
-    // 6. 底部联系栏
-    // ============================
+    // 复制微信号功能（弹窗内的复制按钮）
+    function copyWechat() {
+      const wechatId = document.getElementById('wechatId').textContent; // 读取微信号
+      navigator.clipboard.writeText(wechatId).then(() => {
+        // 复制成功后弹窗复制按钮显示"已复制"
+        const btn = document.querySelector('.modal-copy-btn');
+        if (btn) {
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            已复制！
+          `;
+          btn.classList.add('copied');
+        }
+        setTimeout(() => {
+          // 3秒后恢复原样
+          if (btn) {
+            btn.innerHTML = `
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              复制微信号
+            `;
+            btn.classList.remove('copied');
+          }
+        }, 3000);
+      });
+    }
+
+    // === B. 顶部导航栏联系按钮功能 ===
+    function toggleNavContact() {
+      const popup = document.getElementById('navContactPopup');
+      const bottomPopup = document.getElementById('bottomWechatPopup');
+      // 关闭底部弹窗
+      bottomPopup.classList.remove('show');
+      popup.classList.toggle('show');
+    }
+
+    function copyNavWechat() {
+      const wechatId = document.getElementById('navWechatId').textContent;
+      navigator.clipboard.writeText(wechatId).then(() => {
+        const btn = document.getElementById('navCopyBtn');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+          已复制！
+        `;
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            复制微信号
+          `;
+          btn.classList.remove('copied');
+        }, 3000);
+      });
+    }
+
+    // === A. 底部固定栏功能 ===
+    // 页面滚动时显示/隐藏底部栏
     window.addEventListener('scroll', () => {
       const bottomBar = document.getElementById('bottomBar');
       if (window.scrollY > 300) {
@@ -445,42 +1228,43 @@
       }
     });
 
-    // ============================
-    // 7. 微信联系弹窗
-    // ============================
-    function showWechat() {
-      document.getElementById('wechatPopup').classList.add('show');
-      document.getElementById('overlay').classList.add('show');
+    function toggleBottomWechat() {
+      const popup = document.getElementById('bottomWechatPopup');
+      const navPopup = document.getElementById('navContactPopup');
+      // 关闭顶部弹窗
+      navPopup.classList.remove('show');
+      popup.classList.toggle('show');
     }
 
-    function hideWechat() {
-      document.getElementById('wechatPopup').classList.remove('show');
-      document.getElementById('overlay').classList.remove('show');
-    }
-
-    function copyWechat() {
-      const wechatId = document.getElementById('wechatId').textContent;
+    function copyBottomWechat() {
+      const wechatId = document.getElementById('bottomWechatId').textContent;
       navigator.clipboard.writeText(wechatId).then(() => {
-        alert('微信号已复制：' + wechatId);
-        hideWechat();
-      }).catch(() => {
-        prompt('请手动复制微信号：', wechatId);
+        const btn = document.getElementById('bottomCopyBtn');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+          已复制！
+        `;
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            复制微信号
+          `;
+          btn.classList.remove('copied');
+        }, 3000);
       });
     }
 
-    // ============================
-    // 8. 初始化
-    // ============================
-    document.addEventListener('DOMContentLoaded', renderGallery);
-
-    // ============================
-    // 9. 鞋子数据
-    // ============================
-    // 本文件由 update_gallery.py 自动生成
-    // 请勿手动修改此数组，直接上传图片到对应文件夹即可
-    const shoes = [
-      { id: 1, name: "乔一 #1", category: "乔一", imgIndex: 1, price: "面议", image: "images/乔一/1-江浸月.jpg" }
-    ];
+    // === C. 卡片咨询按钮功能 ===
+    function showWechatToast() {
+      // 直接打开右下角的微信弹窗
+      const card = document.getElementById('contactCard');
+      const bottomPopup = document.getElementById('bottomWechatPopup');
+      const navPopup = document.getElementById('navContactPopup');
+      bottomPopup.classList.remove('show');
+      navPopup.classList.remove('show');
+      card.classList.add('show');
+    }
 
   </script>
 </body>
