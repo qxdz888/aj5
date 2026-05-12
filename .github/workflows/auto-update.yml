@@ -1,0 +1,33 @@
+name: Auto Update Shoes Gallery
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'images/**'
+
+jobs:
+  update-gallery:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Run update script
+      run: python update_gallery.py
+      
+    - name: Commit and push changes
+      run: |
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git add -A
+        git diff --staged --quiet || git commit -m "auto: 鏇存柊闉嬪瓙灞曠ず鏁版嵁 $(date '+%Y-%m-%d %H:%M')"
+        git push
