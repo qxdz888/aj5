@@ -13,13 +13,12 @@ IMAGES_DIR = "images"
 INDEX_FILE = "index.html"
 
 # Category display names and order
+# Using Unicode escapes to avoid encoding issues on Linux runners
 CATEGORIES = [
-    ("涔斾竴", "涔斾竴"),
-    ("绌哄啗", "绌哄啗"),
-    ("灏忕┖鍐?, "灏忕┖鍐?),
-    ("寮€鎷撹€?, "寮€鎷撹€?),
-    ("闃胯开", "闃胯开"),
-    ("褰┈", "褰┈"),
+    ("\u4e54\u4e00", "\u4e54\u4e00"),           # 涔斾竴
+    ("\u7a7a\u519b", "\u7a7a\u519b"),           # 绌哄啗
+    ("\u5c0f\u7a7a\u519b", "\u5c0f\u7a7a\u519b"), # 灏忕┖鍐?    ("\u5f00\u62d3\u8005", "\u5f00\u62d3\u8005"), # 寮€鎷撹€?    ("\u963f\u8fea", "\u963f\u8fea"),             # 闃胯开
+    ("\u5f6a\u9a6c", "\u5f6a\u9a6c"),             # 褰┈
     ("wans", "wans"),
     ("lv", "lv"),
 ]
@@ -36,7 +35,7 @@ def scan_images():
         category_path = Path(IMAGES_DIR) / category_en
         
         if not category_path.exists():
-            print(f"鈿狅笍  Category directory not found: {category_path}")
+            print(f"[WARN] Category directory not found: {category_path}")
             continue
         
         # Get all image files in this category
@@ -48,10 +47,10 @@ def scan_images():
         image_files.sort()
         
         if not image_files:
-            print(f"鈿狅笍  No images found in category: {category_en}")
+            print(f"[WARN] No images found in category: {category_en}")
             continue
         
-        print(f"馃搧 Category '{category_en}': found {len(image_files)} images")
+        print(f"[INFO] Category '{category_en}': found {len(image_files)} images")
         
         # Create shoe entries for each image
         for img_index, img_path in enumerate(image_files, start=1):
@@ -60,7 +59,7 @@ def scan_images():
                 "name": f"{category_cn} #{img_index}",
                 "category": category_cn,
                 "imgIndex": img_index,
-                "price": "闈㈣",
+                "price": "\u9762\u8bae",  # 闈㈣
                 "image": f"{IMAGES_DIR}/{category_en}/{img_path.name}"
             }
             shoes.append(shoe)
@@ -93,26 +92,26 @@ def update_index_html(shoes_js):
     new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
     
     if new_content == content:
-        print("鈿狅笍  No changes made to index.html (pattern not found or no change)")
+        print("[WARN] No changes made to index.html (pattern not found or no change)")
         return False
     
     with open(INDEX_FILE, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
-    print(f"鉁?Updated index.html with {len(shoes_js.split(chr(10)))} shoes")
+    print(f"[SUCCESS] Updated index.html with {len(shoes_js.split(chr(10)))} shoes")
     return True
 
 def main():
-    print("馃殌 Starting shoes gallery update...")
+    print("[INFO] Starting shoes gallery update...")
     
     # Scan images
     shoes = scan_images()
     
     if not shoes:
-        print("鉂?No shoes data generated. Exiting.")
+        print("[ERROR] No shoes data generated. Exiting.")
         return
     
-    print(f"馃搳 Generated {len(shoes)} shoe entries")
+    print(f"[INFO] Generated {len(shoes)} shoe entries")
     
     # Generate JS
     shoes_js = generate_shoes_js(shoes)
@@ -121,9 +120,9 @@ def main():
     success = update_index_html(shoes_js)
     
     if success:
-        print("鉁?Gallery update complete!")
+        print("[SUCCESS] Gallery update complete!")
     else:
-        print("鈿狅笍  Gallery update incomplete")
+        print("[WARN] Gallery update incomplete")
 
 if __name__ == "__main__":
     main()
