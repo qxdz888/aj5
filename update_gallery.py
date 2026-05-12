@@ -4,6 +4,7 @@
 自动更新球鞋展示数据
 扫描 images 目录下的图片，自动生成 JavaScript 数据
 支持从文件名提取名称和价格
+目录结构：images/品牌/分类/图片.jpg
 """
 import os, re
 from pathlib import Path
@@ -11,17 +12,21 @@ from pathlib import Path
 IMAGES_DIR = "images"
 INDEX_FILE = "index.html"
 
-# 分类配置（文件夹名，显示名）
+# 分类配置（品牌/文件夹路径, 显示分类名）
 CATEGORIES = [
-    ("乔一", "乔一"),
-    ("空军", "空军"),
-    ("小空军", "小空军"),
-    ("开拓者", "开拓者"),
-    ("高帮", "高帮"),
-    ("其他", "其他"),
-    ("德讯", "德讯"),
-    ("贝壳头", "贝壳头"),
-    ("彪马", "彪马"),
+    # Nike 品牌
+    ("nike/乔一", "乔一"),
+    ("nike/空军", "空军"),
+    ("nike/小空军", "小空军"),
+    ("nike/开拓者", "开拓者"),
+    ("nike/高帮", "高帮"),
+    # Adidas 品牌
+    ("adidas/其他", "其他"),
+    ("adidas/德讯", "德讯"),
+    ("adidas/贝壳头", "贝壳头"),
+    # Puma 品牌
+    ("puma/彪马", "彪马"),
+    # 独立品牌
     ("wans", "wans"),
     ("lv", "lv"),
 ]
