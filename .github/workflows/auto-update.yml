@@ -36,13 +36,13 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         
-        # 检查是否有变更
-        if git diff --exit-code --quiet index.html; then
-          echo "No changes to commit"
-          exit 0
-        fi
-        
-        # 添加并提交
+        # 只添加 index.html，不 pull
         git add index.html
-        git commit -m "auto: update gallery $(date '+%Y-%m-%d %H:%M')"
-        git push origin main
+        
+        # 检查是否有变更
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "auto: update gallery $(date '+%Y-%m-%d %H:%M')"
+          git push origin main
+        fi
