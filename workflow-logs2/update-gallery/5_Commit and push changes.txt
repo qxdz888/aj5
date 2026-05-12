@@ -1,0 +1,20 @@
+﻿2026-05-12T05:12:23.6299496Z ##[group]Run git config --local user.name "github-actions[bot]"
+2026-05-12T05:12:23.6300285Z [36;1mgit config --local user.name "github-actions[bot]"[0m
+2026-05-12T05:12:23.6301112Z [36;1mgit config --local user.email "github-actions[bot]@users.noreply.github.com"[0m
+2026-05-12T05:12:23.6301854Z [36;1mgit add -A[0m
+2026-05-12T05:12:23.6302504Z [36;1mgit diff --staged --quiet || git commit -m "auto: 鏇存柊闉嬪瓙灞曠ず鏁版嵁 $(date '+%Y-%m-%d %H:%M')"[0m
+2026-05-12T05:12:23.6303262Z [36;1mgit push[0m
+2026-05-12T05:12:23.6326415Z shell: /usr/bin/bash -e {0}
+2026-05-12T05:12:23.6326868Z env:
+2026-05-12T05:12:23.6327323Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6328092Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-05-12T05:12:23.6328824Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6329486Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6330166Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6330875Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-05-12T05:12:23.6331446Z ##[endgroup]
+2026-05-12T05:12:23.6549972Z [main 8396b57] auto: 鏇存柊闉嬪瓙灞曠ず鏁版嵁 2026-05-12 05:12
+2026-05-12T05:12:23.6551077Z  1 file changed, 3 insertions(+), 26 deletions(-)
+2026-05-12T05:12:23.7569317Z remote: Permission to qxdz888/aj5.git denied to github-actions[bot].
+2026-05-12T05:12:23.7570929Z fatal: unable to access 'https://github.com/qxdz888/aj5/': The requested URL returned error: 403
+2026-05-12T05:12:23.7600621Z ##[error]Process completed with exit code 128.

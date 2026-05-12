@@ -1,0 +1,185 @@
+﻿2026-05-12T05:28:19.3044538Z Current runner version: '2.334.0'
+2026-05-12T05:28:19.3069944Z ##[group]Runner Image Provisioner
+2026-05-12T05:28:19.3070801Z Hosted Compute Agent
+2026-05-12T05:28:19.3071426Z Version: 20260213.493
+2026-05-12T05:28:19.3072048Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-05-12T05:28:19.3072716Z Build Date: 2026-02-13T00:28:41Z
+2026-05-12T05:28:19.3073439Z Worker ID: {b59bf414-fd3d-4af9-b2b6-d8e5991cd386}
+2026-05-12T05:28:19.3074100Z Azure Region: eastus
+2026-05-12T05:28:19.3074998Z ##[endgroup]
+2026-05-12T05:28:19.3076623Z ##[group]Operating System
+2026-05-12T05:28:19.3077202Z Ubuntu
+2026-05-12T05:28:19.3077698Z 24.04.4
+2026-05-12T05:28:19.3078171Z LTS
+2026-05-12T05:28:19.3078669Z ##[endgroup]
+2026-05-12T05:28:19.3079195Z ##[group]Runner Image
+2026-05-12T05:28:19.3079793Z Image: ubuntu-24.04
+2026-05-12T05:28:19.3080328Z Version: 20260413.86.1
+2026-05-12T05:28:19.3081605Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-05-12T05:28:19.3083035Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-05-12T05:28:19.3083934Z ##[endgroup]
+2026-05-12T05:28:19.3085281Z ##[group]GITHUB_TOKEN Permissions
+2026-05-12T05:28:19.3087427Z Contents: write
+2026-05-12T05:28:19.3088058Z Metadata: read
+2026-05-12T05:28:19.3088589Z ##[endgroup]
+2026-05-12T05:28:19.3090690Z Secret source: Actions
+2026-05-12T05:28:19.3091751Z Prepare workflow directory
+2026-05-12T05:28:19.3422114Z Prepare all required actions
+2026-05-12T05:28:19.3460521Z Getting action download info
+2026-05-12T05:28:19.6174523Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-05-12T05:28:19.7419693Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-05-12T05:28:19.9297765Z Complete job name: update-gallery
+2026-05-12T05:28:19.9995738Z ##[group]Run actions/checkout@v4
+2026-05-12T05:28:19.9996561Z with:
+2026-05-12T05:28:19.9996937Z   fetch-depth: 0
+2026-05-12T05:28:19.9997363Z   repository: qxdz888/aj5
+2026-05-12T05:28:19.9998016Z   token: ***
+2026-05-12T05:28:19.9998400Z   ssh-strict: true
+2026-05-12T05:28:19.9998785Z   ssh-user: git
+2026-05-12T05:28:19.9999180Z   persist-credentials: true
+2026-05-12T05:28:19.9999611Z   clean: true
+2026-05-12T05:28:20.0000006Z   sparse-checkout-cone-mode: true
+2026-05-12T05:28:20.0000472Z   fetch-tags: false
+2026-05-12T05:28:20.0000873Z   show-progress: true
+2026-05-12T05:28:20.0001275Z   lfs: false
+2026-05-12T05:28:20.0001628Z   submodules: false
+2026-05-12T05:28:20.0002026Z   set-safe-directory: true
+2026-05-12T05:28:20.0002632Z ##[endgroup]
+2026-05-12T05:28:20.1159293Z Syncing repository: qxdz888/aj5
+2026-05-12T05:28:20.1161415Z ##[group]Getting Git version info
+2026-05-12T05:28:20.1162045Z Working directory is '/home/runner/work/aj5/aj5'
+2026-05-12T05:28:20.1163016Z [command]/usr/bin/git version
+2026-05-12T05:28:20.1191130Z git version 2.53.0
+2026-05-12T05:28:20.1216496Z ##[endgroup]
+2026-05-12T05:28:20.1240319Z Temporarily overriding HOME='/home/runner/work/_temp/0efc3c42-4cb0-4ab2-a8af-c0c1ff8b1a80' before making global git config changes
+2026-05-12T05:28:20.1242462Z Adding repository directory to the temporary git global config as a safe directory
+2026-05-12T05:28:20.1246936Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aj5/aj5
+2026-05-12T05:28:20.1282237Z Deleting the contents of '/home/runner/work/aj5/aj5'
+2026-05-12T05:28:20.1286268Z ##[group]Initializing the repository
+2026-05-12T05:28:20.1290271Z [command]/usr/bin/git init /home/runner/work/aj5/aj5
+2026-05-12T05:28:20.1374338Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-05-12T05:28:20.1375992Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-05-12T05:28:20.1376970Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-05-12T05:28:20.1377678Z hint: call:
+2026-05-12T05:28:20.1378032Z hint:
+2026-05-12T05:28:20.1378502Z hint: 	git config --global init.defaultBranch <name>
+2026-05-12T05:28:20.1379341Z hint:
+2026-05-12T05:28:20.1379883Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-05-12T05:28:20.1380745Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-05-12T05:28:20.1381433Z hint:
+2026-05-12T05:28:20.1381795Z hint: 	git branch -m <name>
+2026-05-12T05:28:20.1382204Z hint:
+2026-05-12T05:28:20.1382762Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-05-12T05:28:20.1383692Z Initialized empty Git repository in /home/runner/work/aj5/aj5/.git/
+2026-05-12T05:28:20.1386432Z [command]/usr/bin/git remote add origin https://github.com/qxdz888/aj5
+2026-05-12T05:28:20.1419195Z ##[endgroup]
+2026-05-12T05:28:20.1419929Z ##[group]Disabling automatic garbage collection
+2026-05-12T05:28:20.1423319Z [command]/usr/bin/git config --local gc.auto 0
+2026-05-12T05:28:20.1453272Z ##[endgroup]
+2026-05-12T05:28:20.1453926Z ##[group]Setting up auth
+2026-05-12T05:28:20.1460444Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-12T05:28:20.1492090Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-12T05:28:20.1788353Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-12T05:28:20.1821392Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-12T05:28:20.2059449Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-12T05:28:20.2095898Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-12T05:28:20.2341808Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-05-12T05:28:20.2378292Z ##[endgroup]
+2026-05-12T05:28:20.2379391Z ##[group]Fetching the repository
+2026-05-12T05:28:20.2388188Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-05-12T05:28:20.4905265Z From https://github.com/qxdz888/aj5
+2026-05-12T05:28:20.4906034Z  * [new branch]      main       -> origin/main
+2026-05-12T05:28:20.4941494Z [command]/usr/bin/git branch --list --remote origin/main
+2026-05-12T05:28:20.4966162Z   origin/main
+2026-05-12T05:28:20.4975134Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-05-12T05:28:20.4996176Z d97126ff219848f5be83e0828741d0c19e1c6fa6
+2026-05-12T05:28:20.5007583Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +f9b6c19d7ff4761317b153e5a621979d587fe3f6:refs/remotes/origin/main
+2026-05-12T05:28:20.5051461Z From https://github.com/qxdz888/aj5
+2026-05-12T05:28:20.5052802Z  + d97126f...f9b6c19 f9b6c19d7ff4761317b153e5a621979d587fe3f6 -> origin/main  (forced update)
+2026-05-12T05:28:20.5078860Z ##[endgroup]
+2026-05-12T05:28:20.5079831Z ##[group]Determining the checkout info
+2026-05-12T05:28:20.5080926Z ##[endgroup]
+2026-05-12T05:28:20.5084048Z [command]/usr/bin/git sparse-checkout disable
+2026-05-12T05:28:20.5130066Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-05-12T05:28:20.5156009Z ##[group]Checking out the ref
+2026-05-12T05:28:20.5159570Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-05-12T05:28:20.5208710Z Switched to a new branch 'main'
+2026-05-12T05:28:20.5211072Z branch 'main' set up to track 'origin/main'.
+2026-05-12T05:28:20.5216850Z ##[endgroup]
+2026-05-12T05:28:20.5255028Z [command]/usr/bin/git log -1 --format=%H
+2026-05-12T05:28:20.5278564Z f9b6c19d7ff4761317b153e5a621979d587fe3f6
+2026-05-12T05:28:20.5526742Z ##[group]Run actions/setup-python@v5
+2026-05-12T05:28:20.5527456Z with:
+2026-05-12T05:28:20.5527802Z   python-version: 3.11
+2026-05-12T05:28:20.5528210Z   check-latest: false
+2026-05-12T05:28:20.5528765Z   token: ***
+2026-05-12T05:28:20.5529141Z   update-environment: true
+2026-05-12T05:28:20.5529579Z   allow-prereleases: false
+2026-05-12T05:28:20.5529991Z   freethreaded: false
+2026-05-12T05:28:20.5530377Z ##[endgroup]
+2026-05-12T05:28:20.7466691Z ##[group]Installed versions
+2026-05-12T05:28:20.7582094Z Successfully set up CPython (3.11.15)
+2026-05-12T05:28:20.7584123Z ##[endgroup]
+2026-05-12T05:28:20.7716128Z ##[group]Run python update_gallery.py
+2026-05-12T05:28:20.7716896Z [36;1mpython update_gallery.py[0m
+2026-05-12T05:28:20.7755266Z shell: /usr/bin/bash -e {0}
+2026-05-12T05:28:20.7755805Z env:
+2026-05-12T05:28:20.7756321Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.7757442Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-05-12T05:28:20.7758380Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.7759231Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.7760053Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.7760877Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-05-12T05:28:20.7761562Z ##[endgroup]
+2026-05-12T05:28:20.8246512Z [INFO] Starting shoes gallery update...
+2026-05-12T05:28:20.8247903Z [INFO] Category '乔一': found 1 images
+2026-05-12T05:28:20.8248895Z [WARN] Category directory not found: images/空军
+2026-05-12T05:28:20.8249949Z [WARN] Category directory not found: images/小空军
+2026-05-12T05:28:20.8250687Z [WARN] Category directory not found: images/彪马
+2026-05-12T05:28:20.8251388Z [WARN] Category directory not found: images/wans
+2026-05-12T05:28:20.8252087Z [WARN] Category directory not found: images/lv
+2026-05-12T05:28:20.8252766Z [INFO] Generated 1 shoe entries
+2026-05-12T05:28:20.8253327Z [SUCCESS] Updated index.html with 3 shoes
+2026-05-12T05:28:20.8253980Z [SUCCESS] Gallery update complete!
+2026-05-12T05:28:20.8339897Z ##[group]Run git config --local user.name "github-actions[bot]"
+2026-05-12T05:28:20.8340918Z [36;1mgit config --local user.name "github-actions[bot]"[0m
+2026-05-12T05:28:20.8341983Z [36;1mgit config --local user.email "github-actions[bot]@users.noreply.github.com"[0m
+2026-05-12T05:28:20.8342922Z [36;1mgit add -A[0m
+2026-05-12T05:28:20.8343764Z [36;1mgit diff --staged --quiet || git commit -m "auto: update gallery $(date '+%Y-%m-%d %H:%M')"[0m
+2026-05-12T05:28:20.8344996Z [36;1mgit push[0m
+2026-05-12T05:28:20.8368655Z shell: /usr/bin/bash -e {0}
+2026-05-12T05:28:20.8369173Z env:
+2026-05-12T05:28:20.8369685Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.8370656Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-05-12T05:28:20.8371604Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.8372462Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.8373370Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:28:20.8374228Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-05-12T05:28:20.8375531Z   GITHUB_TOKEN: ***
+2026-05-12T05:28:20.8375958Z ##[endgroup]
+2026-05-12T05:28:20.8591606Z [main df70a22] auto: update gallery 2026-05-12 05:28
+2026-05-12T05:28:20.8592640Z  1 file changed, 1 insertion(+), 2 deletions(-)
+2026-05-12T05:28:21.0363259Z To https://github.com/qxdz888/aj5
+2026-05-12T05:28:21.0364557Z  ! [rejected]        main -> main (non-fast-forward)
+2026-05-12T05:28:21.0366397Z error: failed to push some refs to 'https://github.com/qxdz888/aj5'
+2026-05-12T05:28:21.0393615Z hint: Updates were rejected because the tip of your current branch is behind
+2026-05-12T05:28:21.0395563Z hint: its remote counterpart. If you want to integrate the remote changes,
+2026-05-12T05:28:21.0397319Z hint: use 'git pull' before pushing again.
+2026-05-12T05:28:21.0399469Z hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+2026-05-12T05:28:21.0411520Z ##[error]Process completed with exit code 1.
+2026-05-12T05:28:21.0715771Z Post job cleanup.
+2026-05-12T05:28:21.1696415Z [command]/usr/bin/git version
+2026-05-12T05:28:21.1732734Z git version 2.53.0
+2026-05-12T05:28:21.1775151Z Temporarily overriding HOME='/home/runner/work/_temp/d3d3c461-4b64-48db-8fd9-7fe6e3c6793e' before making global git config changes
+2026-05-12T05:28:21.1778309Z Adding repository directory to the temporary git global config as a safe directory
+2026-05-12T05:28:21.1780960Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aj5/aj5
+2026-05-12T05:28:21.1825174Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-12T05:28:21.1858880Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-12T05:28:21.2101731Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-12T05:28:21.2125163Z http.https://github.com/.extraheader
+2026-05-12T05:28:21.2138029Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-05-12T05:28:21.2171780Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-12T05:28:21.2408699Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-12T05:28:21.2442813Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-12T05:28:21.2809861Z Cleaning up orphan processes
+2026-05-12T05:28:21.3185136Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/setup-python@v5. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+自动更新球鞋展示数据
+扫描 images 目录下的图片，自动生成 JavaScript 数据
+"""
 import os, re
 from pathlib import Path
 
@@ -18,9 +22,10 @@ CATEGORIES = [
     ("lv", "lv"),
 ]
 
-IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp'}
+IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG', '.WEBP'}
 
 def scan_images():
+    """扫描图片目录，返回鞋子数据列表"""
     shoes = []
     shoe_id = 1
     for folder, display in CATEGORIES:
@@ -28,10 +33,18 @@ def scan_images():
         if not path.exists():
             print(f"[WARN] 目录不存在: {path}")
             continue
-        files = []
+        
+        # 使用 dict 按小写文件名去重（解决大小写重复问题）
+        seen = {}
         for ext in IMAGE_EXTENSIONS:
-            files.extend(path.glob(f"*{ext}"))
-        files.sort()
+            for f in path.glob(f"*{ext}"):
+                key = f.name.lower()  # 用小写作为 key 去重
+                if key not in seen:
+                    seen[key] = f  # 保留原始 Path 对象
+        
+        # 排序
+        files = sorted(seen.values(), key=lambda x: x.name)
+        
         if not files:
             print(f"[WARN] 无图片: {folder}")
             continue
@@ -49,13 +62,17 @@ def scan_images():
     return shoes
 
 def update_html(shoes):
+    """更新 index.html 中的 shoes 数据"""
     with open(INDEX_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
+    
     js = "const shoes = [\n" + ",\n".join(
-        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}, imgIndex: {s["imgIndex"]}, price: "{s["price"]}, image: "{s["image"]}"'
+        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", image: "{s["image"]}"'
         for s in shoes
     ) + "\n];"
-    new = re.sub(r'const shoes = $$.*?$$;', js, content, flags=re.DOTALL)
+    
+    # 匹配 const shoes = [...] 块
+    new = re.sub(r'const shoes = \[.*?\];', js, content, flags=re.DOTALL)
     if new == content:
         print("[WARN] 无变更")
         return False

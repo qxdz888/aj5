@@ -1,0 +1,16 @@
+﻿2026-05-12T05:07:56.4570420Z ##[group]Run python update_gallery.py
+2026-05-12T05:07:56.4571083Z [36;1mpython update_gallery.py[0m
+2026-05-12T05:07:56.4606578Z shell: /usr/bin/bash -e {0}
+2026-05-12T05:07:56.4607097Z env:
+2026-05-12T05:07:56.4607573Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:07:56.4608348Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-05-12T05:07:56.4609126Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:07:56.4609809Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:07:56.4610498Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:07:56.4611187Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-05-12T05:07:56.4612125Z ##[endgroup]
+2026-05-12T05:07:56.4872380Z   File "/home/runner/work/aj5/aj5/update_gallery.py", line 19
+2026-05-12T05:07:56.4873618Z     ("灏忕┖鍐?, "灏忕┖鍐?),
+2026-05-12T05:07:56.4874063Z                 ^
+2026-05-12T05:07:56.4874592Z SyntaxError: invalid character '┖' (U+2516)
+2026-05-12T05:07:56.4910815Z ##[error]Process completed with exit code 1.

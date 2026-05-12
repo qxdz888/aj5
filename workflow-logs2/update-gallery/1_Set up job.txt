@@ -1,0 +1,32 @@
+﻿2026-05-12T05:12:22.1898410Z Current runner version: '2.334.0'
+2026-05-12T05:12:22.1925313Z ##[group]Runner Image Provisioner
+2026-05-12T05:12:22.1926180Z Hosted Compute Agent
+2026-05-12T05:12:22.1926726Z Version: 20260213.493
+2026-05-12T05:12:22.1927403Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-05-12T05:12:22.1928118Z Build Date: 2026-02-13T00:28:41Z
+2026-05-12T05:12:22.1928862Z Worker ID: {08a4521b-abff-4d04-a2f1-9695a103381f}
+2026-05-12T05:12:22.1929613Z Azure Region: eastus
+2026-05-12T05:12:22.1930169Z ##[endgroup]
+2026-05-12T05:12:22.1931505Z ##[group]Operating System
+2026-05-12T05:12:22.1932068Z Ubuntu
+2026-05-12T05:12:22.1932670Z 24.04.4
+2026-05-12T05:12:22.1933129Z LTS
+2026-05-12T05:12:22.1933688Z ##[endgroup]
+2026-05-12T05:12:22.1934527Z ##[group]Runner Image
+2026-05-12T05:12:22.1935109Z Image: ubuntu-24.04
+2026-05-12T05:12:22.1935704Z Version: 20260413.86.1
+2026-05-12T05:12:22.1936703Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-05-12T05:12:22.1938395Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-05-12T05:12:22.1939323Z ##[endgroup]
+2026-05-12T05:12:22.1940418Z ##[group]GITHUB_TOKEN Permissions
+2026-05-12T05:12:22.1942347Z Contents: read
+2026-05-12T05:12:22.1942884Z Metadata: read
+2026-05-12T05:12:22.1943528Z Packages: read
+2026-05-12T05:12:22.1944375Z ##[endgroup]
+2026-05-12T05:12:22.1946466Z Secret source: Actions
+2026-05-12T05:12:22.1947137Z Prepare workflow directory
+2026-05-12T05:12:22.2275942Z Prepare all required actions
+2026-05-12T05:12:22.2312282Z Getting action download info
+2026-05-12T05:12:22.5135377Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-05-12T05:12:22.6069770Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-05-12T05:12:22.7927808Z Complete job name: update-gallery

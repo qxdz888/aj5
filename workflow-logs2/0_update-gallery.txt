@@ -1,0 +1,177 @@
+﻿2026-05-12T05:12:22.1899119Z Current runner version: '2.334.0'
+2026-05-12T05:12:22.1925338Z ##[group]Runner Image Provisioner
+2026-05-12T05:12:22.1926186Z Hosted Compute Agent
+2026-05-12T05:12:22.1926729Z Version: 20260213.493
+2026-05-12T05:12:22.1927407Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-05-12T05:12:22.1928123Z Build Date: 2026-02-13T00:28:41Z
+2026-05-12T05:12:22.1928867Z Worker ID: {08a4521b-abff-4d04-a2f1-9695a103381f}
+2026-05-12T05:12:22.1929617Z Azure Region: eastus
+2026-05-12T05:12:22.1930172Z ##[endgroup]
+2026-05-12T05:12:22.1931515Z ##[group]Operating System
+2026-05-12T05:12:22.1932072Z Ubuntu
+2026-05-12T05:12:22.1932674Z 24.04.4
+2026-05-12T05:12:22.1933133Z LTS
+2026-05-12T05:12:22.1933691Z ##[endgroup]
+2026-05-12T05:12:22.1934533Z ##[group]Runner Image
+2026-05-12T05:12:22.1935112Z Image: ubuntu-24.04
+2026-05-12T05:12:22.1935707Z Version: 20260413.86.1
+2026-05-12T05:12:22.1936920Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-05-12T05:12:22.1938399Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-05-12T05:12:22.1939327Z ##[endgroup]
+2026-05-12T05:12:22.1940424Z ##[group]GITHUB_TOKEN Permissions
+2026-05-12T05:12:22.1942365Z Contents: read
+2026-05-12T05:12:22.1942887Z Metadata: read
+2026-05-12T05:12:22.1943531Z Packages: read
+2026-05-12T05:12:22.1944380Z ##[endgroup]
+2026-05-12T05:12:22.1946480Z Secret source: Actions
+2026-05-12T05:12:22.1947142Z Prepare workflow directory
+2026-05-12T05:12:22.2275971Z Prepare all required actions
+2026-05-12T05:12:22.2312307Z Getting action download info
+2026-05-12T05:12:22.5135413Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-05-12T05:12:22.6069800Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-05-12T05:12:22.7927836Z Complete job name: update-gallery
+2026-05-12T05:12:22.8626570Z ##[group]Run actions/checkout@v4
+2026-05-12T05:12:22.8627331Z with:
+2026-05-12T05:12:22.8627723Z   fetch-depth: 0
+2026-05-12T05:12:22.8628117Z   repository: qxdz888/aj5
+2026-05-12T05:12:22.8628743Z   token: ***
+2026-05-12T05:12:22.8629118Z   ssh-strict: true
+2026-05-12T05:12:22.8629492Z   ssh-user: git
+2026-05-12T05:12:22.8629881Z   persist-credentials: true
+2026-05-12T05:12:22.8630308Z   clean: true
+2026-05-12T05:12:22.8630700Z   sparse-checkout-cone-mode: true
+2026-05-12T05:12:22.8631171Z   fetch-tags: false
+2026-05-12T05:12:22.8631564Z   show-progress: true
+2026-05-12T05:12:22.8631953Z   lfs: false
+2026-05-12T05:12:22.8632309Z   submodules: false
+2026-05-12T05:12:22.8632704Z   set-safe-directory: true
+2026-05-12T05:12:22.8633294Z ##[endgroup]
+2026-05-12T05:12:22.9759505Z Syncing repository: qxdz888/aj5
+2026-05-12T05:12:22.9761189Z ##[group]Getting Git version info
+2026-05-12T05:12:22.9761846Z Working directory is '/home/runner/work/aj5/aj5'
+2026-05-12T05:12:22.9762759Z [command]/usr/bin/git version
+2026-05-12T05:12:22.9794328Z git version 2.53.0
+2026-05-12T05:12:22.9818376Z ##[endgroup]
+2026-05-12T05:12:22.9839608Z Temporarily overriding HOME='/home/runner/work/_temp/14165d67-8da1-4d3c-a3fb-040f198a05db' before making global git config changes
+2026-05-12T05:12:22.9840950Z Adding repository directory to the temporary git global config as a safe directory
+2026-05-12T05:12:22.9844560Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aj5/aj5
+2026-05-12T05:12:22.9878126Z Deleting the contents of '/home/runner/work/aj5/aj5'
+2026-05-12T05:12:22.9881654Z ##[group]Initializing the repository
+2026-05-12T05:12:22.9885691Z [command]/usr/bin/git init /home/runner/work/aj5/aj5
+2026-05-12T05:12:22.9945087Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-05-12T05:12:22.9946556Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-05-12T05:12:22.9947797Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-05-12T05:12:22.9948518Z hint: call:
+2026-05-12T05:12:22.9949150Z hint:
+2026-05-12T05:12:22.9949614Z hint: 	git config --global init.defaultBranch <name>
+2026-05-12T05:12:22.9950175Z hint:
+2026-05-12T05:12:22.9950840Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-05-12T05:12:22.9951705Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-05-12T05:12:22.9952381Z hint:
+2026-05-12T05:12:22.9952750Z hint: 	git branch -m <name>
+2026-05-12T05:12:22.9953176Z hint:
+2026-05-12T05:12:22.9953740Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-05-12T05:12:22.9955221Z Initialized empty Git repository in /home/runner/work/aj5/aj5/.git/
+2026-05-12T05:12:22.9957107Z [command]/usr/bin/git remote add origin https://github.com/qxdz888/aj5
+2026-05-12T05:12:22.9987270Z ##[endgroup]
+2026-05-12T05:12:22.9987980Z ##[group]Disabling automatic garbage collection
+2026-05-12T05:12:22.9991465Z [command]/usr/bin/git config --local gc.auto 0
+2026-05-12T05:12:23.0019844Z ##[endgroup]
+2026-05-12T05:12:23.0020575Z ##[group]Setting up auth
+2026-05-12T05:12:23.0027516Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-12T05:12:23.0057931Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-12T05:12:23.0342942Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-12T05:12:23.0373982Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-12T05:12:23.0600607Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-12T05:12:23.0633700Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-12T05:12:23.0866407Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-05-12T05:12:23.0901146Z ##[endgroup]
+2026-05-12T05:12:23.0901997Z ##[group]Fetching the repository
+2026-05-12T05:12:23.0909810Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-05-12T05:12:23.3300267Z From https://github.com/qxdz888/aj5
+2026-05-12T05:12:23.3301235Z  * [new branch]      main       -> origin/main
+2026-05-12T05:12:23.3336775Z [command]/usr/bin/git branch --list --remote origin/main
+2026-05-12T05:12:23.3361490Z   origin/main
+2026-05-12T05:12:23.3369647Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-05-12T05:12:23.3391226Z fae6e5ec27e73fe1b643899c0886010ac0b4a074
+2026-05-12T05:12:23.3395379Z ##[endgroup]
+2026-05-12T05:12:23.3396057Z ##[group]Determining the checkout info
+2026-05-12T05:12:23.3396951Z ##[endgroup]
+2026-05-12T05:12:23.3401225Z [command]/usr/bin/git sparse-checkout disable
+2026-05-12T05:12:23.3438596Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-05-12T05:12:23.3465666Z ##[group]Checking out the ref
+2026-05-12T05:12:23.3470723Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-05-12T05:12:23.3519734Z Switched to a new branch 'main'
+2026-05-12T05:12:23.3521998Z branch 'main' set up to track 'origin/main'.
+2026-05-12T05:12:23.3527759Z ##[endgroup]
+2026-05-12T05:12:23.3563141Z [command]/usr/bin/git log -1 --format=%H
+2026-05-12T05:12:23.3587179Z fae6e5ec27e73fe1b643899c0886010ac0b4a074
+2026-05-12T05:12:23.3825029Z ##[group]Run actions/setup-python@v5
+2026-05-12T05:12:23.3825532Z with:
+2026-05-12T05:12:23.3825879Z   python-version: 3.11
+2026-05-12T05:12:23.3826277Z   check-latest: false
+2026-05-12T05:12:23.3826803Z   token: ***
+2026-05-12T05:12:23.3827170Z   update-environment: true
+2026-05-12T05:12:23.3827601Z   allow-prereleases: false
+2026-05-12T05:12:23.3828015Z   freethreaded: false
+2026-05-12T05:12:23.3828611Z ##[endgroup]
+2026-05-12T05:12:23.5519904Z ##[group]Installed versions
+2026-05-12T05:12:23.5606042Z Successfully set up CPython (3.11.15)
+2026-05-12T05:12:23.5607784Z ##[endgroup]
+2026-05-12T05:12:23.5734501Z ##[group]Run python update_gallery.py
+2026-05-12T05:12:23.5735114Z [36;1mpython update_gallery.py[0m
+2026-05-12T05:12:23.5769474Z shell: /usr/bin/bash -e {0}
+2026-05-12T05:12:23.5769944Z env:
+2026-05-12T05:12:23.5770402Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.5771149Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-05-12T05:12:23.5771877Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.5772515Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.5773196Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.5774164Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-05-12T05:12:23.5774753Z ##[endgroup]
+2026-05-12T05:12:23.6222160Z [INFO] Starting shoes gallery update...
+2026-05-12T05:12:23.6223177Z [INFO] Category '乔一': found 2 images
+2026-05-12T05:12:23.6224040Z [WARN] Category directory not found: images/空军
+2026-05-12T05:12:23.6224759Z [WARN] Category directory not found: images/小空军
+2026-05-12T05:12:23.6225378Z [WARN] Category directory not found: images/彪马
+2026-05-12T05:12:23.6225960Z [WARN] Category directory not found: images/wans
+2026-05-12T05:12:23.6226540Z [WARN] Category directory not found: images/lv
+2026-05-12T05:12:23.6227055Z [INFO] Generated 2 shoe entries
+2026-05-12T05:12:23.6227526Z [SUCCESS] Updated index.html with 4 shoes
+2026-05-12T05:12:23.6228045Z [SUCCESS] Gallery update complete!
+2026-05-12T05:12:23.6299515Z ##[group]Run git config --local user.name "github-actions[bot]"
+2026-05-12T05:12:23.6300289Z [36;1mgit config --local user.name "github-actions[bot]"[0m
+2026-05-12T05:12:23.6301117Z [36;1mgit config --local user.email "github-actions[bot]@users.noreply.github.com"[0m
+2026-05-12T05:12:23.6301858Z [36;1mgit add -A[0m
+2026-05-12T05:12:23.6302519Z [36;1mgit diff --staged --quiet || git commit -m "auto: 鏇存柊闉嬪瓙灞曠ず鏁版嵁 $(date '+%Y-%m-%d %H:%M')"[0m
+2026-05-12T05:12:23.6303266Z [36;1mgit push[0m
+2026-05-12T05:12:23.6326425Z shell: /usr/bin/bash -e {0}
+2026-05-12T05:12:23.6326871Z env:
+2026-05-12T05:12:23.6327327Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6328096Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-05-12T05:12:23.6328827Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6329489Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6330203Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-05-12T05:12:23.6330878Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-05-12T05:12:23.6331450Z ##[endgroup]
+2026-05-12T05:12:23.6550013Z [main 8396b57] auto: 鏇存柊闉嬪瓙灞曠ず鏁版嵁 2026-05-12 05:12
+2026-05-12T05:12:23.6551084Z  1 file changed, 3 insertions(+), 26 deletions(-)
+2026-05-12T05:12:23.7569378Z remote: Permission to qxdz888/aj5.git denied to github-actions[bot].
+2026-05-12T05:12:23.7570937Z fatal: unable to access 'https://github.com/qxdz888/aj5/': The requested URL returned error: 403
+2026-05-12T05:12:23.7600646Z ##[error]Process completed with exit code 128.
+2026-05-12T05:12:23.7797562Z Post job cleanup.
+2026-05-12T05:12:23.8766881Z [command]/usr/bin/git version
+2026-05-12T05:12:23.8861210Z git version 2.53.0
+2026-05-12T05:12:23.8871216Z Temporarily overriding HOME='/home/runner/work/_temp/2c02421b-33ed-4455-a38f-8cb531d4c209' before making global git config changes
+2026-05-12T05:12:23.8873319Z Adding repository directory to the temporary git global config as a safe directory
+2026-05-12T05:12:23.8876219Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aj5/aj5
+2026-05-12T05:12:23.8909889Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-12T05:12:23.8945368Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-12T05:12:23.9199707Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-12T05:12:23.9223791Z http.https://github.com/.extraheader
+2026-05-12T05:12:23.9236716Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-05-12T05:12:23.9272415Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-12T05:12:23.9504226Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-12T05:12:23.9537535Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-12T05:12:23.9907722Z Cleaning up orphan processes
+2026-05-12T05:12:24.0308625Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/setup-python@v5. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
