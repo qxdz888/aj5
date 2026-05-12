@@ -100,10 +100,9 @@
     /* ============================
        3.2 搜索框样式
        ============================ */
-    /* 搜索框容器 */
+    /* 搜索框容器 - 电脑端在导航右边 */
     .search-container {
       position: relative;
-      margin-left: 15px;
     }
 
     /* 搜索输入框 */
@@ -146,6 +145,50 @@
       padding: 15px;
       color: #888;
       font-size: 14px;
+    }
+
+    /* ============================
+       3.3 手机端搜索框样式（单独一排）
+       ============================ */
+    @media (max-width: 768px) {
+      /* 导航栏布局 - 允许换行 */
+      .nav-content {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 0;
+        gap: 10px;
+      }
+
+      /* Logo */
+      .logo {
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      /* 导航按钮区域 - 单独一行 */
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      /* 搜索框 - 单独一行 */
+      .search-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 8px 0;
+      }
+
+      .search-input {
+        width: 90%;
+        max-width: 300px;
+      }
+
+      .search-input:focus {
+        width: 90%;
+      }
     }
 
     /* ============================
