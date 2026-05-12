@@ -749,12 +749,24 @@
       }
 
       .navbar {
-        position: relative;     /* 移动端不固定导航栏 */
+        position: fixed;     /* 移动端也保持导航栏悬浮 */
+        width: 100%;
+      }
+
+      /* 移动端导航栏高度调整 */
+      .nav-content {
+        padding: 10px 0;
+        gap: 8px;
       }
 
       .banner {
-        margin-top: 0;           /* 去掉顶部间距 */
+        margin-top: 70px;           /* 顶部导航占用的空间 */
         height: 350px;           /* Banner 高度减小 */
+      }
+
+      /* 页面内容顶部间距（手机端） */
+      .page-content {
+        padding-top: 70px;          /* 给悬浮导航栏留出空间 */
       }
 
       .banner-title {
