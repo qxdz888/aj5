@@ -110,7 +110,7 @@ def scan_directory():
                     if key not in seen:
                         seen[key] = f
 
-            files = sorted(seen.values())
+            files = sorted(seen.values(), key=lambda f: f.stat().st_mtime, reverse=True)
             if files:
                 categories.append((brand_folder, subcategory, display_name))
                 print(f"[INFO] {brand_folder}/{subcategory}: {len(files)} 张图片")
@@ -145,7 +145,7 @@ def scan_directory():
                     key = f.name.lower()
                     if key not in seen:
                         seen[key] = f
-            files = sorted(seen.values())
+            files = sorted(seen.values(), key=lambda f: f.stat().st_mtime, reverse=True)
 
         if files:
             display_name = brand_folder.upper() if brand_folder == "lv" else brand_folder.capitalize()
