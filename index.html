@@ -46,9 +46,39 @@
       max-width: 1400px;
       margin: 0 auto;
       display: flex;
+      flex-direction: column;
+      padding: 10px 20px;
+      gap: 10px;
+    }
+
+    /* 第一行：Logo + 搜索框 */
+    .nav-top-row {
+      display: flex;
       align-items: center;
-      justify-content: space-between; /* logo在左，导航按钮在右 */
-      height: 70px;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    /* 第二行：导航按钮 + 招商与售后 */
+    .nav-bottom-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .nav-bottom-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      flex-shrink: 0;
     }
 
     /* Logo 文字样式 */
@@ -148,45 +178,30 @@
     }
 
     /* ============================
-       3.3 手机端导航栏样式（单行横向滚动）
+       3.3 手机端导航栏样式（两行布局）
        ============================ */
     @media (max-width: 768px) {
-      /* 导航栏布局 - 不换行，允许横向滚动 */
+      /* 导航栏容器 - 两行布局 */
       .nav-content {
-        flex-wrap: nowrap;
-        height: 70px;
-        padding: 0 10px;
+        padding: 8px 10px;
         gap: 8px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; /* Firefox 隐藏滚动条 */
       }
 
-      /* 隐藏 Webkit 浏览器的滚动条 */
-      .nav-content::-webkit-scrollbar {
-        display: none;
+      /* 第一行：Logo + 搜索框 */
+      .nav-top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
       }
 
-      /* Logo - 不换行，缩小 */
+      /* Logo 缩小 */
       .logo {
         font-size: 14px;
         white-space: nowrap;
-        flex-shrink: 0;
       }
 
-      /* 导航按钮区域 - 不换行 */
-      .nav-links {
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        gap: 6px;
-        flex-shrink: 0;
-      }
-
-      /* 搜索框 - 不换行 */
-      .search-container {
-        flex-shrink: 0;
-      }
-
+      /* 搜索框缩小 */
       .search-input {
         width: 100px;
         font-size: 12px;
@@ -202,7 +217,24 @@
         right: 8px;
       }
 
-      /* 招商与售后按钮 - 显示并内联 */
+      /* 第二行：导航按钮 + 招商与售后（横向滚动） */
+      .nav-bottom-row {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .nav-bottom-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-links {
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      /* 招商与售后按钮 */
       .nav-contact {
         display: inline-block !important;
         padding: 6px 12px;
@@ -210,6 +242,7 @@
         flex-shrink: 0;
         white-space: nowrap;
         margin-left: 0;
+        border-radius: 20px;
       }
     }
 
@@ -822,33 +855,76 @@
 
     /* 平板尺寸（宽度 <= 768px） */
     @media (max-width: 768px) {
-      .nav-content {
-        flex-wrap: nowrap;
-        height: 70px;
-        padding: 0 10px;
-        gap: 8px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-      }
-
-      .nav-content::-webkit-scrollbar {
-        display: none;
-      }
-
       .navbar {
         position: fixed;
         width: 100%;
       }
 
+      /* 导航栏容器 - 两行布局 */
+      .nav-content {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+
+      /* 第一行：Logo + 搜索框 */
+      .nav-top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      /* Logo 缩小 */
+      .logo {
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      /* 搜索框缩小 */
+      .search-container {
+        flex-shrink: 0;
+      }
+
+      .search-input {
+        width: 100px;
+        font-size: 12px;
+        padding: 6px 25px 6px 10px;
+      }
+
+      .search-input:focus {
+        width: 120px;
+      }
+
+      .search-icon {
+        font-size: 12px;
+        right: 8px;
+      }
+
+      /* 第二行：导航按钮 + 招商与售后（横向滚动） */
+      .nav-bottom-row {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .nav-bottom-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-links {
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
       .banner {
-        margin-top: 70px;
+        margin-top: 120px;  /* 两行导航栏的高度 */
         height: 350px;
       }
 
-      /* 页面内容顶部间距（手机端） */
+      /* 页面内容顶部间距 */
       .page-content {
-        padding-top: 70px;
+        padding-top: 120px;
       }
 
       .banner-title {
@@ -859,7 +935,7 @@
         font-size: 14px;
       }
 
-      /* 图片网格：每列最小160px（适应小屏幕） */
+      /* 图片网格 */
       .gallery {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 16px;
@@ -881,7 +957,7 @@
         margin-top: 30px;
       }
 
-      /* 招商与售后按钮 - 显示并内联 */
+      /* 招商与售后按钮 */
       .nav-contact {
         display: inline-block !important;
         padding: 6px 12px;
@@ -889,6 +965,7 @@
         flex-shrink: 0;
         white-space: nowrap;
         margin-left: 0;
+        border-radius: 20px;
       }
 
       /* 手机端下拉菜单优化 */
@@ -948,52 +1025,56 @@
   <!-- 顶部导航栏 -->
   <nav class="navbar">
     <div class="nav-content">
-      <!-- Logo 文字 -->
-      <div class="logo">SHOES GALLERY</div>
+      <!-- 第一行：Logo + 搜索框 -->
+      <div class="nav-top-row">
+        <!-- Logo 文字 -->
+        <div class="logo">SHOES GALLERY</div>
 
-      <!-- 导航按钮区域 -->
-      <div class="nav-links">
         <!-- 搜索框 -->
         <div class="search-container">
-          <input type="text" class="search-input" id="searchInput" placeholder="搜索鞋款...">
+          <input type="text" class="search-input" id="searchInput" placeholder="搜索...">
           <span class="search-icon">🔍</span>
         </div>
-
-        <!-- AUTO_NAV_START -->
-        <button class="nav-btn active" data-category="all">全部</button>
-        <div class="nav-dropdown">
-          <button class="nav-btn nav-dropbtn" data-category="adidas" data-children="德训,潮流,贝壳头,阿迪">
-            Adidas <span class="nav-arrow">▼</span>
-          </button>
-          <div class="nav-dropdown-content">
-        <button class="nav-btn" data-category="德训">德训</button>
-        <button class="nav-btn" data-category="潮流">潮流</button>
-        <button class="nav-btn" data-category="贝壳头">贝壳头</button>
-        <button class="nav-btn" data-category="阿迪">阿迪</button>
-        </div>
-        </div>
-        <div class="nav-dropdown">
-          <button class="nav-btn nav-dropbtn" data-category="nike" data-children="dunk,乔一,乔四,开拓者,空军,运动款,高帮">
-            Nike <span class="nav-arrow">▼</span>
-          </button>
-          <div class="nav-dropdown-content">
-        <button class="nav-btn" data-category="dunk">dunk</button>
-        <button class="nav-btn" data-category="乔一">乔一</button>
-        <button class="nav-btn" data-category="乔四">乔四</button>
-        <button class="nav-btn" data-category="开拓者">开拓者</button>
-        <button class="nav-btn" data-category="空军">空军</button>
-        <button class="nav-btn" data-category="运动款">运动款</button>
-        <button class="nav-btn" data-category="高帮">高帮</button>
-        </div>
-        </div>
-        <button class="nav-btn" data-category="LV">LV</button>
-        <button class="nav-btn" data-category="Puma">Puma</button>
-        <button class="nav-btn" data-category="Wans">Wans</button>
-        <!-- AUTO_NAV_END -->
       </div>
 
-      <!-- 招商与售后按钮 -->
-      <a href="recruitment.html" class="nav-contact" style="text-decoration: none; display: inline-block;">招商与售后</a>
+      <!-- 第二行：导航按钮 + 招商与售后（横向滚动） -->
+      <div class="nav-bottom-row">
+        <div class="nav-links">
+          <!-- AUTO_NAV_START -->
+          <button class="nav-btn active" data-category="all">全部</button>
+          <div class="nav-dropdown">
+            <button class="nav-btn nav-dropbtn" data-category="adidas" data-children="德训,潮流,贝壳头,阿迪">
+              Adidas <span class="nav-arrow">▼</span>
+            </button>
+            <div class="nav-dropdown-content">
+          <button class="nav-btn" data-category="德训">德训</button>
+          <button class="nav-btn" data-category="潮流">潮流</button>
+          <button class="nav-btn" data-category="贝壳头">贝壳头</button>
+          <button class="nav-btn" data-category="阿迪">阿迪</button>
+          </div>
+          </div>
+          <div class="nav-dropdown">
+            <button class="nav-btn nav-dropbtn" data-category="nike" data-children="dunk,乔一,乔四,开拓者,空军,运动款,高帮">
+              Nike <span class="nav-arrow">▼</span>
+            </button>
+            <div class="nav-dropdown-content">
+          <button class="nav-btn" data-category="dunk">dunk</button>
+          <button class="nav-btn" data-category="乔一">乔一</button>
+          <button class="nav-btn" data-category="乔四">乔四</button>
+          <button class="nav-btn" data-category="开拓者">开拓者</button>
+          <button class="nav-btn" data-category="空军">空军</button>
+          <button class="nav-btn" data-category="运动款">运动款</button>
+          <button class="nav-btn" data-category="高帮">高帮</button>
+          </div>
+          </div>
+          <button class="nav-btn" data-category="LV">LV</button>
+          <button class="nav-btn" data-category="Puma">Puma</button>
+          <button class="nav-btn" data-category="Wans">Wans</button>
+          <!-- AUTO_NAV_END -->
+          </div>
+
+        <!-- 招商与售后按钮 -->
+        <a href="recruitment.html" class="nav-contact" style="text-decoration: none; display: inline-block; flex-shrink: 0;">招商与售后</a>
       </div>
     </div>
   </nav>
