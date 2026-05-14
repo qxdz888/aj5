@@ -61,9 +61,13 @@ def parse_filename(filename):
                 price = f"{price_raw}元"
             else:
                 price = price_raw
-            return shoe_name, price
 
-    return name_without_ext, "面议"
+            # 计算特惠价（固定129元）
+            special_price = "129元"
+
+            return shoe_name, price, special_price
+
+    return name_without_ext, "面议", ""
 
 def scan_directory():
     """
@@ -118,13 +122,14 @@ def scan_directory():
                     print(f"  [INFO] {brand_name}/{subcategory}: {len(files)} 张图片")
 
                     for idx, f in enumerate(files, 1):
-                        shoe_name, shoe_price = parse_filename(f.name)
+                        shoe_name, shoe_price, special_price = parse_filename(f.name)
                         shoes.append({
                             "id": shoe_id,
                             "name": shoe_name,
                             "category": subcategory,
                             "imgIndex": idx,
                             "price": shoe_price,
+                            "special_price": special_price,
                             "image": f"{IMAGES_DIR}/{brand_name}/{subcategory}/{f.name}"
                         })
                         shoe_id += 1
@@ -148,13 +153,14 @@ def scan_directory():
                 print(f"  [INFO] {brand_name}: {len(files)} 张图片")
 
                 for idx, f in enumerate(files, 1):
-                    shoe_name, shoe_price = parse_filename(f.name)
+                    shoe_name, shoe_price, special_price = parse_filename(f.name)
                     shoes.append({
                         "id": shoe_id,
                         "name": shoe_name,
                         "category": display_name,
                         "imgIndex": idx,
                         "price": shoe_price,
+                        "special_price": special_price,
                         "image": f"{IMAGES_DIR}/{brand_name}/{f.name}"
                     })
                     shoe_id += 1
@@ -231,7 +237,7 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
 
     # 生成shoes数据
     js = "const shoes = [\n" + ",\n".join(
-        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", image: "{s["image"]}" }}'
+        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", image: "{s["image"]}" }}'
         for s in shoes
     ) + "\n];"
 
