@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>招商与售后 - 鞋款展示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    /* 顶部导航 */
+    .top-nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      border-radius: 15px 15px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 16px;
+      background: #f0f0f0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #e0e0e0;
+    }
+
+    .top-nav h1 {
+      font-size: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    /* 主卡片 */
+    .main-card {
+      background: white;
+      border-radius: 0 0 15px 15px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    /* 招商部分 */
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: #667eea;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 28px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
+
+    .section-content {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 30px;
+      line-height: 1.8;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .highlight-box h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .highlight-box ul {
+      list-style: none;
+      text-align: left;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .highlight-box li {
+      padding: 10px 0;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .highlight-box li::before {
+      content: '✓';
+      background: rgba(255,255,255,0.3);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* 售后部分 */
+    .after-sale-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .after-sale-card {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .after-sale-card:hover {
+      border-color: #667eea;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .after-sale-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .after-sale-card h4 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .after-sale-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* 联系方式 */
+    .contact-section {
+      background: linear-gradient(135deg, #07c160 0%, #06ad56 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .contact-section h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 40px;
+      background: white;
+      color: #07c160;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .contact-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .main-card {
+        padding: 25px;
+      }
+
+      .section-title {
+        font-size: 22px;
+      }
+
+      .after-sale-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+      <a href="index.html" class="back-btn">
+        ← 返回首页
+      </a>
+      <h1>招商与售后</h1>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="main-card">
+      <!-- 招商部分 -->
+      <div class="section">
+        <h2 class="section-title">🤝 诚招代理商</h2>
+        <div class="section-content">
+          <div class="highlight-box">
+            <h3>一件代发 · 无库存风险 · 低成本创业</h3>
+            <ul>
+              <li>无需囤货，一件代发</li>
+              <li>零库存风险，轻松创业</li>
+              <li>低成本起步，高回报收益</li>
+              <li>专业培训，全程指导</li>
+              <li>稳定货源，品质保证</li>
+            </ul>
+          </div>
+
+          <h3 style="margin-top: 30px; color: #333; font-size: 20px;">加盟优势</h3>
+          <div class="after-sale-grid" style="margin-top: 20px;">
+            <div class="after-sale-card">
+              <div class="after-sale-icon">💰</div>
+              <h4>低投入</h4>
+              <p>无需大量启动资金<br>低成本开启创业之路</p>
+            </div>
+            <div class="after-sale-card">
+              <div class="after-sale-icon">📦</div>
+              <h4>一件代发</h4>
+              <p>无需囤货压资金<br>我们负责发货</p>
+            </div>
+            <div class="after-sale-card">
+              <div class="after-sale-icon">📈</div>
+              <h4>高利润</h4>
+              <p>极具竞争力的价格<br>丰厚的利润空间</p>
+            </div>
+            <div class="after-sale-card">
+              <div class="after-sale-icon">🎯</div>
+              <h4>全流程支持</h4>
+              <p>提供图片、文案、培训<br>助你快速上手</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 售后部分 -->
+      <div class="section">
+        <h2 class="section-title">🔧 质量三包</h2>
+        <div class="section-content">
+          <div class="after-sale-grid">
+            <div class="after-sale-card">
+              <div class="after-sale-icon">🛡️</div>
+              <h4>包换</h4>
+              <p>一个月内<br>大面积脱胶、断底、爆皮<br>换新处理</p>
+            </div>
+            <div class="after-sale-card">
+              <div class="after-sale-icon">🔄</div>
+              <h4>包修</h4>
+              <p>非人为损坏<br>免费维修<br>让您无后顾之忧</p>
+            </div>
+            <div class="after-sale-card">
+              <div class="after-sale-icon">💯</div>
+              <h4>包退</h4>
+              <p>七天无理由退货<br>购物零风险<br>放心购买</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px;">
+            <h4 style="color: #856404; margin-bottom: 10px;">⚠️ 售后说明</h4>
+            <p style="color: #856404; line-height: 1.8;">
+              • 包换期限：自收货之日起 <strong>30天内</strong><br>
+              • 包换范围：大面积脱胶、断底、爆皮等质量问题<br>
+              • 人为损坏（如划破、烫伤等）不在包换范围内<br>
+              • 详情请咨询客服微信：<strong>xdq880406</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 联系方式 -->
+      <div class="contact-section">
+        <h3>📱 立即联系我们</h3>
+        <p style="margin: 15px 0; font-size: 16px; opacity: 0.9;">扫码添加微信，开启创业之旅</p>
+        <a href="javascript:void(0)" class="contact-btn" onclick="showQR()">
+          💬 扫码添加微信
+        </a>
+        <p style="margin-top: 15px; font-size: 14px; opacity: 0.8;">微信号：xdq880406</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 二维码弹窗 -->
+  <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 90%;">
+      <h3 style="margin-bottom: 20px; color: #333;">扫码添加微信</h3>
+      <img src="wechat-qr.png" alt="微信二维码" style="max-width: 300px; width: 100%; border-radius: 8px;">
+      <p style="margin-top: 15px; color: #666;">微信号：xdq880406</p>
+      <button onclick="closeQR()" style="margin-top: 20px; padding: 10px 30px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">关闭</button>
+    </div>
+  </div>
+
+  <script>
+    function showQR() {
+      document.getElementById('qrModal').style.display = 'flex';
+    }
+
+    function closeQR() {
+      document.getElementById('qrModal').style.display = 'none';
+    }
+
+    // 点击弹窗背景关闭
+    document.getElementById('qrModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeQR();
+      }
+    });
+  </script>
+</body>
+</html>
