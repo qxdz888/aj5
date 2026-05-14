@@ -566,17 +566,18 @@
 
     /* 鞋子价格 */
     .card-price {
-      font-size: 20px;
+      font-size: 14px;
       font-weight: 700;
       color: #fff;
       display: flex;
-      flex-direction: column;
-      gap: 5px;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
     }
 
     /* 原价（删除线） */
     .original-price {
-      font-size: 16px;
+      font-size: 13px;
       color: #999;
       text-decoration: line-through;
       font-weight: 400;
@@ -585,7 +586,7 @@
     /* 特惠价 */
     .special-price {
       color: #ff4444;
-      font-size: 20px;
+      font-size: 14px;
       font-weight: 700;
     }
 
@@ -1349,7 +1350,7 @@
           <div class="card-info">
             <h3 class="card-name">${shoe.name}</h3>
             <p class="card-price">
-              ${shoe.specialPrice ? `<span class="original-price">${shoe.price}</span><span class="special-price">限时特惠价 ${shoe.specialPrice}</span>` : shoe.price}
+              ${shoe.specialPrice ? `<span class="original-price">原价：${shoe.price}</span><span class="special-price">限时特惠价 ${shoe.specialPrice}</span>` : shoe.price}
             </p>
             <span class="card-category">${shoe.category}</span>
           </div>
@@ -1455,7 +1456,7 @@
       modalName.textContent = shoe.name;      // 设置名称文字
       // 设置价格（支持特惠价）
       modalPrice.innerHTML = shoe.specialPrice
-        ? `<span class="original-price">${shoe.price}</span><span class="special-price">限时特惠价 ${shoe.specialPrice}</span>`
+        ? `<span class="original-price">原价：${shoe.price}</span><span class="special-price">限时特惠价 ${shoe.specialPrice}</span>`
         : shoe.price;
       modal.classList.add('active');          // 显示弹窗（添加 .active 类）
       document.body.style.overflow = 'hidden'; // 禁止页面滚动
