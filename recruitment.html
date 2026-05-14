@@ -22,7 +22,7 @@
     }
 
     .container {
-      max-width: 800px;
+      max-width: 900px;
       width: 100%;
     }
 
@@ -51,6 +51,7 @@
       color: #333;
       text-decoration: none;
       transition: all 0.3s;
+      white-space: nowrap;
     }
 
     .back-btn:hover {
@@ -141,44 +142,104 @@
       flex-shrink: 0;
     }
 
-    /* 售后部分 */
-    .after-sale-grid {
+    /* 加盟优势 - 一排显示 */
+    .advantage-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
       margin-top: 20px;
     }
 
-    .after-sale-card {
+    .advantage-card {
       background: white;
       border: 2px solid #e0e0e0;
       border-radius: 12px;
-      padding: 25px;
+      padding: 25px 15px;
       text-align: center;
       transition: all 0.3s;
     }
 
-    .after-sale-card:hover {
+    .advantage-card:hover {
       border-color: #667eea;
       transform: translateY(-5px);
       box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
     }
 
-    .after-sale-icon {
-      font-size: 48px;
-      margin-bottom: 15px;
+    .advantage-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
     }
 
-    .after-sale-card h4 {
-      font-size: 18px;
+    .advantage-card h4 {
+      font-size: 16px;
       color: #333;
+      margin-bottom: 8px;
+    }
+
+    .advantage-card p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* 质量三包 - 一排显示 */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .service-card {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 25px 15px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .service-card:hover {
+      border-color: #667eea;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .service-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .service-card h4 {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .service-card p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* 运费说明 */
+    .shipping-box {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e7f3ff;
+      border-left: 4px solid #2196F3;
+      border-radius: 8px;
+    }
+
+    .shipping-box h4 {
+      color: #1565c0;
       margin-bottom: 10px;
     }
 
-    .after-sale-card p {
+    .shipping-box p {
+      color: #1565c0;
+      line-height: 1.8;
       font-size: 14px;
-      color: #666;
-      line-height: 1.6;
     }
 
     /* 联系方式 */
@@ -218,15 +279,110 @@
 
     /* 响应式 */
     @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .top-nav {
+        padding: 12px 15px;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .top-nav h1 {
+        font-size: 16px;
+        width: 100%;
+        order: 3;
+      }
+
       .main-card {
-        padding: 25px;
+        padding: 25px 20px;
       }
 
       .section-title {
         font-size: 22px;
       }
 
-      .after-sale-grid {
+      /* 加盟优势 - 手机端两列 */
+      .advantage-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .advantage-card {
+        padding: 20px 10px;
+      }
+
+      .advantage-icon {
+        font-size: 28px;
+      }
+
+      .advantage-card h4 {
+        font-size: 14px;
+      }
+
+      .advantage-card p {
+        font-size: 12px;
+      }
+
+      /* 质量三包 - 手机端一列 */
+      .service-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .service-card {
+        padding: 20px 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+      }
+
+      .service-icon {
+        font-size: 28px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+
+      .service-card h4 {
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      .service-card p {
+        font-size: 12px;
+      }
+
+      .shipping-box {
+        padding: 15px;
+      }
+
+      .shipping-box p {
+        font-size: 13px;
+      }
+
+      .contact-section {
+        padding: 25px 20px;
+      }
+
+      .contact-section h3 {
+        font-size: 20px;
+      }
+
+      .contact-btn {
+        padding: 12px 30px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .advantage-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .service-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -260,24 +416,24 @@
           </div>
 
           <h3 style="margin-top: 30px; color: #333; font-size: 20px;">加盟优势</h3>
-          <div class="after-sale-grid" style="margin-top: 20px;">
-            <div class="after-sale-card">
-              <div class="after-sale-icon">💰</div>
+          <div class="advantage-grid">
+            <div class="advantage-card">
+              <div class="advantage-icon">💰</div>
               <h4>低投入</h4>
               <p>无需大量启动资金<br>低成本开启创业之路</p>
             </div>
-            <div class="after-sale-card">
-              <div class="after-sale-icon">📦</div>
+            <div class="advantage-card">
+              <div class="advantage-icon">📦</div>
               <h4>一件代发</h4>
               <p>无需囤货压资金<br>我们负责发货</p>
             </div>
-            <div class="after-sale-card">
-              <div class="after-sale-icon">📈</div>
+            <div class="advantage-card">
+              <div class="advantage-icon">📈</div>
               <h4>高利润</h4>
               <p>极具竞争力的价格<br>丰厚的利润空间</p>
             </div>
-            <div class="after-sale-card">
-              <div class="after-sale-icon">🎯</div>
+            <div class="advantage-card">
+              <div class="advantage-icon">🎯</div>
               <h4>全流程支持</h4>
               <p>提供图片、文案、培训<br>助你快速上手</p>
             </div>
@@ -289,25 +445,31 @@
       <div class="section">
         <h2 class="section-title">🔧 质量三包</h2>
         <div class="section-content">
-          <div class="after-sale-grid">
-            <div class="after-sale-card">
-              <div class="after-sale-icon">🛡️</div>
-              <h4>包换</h4>
-              <p>一个月内<br>大面积脱胶、断底、爆皮<br>换新处理</p>
+          <div class="service-grid">
+            <div class="service-card">
+              <div class="service-icon">🛡️</div>
+              <div>
+                <h4>包换</h4>
+                <p>一个月内<br>大面积脱胶、断底、爆皮<br>换新处理</p>
+              </div>
             </div>
-            <div class="after-sale-card">
-              <div class="after-sale-icon">🔄</div>
-              <h4>包修</h4>
-              <p>非人为损坏<br>免费维修<br>让您无后顾之忧</p>
+            <div class="service-card">
+              <div class="service-icon">🔧</div>
+              <div>
+                <h4>包修</h4>
+                <p>非人为损坏<br>免费维修<br>让您无后顾之忧</p>
+              </div>
             </div>
-            <div class="after-sale-card">
-              <div class="after-sale-icon">💯</div>
-              <h4>包退</h4>
-              <p>因不喜欢导致的退货<br>扣除运费及服务费总计25元<br>且买家承担运费</p>
+            <div class="service-card">
+              <div class="service-icon">💯</div>
+              <div>
+                <h4>包退</h4>
+                <p>因不喜欢导致的退货<br>扣除运费及服务费总计25元<br>且买家承担运费</p>
+              </div>
             </div>
           </div>
 
-          <div style="margin-top: 30px; padding: 20px; background: #e7f3ff; border-left: 4px solid #2196F3; border-radius: 8px;">
+          <div class="shipping-box">
             <h4 style="color: #1565c0; margin-bottom: 10px;">🚚 运费说明</h4>
             <p style="color: #1565c0; line-height: 1.8;">
               • 快递费均为快递公司收取<br>

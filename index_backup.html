@@ -381,24 +381,130 @@
       object-fit: contain;
     }
 
-    .bottom-bar-recruitment {
-      background: #fff;
+    .bottom-bar-wechat {
       color: #07c160;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 20px;
-      transition: all 0.3s ease;
     }
 
-    .bottom-bar-recruitment:hover {
-      background: #f0f0f0;
+    .bottom-bar-wechat:hover {
       color: #06ad56;
     }
 
-    /* 页面底部留出空间（防止内容被底部栏遮挡） */
+    .bottom-bar-recruitment {
       color: #fff;
       font-weight: 600;
     }
+
+    .bottom-bar-recruitment:hover {
+      color: #07c160;
+    }
+
+    .bottom-bar-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .bottom-bar-phone {
+      color: #fff;
+      font-weight: 600;
+    }
+    .bottom-wechat-popup {
+      position: absolute;
+      bottom: 75px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 210px;
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .bottom-wechat-popup.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .bottom-wechat-popup::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      margin-left: -8px;
+      width: 14px;
+      height: 14px;
+      background: #1a1a1a;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+    }
+
+    .bottom-popup-title {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* 底部弹窗二维码 */
+    .bottom-popup-qr {
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      background: #fff;
+      padding: 6px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 12px;
+    }
+
+    .bottom-popup-id {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+      word-break: break-all;
+    }
+
+    .bottom-popup-btn {
+      width: 100%;
+      padding: 12px;
+      background: #07c160;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .bottom-popup-btn:hover {
+      background: #06ad56;
+    }
+
+    .bottom-popup-btn.copied {
+      background: #333;
+    }
+
+    .bottom-popup-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* 页面底部留出空间（防止内容被底部栏遮挡） */
     .page-content {
       padding-bottom: 80px;
     }
@@ -724,6 +830,90 @@
       fill: currentColor;
     }
 
+    /* 招商与售后弹窗 */
+    .recruitment-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .recruitment-modal.active {
+      display: flex;
+    }
+
+    .recruitment-content {
+      max-width: 600px;
+      width: 100%;
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .recruitment-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 5px;
+    }
+
+    .recruitment-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .recruitment-section {
+      margin-bottom: 20px;
+    }
+
+    .recruitment-section h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #07c160;
+      margin-bottom: 10px;
+    }
+
+    .recruitment-section p {
+      font-size: 14px;
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .modal-copy-btn:hover {
+      background: #06ad56;
+    }
+
+    .modal-copy-btn.copied {
+      background: #333;
+    }
+
+    .modal-copy-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
     /* 弹窗关闭按钮 */
     .modal-close {
       position: absolute;
@@ -893,6 +1083,10 @@
         justify-content: center;
       }
 
+      .bottom-bar-divider {
+        display: none;
+      }
+
       .bottom-bar-item span {
         font-size: 13px;
       }
@@ -1035,11 +1229,57 @@
        A. 底部固定联系栏
        ============================ -->
   <div class="bottom-bar" id="bottomBar">
+    <!-- 微信咨询 -->
+    <div class="bottom-bar-item bottom-bar-wechat" onclick="toggleBottomWechat()">
+      <img src="wechat-icon.png" alt="微信">
+      <span>微信咨询</span>
+    </div>
+
+    <div class="bottom-bar-divider"></div>
+
     <!-- 招商与售后 -->
     <div class="bottom-bar-item bottom-bar-recruitment" onclick="window.location.href='recruitment.html'">
       <span>招商与售后</span>
     </div>
 
+    <!-- 底部微信弹窗 -->
+    <div class="bottom-wechat-popup" id="bottomWechatPopup">
+      <p class="bottom-popup-title">扫码添加微信</p>
+      <!-- 微信二维码 -->
+      <img class="bottom-popup-qr" src="wechat-qr.png" alt="微信二维码">
+      <p class="bottom-popup-id" id="bottomWechatId">xdq880406</p>
+      <button class="bottom-popup-btn" id="bottomCopyBtn" onclick="copyBottomWechat()">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        复制微信号
+      </button>
+    </div>
+  </div>
+
+  <!-- 招商与售后弹窗 -->
+  <div class="recruitment-modal" id="recruitmentModal">
+    <div class="recruitment-content">
+      <button class="recruitment-close" onclick="closeRecruitment()">&times;</button>
+      <h2 class="recruitment-title">招商与售后</h2>
+
+      <div class="recruitment-section">
+        <h3>诚招代理商</h3>
+        <p>一件代发，无库存风险，低成本创业</p>
+      </div>
+
+      <div class="recruitment-section">
+        <h3>质量三包</h3>
+        <p>一个月以内大面积脱胶断底爆皮换新处理</p>
+      </div>
+
+      <div class="recruitment-section">
+        <h3>运费说明</h3>
+        <p>快递费均为快递公司收取</p>
+        <p>代理一单运费是10元</p>
+        <p>质量问题导致的换货：买家卖家自行承担各自发出的运费</p>
+        <p>非质量问题导致的换货：买家自行承担去来的运费</p>
+        <p>因不喜欢导致的退货：扣除运费及服务费（打包费、商品调货费）总计25元，且买家承担运费</p>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -1643,6 +1883,26 @@
         }, 3000);
       });
     }
+
+    // === 招商与售后弹窗功能 ===
+    function toggleRecruitment() {
+      const modal = document.getElementById('recruitmentModal');
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeRecruitment() {
+      const modal = document.getElementById('recruitmentModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // 点击弹窗背景也能关闭
+    document.getElementById('recruitmentModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('recruitmentModal')) {
+        closeRecruitment();
+      }
+    });
 
     // === C. 卡片咨询按钮功能 ===
     function showWechatToast() {
