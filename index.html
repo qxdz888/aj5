@@ -1620,39 +1620,6 @@
       }
     });
 
-    function toggleBottomWechat() {
-      const popup = document.getElementById('bottomWechatPopup');
-      popup.classList.toggle('show');
-    }
-
-    function copyBottomWechat() {
-      const wechatId = document.getElementById('bottomWechatId').textContent;
-      navigator.clipboard.writeText(wechatId).then(() => {
-        const btn = document.getElementById('bottomCopyBtn');
-        btn.innerHTML = `
-          <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
-          已复制！
-        `;
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.innerHTML = `
-            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            复制微信号
-          `;
-          btn.classList.remove('copied');
-        }, 3000);
-      });
-    }
-
-    // === C. 卡片咨询按钮功能 ===
-    function showWechatToast() {
-      // 直接打开右下角的微信弹窗
-      const card = document.getElementById('contactCard');
-      const bottomPopup = document.getElementById('bottomWechatPopup');
-      bottomPopup.classList.remove('show');
-      card.classList.add('show');
-    }
-
   </script>
 </body>
 </html>
