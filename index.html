@@ -148,46 +148,68 @@
     }
 
     /* ============================
-       3.3 手机端搜索框样式（单独一排）
+       3.3 手机端导航栏样式（单行横向滚动）
        ============================ */
     @media (max-width: 768px) {
-      /* 导航栏布局 - 允许换行 */
+      /* 导航栏布局 - 不换行，允许横向滚动 */
       .nav-content {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 10px 0;
-        gap: 10px;
+        flex-wrap: nowrap;
+        height: 70px;
+        padding: 0 10px;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox 隐藏滚动条 */
       }
 
-      /* Logo */
+      /* 隐藏 Webkit 浏览器的滚动条 */
+      .nav-content::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Logo - 不换行，缩小 */
       .logo {
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
+        font-size: 14px;
+        white-space: nowrap;
+        flex-shrink: 0;
       }
 
-      /* 导航按钮区域 - 单独一行 */
+      /* 导航按钮区域 - 不换行 */
       .nav-links {
-        width: 100%;
-        justify-content: center;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
         gap: 6px;
+        flex-shrink: 0;
       }
 
-      /* 搜索框 - 单独一行 */
+      /* 搜索框 - 不换行 */
       .search-container {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding: 8px 0;
+        flex-shrink: 0;
       }
 
       .search-input {
-        width: 90%;
-        max-width: 300px;
+        width: 100px;
+        font-size: 12px;
+        padding: 6px 25px 6px 10px;
       }
 
       .search-input:focus {
-        width: 90%;
+        width: 120px;
+      }
+
+      .search-icon {
+        font-size: 12px;
+        right: 8px;
+      }
+
+      /* 招商与售后按钮 - 显示并内联 */
+      .nav-contact {
+        display: inline-block !important;
+        padding: 6px 12px;
+        font-size: 12px;
+        flex-shrink: 0;
+        white-space: nowrap;
+        margin-left: 0;
       }
     }
 
@@ -801,31 +823,32 @@
     /* 平板尺寸（宽度 <= 768px） */
     @media (max-width: 768px) {
       .nav-content {
-        flex-direction: column;  /* 导航栏改为上下排列 */
-        height: auto;
-        padding: 15px 0;
-        gap: 15px;
+        flex-wrap: nowrap;
+        height: 70px;
+        padding: 0 10px;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .nav-content::-webkit-scrollbar {
+        display: none;
       }
 
       .navbar {
-        position: fixed;     /* 移动端也保持导航栏悬浮 */
+        position: fixed;
         width: 100%;
       }
 
-      /* 移动端导航栏高度调整 */
-      .nav-content {
-        padding: 10px 0;
-        gap: 8px;
-      }
-
       .banner {
-        margin-top: 70px;           /* 顶部导航占用的空间 */
-        height: 350px;           /* Banner 高度减小 */
+        margin-top: 70px;
+        height: 350px;
       }
 
       /* 页面内容顶部间距（手机端） */
       .page-content {
-        padding-top: 70px;          /* 给悬浮导航栏留出空间 */
+        padding-top: 70px;
       }
 
       .banner-title {
@@ -858,9 +881,14 @@
         margin-top: 30px;
       }
 
-      /* 顶部联系按钮在手机上隐藏（用底部栏代替） */
+      /* 招商与售后按钮 - 显示并内联 */
       .nav-contact {
-        display: none;
+        display: inline-block !important;
+        padding: 6px 12px;
+        font-size: 12px;
+        flex-shrink: 0;
+        white-space: nowrap;
+        margin-left: 0;
       }
 
       /* 手机端下拉菜单优化 */
