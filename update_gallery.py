@@ -37,11 +37,10 @@ INDEX_FILE = "index.html"
 BRANDS = {
     "nike": "Nike",
     "adidas": "Adidas",
-    "puma": "Puma",
 }
 
 # 独立品牌（没有子分类，图片直接在品牌文件夹下）
-STANDALONE_BRANDS = ["wans", "lv"]
+STANDALONE_BRANDS = ["wans", "lv", "puma"]
 
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG', '.WEBP'}
 
