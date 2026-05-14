@@ -4,43 +4,34 @@
 自动更新球鞋展示数据
 扫描 images 目录结构，自动生成导航菜单和图片数据
 
+【全自动识别】
+- 自动扫描 images/ 下所有文件夹
+- 如果文件夹有子文件夹 → 生成下拉菜单（如 nike/乔一/）
+- 如果文件夹直接放图片 → 生成单个按钮（如 puma/）
+- 无需手动配置，添加/删除文件夹后直接运行即可
+
 使用说明：
-1. 在 images/ 目录下按品牌+子分类创建文件夹结构
-2. 把图片放到对应分类文件夹，文件名格式：款式-价格元.jpg
-3. 运行此脚本，自动更新 index.html
+1. 在 images/ 目录下创建品牌文件夹
+2. 如果品牌有多个分类，创建子文件夹
+3. 把图片放到对应位置，文件名格式：款式-价格元.jpg
+4. 运行此脚本，自动更新 index.html
 
 目录结构示例：
 images/
-├── nike/
-│   ├── 乔一/          ← 放图片
-│   ├── 空军/          ← 放图片
-│   ├── 小空军/        ← 放图片
-│   ├── 开拓者/        ← 放图片
-│   └── 高帮/          ← 放图片
-├── adidas/
-│   ├── 阿迪/          ← 放图片
-│   ├── 其他/          ← 放图片
-│   ├── 德讯/          ← 放图片
-│   └── 贝壳头/        ← 放图片
-├── puma/
-│   └── 彪马/          ← 放图片
-├── wans/              ← 独立品牌，图片直接在文件夹下
-└── lv/                ← 独立品牌，图片直接在文件夹下
+├── nike/           ← 有子文件夹，生成下拉菜单
+│   ├── 乔一/       ← 放图片
+│   └── 空军/       ← 放图片
+├── adidas/         ← 有子文件夹，生成下拉菜单
+│   ├── 德训/       ← 放图片
+│   └── 贝壳头/     ← 放图片
+├── puma/           ← 直接放图片，生成单个按钮
+└── wans/           ← 直接放图片，生成单个按钮
 """
 import os, re
 from pathlib import Path
 
 IMAGES_DIR = "images"
 INDEX_FILE = "index.html"
-
-# 品牌配置（文件夹名，显示名）
-BRANDS = {
-    "nike": "Nike",
-    "adidas": "Adidas",
-}
-
-# 独立品牌（没有子分类，图片直接在品牌文件夹下）
-STANDALONE_BRANDS = ["wans", "lv", "puma"]
 
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG', '.WEBP'}
 
@@ -76,43 +67,85 @@ def parse_filename(filename):
 
 def scan_directory():
     """
-    扫描 images 目录，返回分类结构和图片数据
-    返回格式：{
-        'categories': [(brand, subcategory, display_name), ...],
-        'shoes': [...]
-    }
+    自动扫描 images 目录，返回分类结构和图片数据
+    全自动识别所有品牌文件夹，无需手动配置
+
+    返回格式：
+    brands_with_subs: {品牌文件夹名: [子分类列表]}
+    standalone_brands: [品牌文件夹名列表]  # 直接放图片的
+    shoes: [商品数据列表]
     """
-    categories = []  # [(品牌, 子分类, 显示名), ...]
+    brands_with_subs = {}  # {品牌: [子分类]}
+    standalone_brands = []  # [品牌]
     shoes = []
     shoe_id = 1
 
     images_path = Path(IMAGES_DIR)
 
-    # 扫描有子分类的品牌（如 nike/乔一/）
-    for brand_folder, brand_display in BRANDS.items():
-        brand_path = images_path / brand_folder
-        if not brand_path.exists():
+    if not images_path.exists():
+        print(f"[ERR] {IMAGES_DIR} 目录不存在！")
+        return brands_with_subs, standalone_brands, shoes
+
+    # 扫描 images/ 下的所有文件夹
+    for brand_folder in sorted(images_path.iterdir()):
+        if not brand_folder.is_dir():
             continue
 
-        for subfolder in brand_path.iterdir():
-            if not subfolder.is_dir():
-                continue
+        brand_name = brand_folder.name
 
-            subcategory = subfolder.name
-            display_name = subcategory
+        # 检查是否有子文件夹
+        subfolders = sorted([f for f in brand_folder.iterdir() if f.is_dir()])
 
-            # 扫描该子分类下的图片
+        if subfolders:
+            # 有子文件夹 → 作为"品牌-子分类"结构
+            brands_with_subs[brand_name] = []
+            print(f"[扫描] {brand_name}/ (有{len(subfolders)}个子分类)")
+
+            for subfolder in subfolders:
+                subcategory = subfolder.name
+                brands_with_subs[brand_name].append(subcategory)
+
+                # 扫描该子分类下的图片
+                seen = {}
+                for ext in IMAGE_EXTENSIONS:
+                    for f in subfolder.glob(f"*{ext}"):
+                        key = f.name.lower()
+                        if key not in seen:
+                            seen[key] = f
+
+                files = sorted(seen.values(), key=lambda f: f.stat().st_mtime, reverse=True)
+                if files:
+                    print(f"  [INFO] {brand_name}/{subcategory}: {len(files)} 张图片")
+
+                    for idx, f in enumerate(files, 1):
+                        shoe_name, shoe_price = parse_filename(f.name)
+                        shoes.append({
+                            "id": shoe_id,
+                            "name": shoe_name,
+                            "category": subcategory,
+                            "imgIndex": idx,
+                            "price": shoe_price,
+                            "image": f"{IMAGES_DIR}/{brand_name}/{subcategory}/{f.name}"
+                        })
+                        shoe_id += 1
+
+        else:
+            # 没有子文件夹 → 作为独立品牌（图片直接在品牌文件夹下）
+            standalone_brands.append(brand_name)
+            print(f"[扫描] {brand_name}/ (独立品牌，直接放图片)")
+
+            # 扫描该文件夹下的图片
             seen = {}
             for ext in IMAGE_EXTENSIONS:
-                for f in subfolder.glob(f"*{ext}"):
+                for f in brand_folder.glob(f"*{ext}"):
                     key = f.name.lower()
                     if key not in seen:
                         seen[key] = f
 
             files = sorted(seen.values(), key=lambda f: f.stat().st_mtime, reverse=True)
             if files:
-                categories.append((brand_folder, subcategory, display_name))
-                print(f"[INFO] {brand_folder}/{subcategory}: {len(files)} 张图片")
+                display_name = brand_name.upper() if brand_name == "lv" else brand_name.capitalize()
+                print(f"  [INFO] {brand_name}: {len(files)} 张图片")
 
                 for idx, f in enumerate(files, 1):
                     shoe_name, shoe_price = parse_filename(f.name)
@@ -122,91 +155,46 @@ def scan_directory():
                         "category": display_name,
                         "imgIndex": idx,
                         "price": shoe_price,
-                        "image": f"{IMAGES_DIR}/{brand_folder}/{subcategory}/{f.name}"
+                        "image": f"{IMAGES_DIR}/{brand_name}/{f.name}"
                     })
                     shoe_id += 1
 
-    # 扫描独立品牌（图片直接在品牌文件夹下）
-    for brand_folder in STANDALONE_BRANDS:
-        brand_path = images_path / brand_folder
-        if not brand_path.exists():
-            continue
+    return brands_with_subs, standalone_brands, shoes
 
-        # 检查是否有子文件夹
-        subfolders = [f for f in brand_path.iterdir() if f.is_dir()]
-        files = []
-
-        if not subfolders:
-            # 直接是图片文件
-            seen = {}
-            for ext in IMAGE_EXTENSIONS:
-                for f in brand_path.glob(f"*{ext}"):
-                    key = f.name.lower()
-                    if key not in seen:
-                        seen[key] = f
-            files = sorted(seen.values(), key=lambda f: f.stat().st_mtime, reverse=True)
-
-        if files:
-            display_name = brand_folder.upper() if brand_folder == "lv" else brand_folder.capitalize()
-            print(f"[INFO] {brand_folder}: {len(files)} 张图片")
-
-            for idx, f in enumerate(files, 1):
-                shoe_name, shoe_price = parse_filename(f.name)
-                shoes.append({
-                    "id": shoe_id,
-                    "name": shoe_name,
-                    "category": display_name,
-                    "imgIndex": idx,
-                    "price": shoe_price,
-                    "image": f"{IMAGES_DIR}/{brand_folder}/{f.name}"
-                })
-                shoe_id += 1
-
-    return categories, shoes
-
-def generate_nav_html(categories):
+def generate_nav_html(brands_with_subs, standalone_brands):
     """
-    根据目录结构生成导航HTML
+    根据扫描结果自动生成导航HTML
     """
-    # 按品牌分组
-    brand_categories = {}
-    for brand_folder, subcategory, display_name in categories:
-        if brand_folder not in brand_categories:
-            brand_categories[brand_folder] = []
-        if subcategory:
-            brand_categories[brand_folder].append(subcategory)
-
     nav_buttons = []
 
     # 全部按钮
     nav_buttons.append('<button class="nav-btn active" data-category="all">全部</button>')
 
-    # 品牌下拉菜单
-    for brand_folder, brand_display in BRANDS.items():
-        subs = brand_categories.get(brand_folder)
-        if not subs:
+    # 有子分类的品牌 → 下拉菜单
+    for brand_folder, subcategories in brands_with_subs.items():
+        if not subcategories:
             continue
 
-        children = ",".join(subs)
+        # 品牌显示名（首字母大写）
+        brand_display = brand_folder.capitalize()
+
+        children = ",".join(subcategories)
         nav_buttons.append(f'''<div class="nav-dropdown">
           <button class="nav-btn nav-dropbtn" data-category="{brand_folder}" data-children="{children}">
             {brand_display} <span class="nav-arrow">▼</span>
           </button>
           <div class="nav-dropdown-content">''')
 
-        for sub in subs:
+        for sub in subcategories:
             nav_buttons.append(f'<button class="nav-btn" data-category="{sub}">{sub}</button>')
 
         nav_buttons.append('</div>')
         nav_buttons.append('</div>')
 
-    # 独立品牌
-    for brand_folder in STANDALONE_BRANDS:
-        # 检查这个品牌是否有图片
+    # 独立品牌 → 单个按钮
+    for brand_folder in standalone_brands:
+        # 检查是否有图片
         brand_path = Path(IMAGES_DIR) / brand_folder
-        if not brand_path.exists():
-            continue
-
         has_images = False
         for ext in IMAGE_EXTENSIONS:
             if list(brand_path.glob(f"*{ext}")):
@@ -219,13 +207,13 @@ def generate_nav_html(categories):
 
     return "\n        ".join(nav_buttons)
 
-def update_index_html(categories, shoes):
+def update_index_html(brands_with_subs, standalone_brands, shoes):
     """更新 index.html 中的导航和shoes数据"""
     with open(INDEX_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
 
     # 生成新的导航HTML
-    new_nav = generate_nav_html(categories)
+    new_nav = generate_nav_html(brands_with_subs, standalone_brands)
 
     # 替换导航区域（使用标记）
     start_marker = "<!-- AUTO_NAV_START -->"
@@ -254,19 +242,24 @@ def update_index_html(categories, shoes):
         f.write(content)
 
     print(f"[OK] 已更新 {len(shoes)} 个商品")
+    print(f"[OK] 导航品牌：{len(brands_with_subs)} 个下拉菜单 + {len(standalone_brands)} 个独立按钮")
     return True
 
 if __name__ == "__main__":
     print("=" * 50)
     print("自动更新鞋款展示数据")
     print("=" * 50)
-    categories, shoes = scan_directory()
+    print("【全自动模式】扫描 images/ 下所有文件夹...\n")
+
+    brands_with_subs, standalone_brands, shoes = scan_directory()
+
     if not shoes:
         print("\n[ERR] 无数据！")
-        print("请在 images 目录下创建分类文件夹并放入图片")
+        print("请在 images 目录下创建品牌文件夹并放入图片")
         print("\n目录结构示例：")
-        print("  images/nike/乔一/黑紫脚趾-129元.jpg")
-        print("  images/adidas/阿迪/白贝壳-99元.jpg")
+        print("  images/nike/乔一/黑紫脚趾-129元.jpg  ← 有子分类")
+        print("  images/puma/休闲鞋-169元.jpg          ← 无子分类")
     else:
-        update_index_html(categories, shoes)
+        print(f"\n扫描完成：{len(brands_with_subs)} 个品牌(有子分类) + {len(standalone_brands)} 个独立品牌")
+        update_index_html(brands_with_subs, standalone_brands, shoes)
         print("\n完成！请提交到 GitHub 部署")
