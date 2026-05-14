@@ -282,125 +282,6 @@
     }
 
     /* 顶部联系卡片的弹窗 */
-    .nav-contact-popup {
-      position: absolute;
-      top: 80px;
-      right: 20px;
-      width: 210px;
-      background: #1a1a1a;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 20px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      z-index: 200;
-    }
-
-    .nav-contact-popup.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    /* 小三角箭头 */
-    .nav-contact-popup::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      right: 30px;
-      width: 14px;
-      height: 14px;
-      background: #1a1a1a;
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      transform: rotate(45deg);
-    }
-
-    .nav-popup-title {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    /* 导航弹窗二维码 */
-    .nav-popup-qr {
-      width: 160px;
-      height: 160px;
-      border-radius: 10px;
-      background: #fff;
-      padding: 6px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 12px;
-    }
-
-    .nav-popup-id {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .nav-popup-icon {
-      width: 36px;
-      height: 36px;
-      background: #07c160;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-popup-icon img {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-    }
-
-    .nav-popup-id span {
-      font-size: 18px;
-      font-weight: 700;
-      color: #fff;
-      word-break: break-all;
-    }
-
-    .nav-popup-btn {
-      width: 100%;
-      padding: 12px;
-      background: #07c160;
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .nav-popup-btn:hover {
-      background: #06ad56;
-    }
-
-    .nav-popup-btn.copied {
-      background: #333;
-    }
-
-    .nav-popup-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
     /* ============================
        A. 底部固定联系栏
        ============================ */
@@ -1068,20 +949,6 @@
 
       <!-- 招商与售后按钮 -->
       <a href="recruitment.html" class="nav-contact" style="text-decoration: none; display: inline-block;">招商与售后</a>
-          <p class="nav-popup-title">扫码添加微信</p>
-          <!-- 微信二维码 -->
-          <img class="nav-popup-qr" src="wechat-qr.png" alt="微信二维码">
-          <div class="nav-popup-id">
-            <div class="nav-popup-icon">
-              <img src="wechat-icon.png" alt="微信">
-            </div>
-            <span id="navWechatId">xdq880406</span>
-          </div>
-          <button class="nav-popup-btn" id="navCopyBtn" onclick="copyNavWechat()">
-            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            复制微信号
-          </button>
-        </div>
       </div>
     </div>
   </nav>
@@ -1719,79 +1586,6 @@
       }
     });
 
-    /* ============================
-       11.10 联系按钮功能
-       ============================ */
-
-    // 点击页面其他地方，关闭所有联系弹窗
-    document.addEventListener('click', (e) => {
-      const navPopup = document.getElementById('navContactPopup');
-      const navBtn = document.querySelector('.nav-contact');
-      const bottomPopup = document.getElementById('bottomWechatPopup');
-      const bottomWechat = document.querySelector('.bottom-bar-wechat');
-
-      if (!navBtn?.contains(e.target) && !navPopup?.contains(e.target)) {
-        navPopup?.classList.remove('show');
-      }
-      if (!bottomWechat?.contains(e.target) && !bottomPopup?.contains(e.target)) {
-        bottomPopup?.classList.remove('show');
-      }
-    });
-
-    // 复制微信号功能（弹窗内的复制按钮）
-    function copyWechat() {
-      const wechatId = document.getElementById('wechatId').textContent; // 读取微信号
-      navigator.clipboard.writeText(wechatId).then(() => {
-        // 复制成功后弹窗复制按钮显示"已复制"
-        const btn = document.querySelector('.modal-copy-btn');
-        if (btn) {
-          btn.innerHTML = `
-            <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
-            已复制！
-          `;
-          btn.classList.add('copied');
-        }
-        setTimeout(() => {
-          // 3秒后恢复原样
-          if (btn) {
-            btn.innerHTML = `
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-              复制微信号
-            `;
-            btn.classList.remove('copied');
-          }
-        }, 3000);
-      });
-    }
-
-    // === B. 顶部导航栏联系按钮功能 ===
-    function toggleNavContact() {
-      const popup = document.getElementById('navContactPopup');
-      const bottomPopup = document.getElementById('bottomWechatPopup');
-      // 关闭底部弹窗
-      bottomPopup.classList.remove('show');
-      popup.classList.toggle('show');
-    }
-
-    function copyNavWechat() {
-      const wechatId = document.getElementById('navWechatId').textContent;
-      navigator.clipboard.writeText(wechatId).then(() => {
-        const btn = document.getElementById('navCopyBtn');
-        btn.innerHTML = `
-          <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
-          已复制！
-        `;
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.innerHTML = `
-            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            复制微信号
-          `;
-          btn.classList.remove('copied');
-        }, 3000);
-      });
-    }
-
     // === A. 底部固定栏功能 ===
     // 页面滚动时显示/隐藏底部栏
     window.addEventListener('scroll', () => {
@@ -1805,9 +1599,6 @@
 
     function toggleBottomWechat() {
       const popup = document.getElementById('bottomWechatPopup');
-      const navPopup = document.getElementById('navContactPopup');
-      // 关闭顶部弹窗
-      navPopup.classList.remove('show');
       popup.classList.toggle('show');
     }
 
@@ -1835,9 +1626,7 @@
       // 直接打开右下角的微信弹窗
       const card = document.getElementById('contactCard');
       const bottomPopup = document.getElementById('bottomWechatPopup');
-      const navPopup = document.getElementById('navContactPopup');
       bottomPopup.classList.remove('show');
-      navPopup.classList.remove('show');
       card.classList.add('show');
     }
 
