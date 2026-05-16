@@ -247,6 +247,21 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
     with open(INDEX_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
 
+    # 同时生成 manifest.json（供 520aj 等子站自动同步图片）
+    import json
+    manifest = {
+        "generated_at": __import__('datetime').datetime.now().isoformat(),
+        "base_url": "https://aj5.netlify.app",
+        "shoes": shoes
+    }
+    # 把 image 字段改成完整 URL
+    for s in manifest["shoes"]:
+        s["image"] = f"https://aj5.netlify.app/{s['image']}"
+
+    with open("manifest.json", 'w', encoding='utf-8') as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    print(f"[OK] 已生成 manifest.json（{len(shoes)} 个商品）")
+
     print(f"[OK] 已更新 {len(shoes)} 个商品")
     print(f"[OK] 导航品牌：{len(brands_with_subs)} 个下拉菜单 + {len(standalone_brands)} 个独立按钮")
     return True
