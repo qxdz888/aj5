@@ -65,7 +65,8 @@
       align-items: center;
       gap: 10px;
       width: 100%;
-      overflow-x: auto;
+      /* 桌面端不设置 overflow-x，避免下拉菜单被裁剪 */
+      overflow-y: visible;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
