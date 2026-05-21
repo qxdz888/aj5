@@ -899,6 +899,36 @@
       }
     }
 
+    /* 加载更多按钮 */
+    .load-more-container {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .load-more-btn {
+      padding: 12px 40px;
+      background: linear-gradient(135deg, #e74c3c 0%, #ff6b6b 100%);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .load-more-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    }
+
+    .load-more-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     /* 手机尺寸（宽度 <= 480px） */
     @media (max-width: 480px) {
       /* 图片网格：固定2列布局 */
@@ -914,6 +944,11 @@
       .nav-btn {
         padding: 6px 12px;
         font-size: 11px;
+      }
+
+      .load-more-btn {
+        padding: 10px 30px;
+        font-size: 13px;
       }
     }
   </style>
@@ -999,6 +1034,11 @@
 
   <!-- 图片展示区：JS 会动态往这里插入卡片 -->
   <section class="gallery" id="gallery"></section>
+
+  <!-- 加载更多按钮 -->
+  <div class="load-more-container" id="loadMoreContainer">
+    <button class="load-more-btn" id="loadMoreBtn">加载更多</button>
+  </div>
 
   <!-- 点击图片后的放大弹窗 -->
   <div class="modal" id="modal">
@@ -1310,6 +1350,12 @@
     let currentCategory = 'all';  // 当前选中的分类，默认是"全部"
     let currentSearchTerm = '';     // 当前搜索关键词
 
+    // 分页状态
+    let filteredShoes = [];
+    let displayCount = 0;
+    const PAGE_SIZE = 40;
+    let isLoading = false;
+
     // 获取页面上的元素（用 ID 找到它们）
     const gallery = document.getElementById('gallery');      // 图片展示区容器
     const modal = document.getElementById('modal');         // 弹窗
@@ -1330,6 +1376,17 @@
        参数：category - 要显示的分类名，'all' 表示显示全部
        或者传入逗号分隔的字符串，如 "乔一,空军,小空军"
     */
+    // 事件委托：卡片点击（只需绑定一次，不需要每次重新绑定）
+    gallery.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (card) {
+        openModal(parseInt(card.dataset.id));
+      }
+    });
+
+    /* ============================
+       11.3 渲染图片函数【已修改：分页加载】
+    ============================ */
     function renderGallery(categories) {
       // 支持传入数组或逗号分隔的字符串
       let categoryList;
@@ -1341,22 +1398,40 @@
         categoryList = [categories];
       }
 
-      // 筛选数据
-      // 如果是 'all'，返回所有鞋子；否则只返回该分类的鞋子
-      const filtered = categories === 'all'
+      // 筛选数据，存入 filteredShoes
+      filteredShoes = categories === 'all'
         ? shoes
         : shoes.filter(shoe => categoryList.includes(shoe.category));
 
       // 如果没有内容，显示空状态提示
-      if (filtered.length === 0) {
+      if (filteredShoes.length === 0) {
         gallery.innerHTML = '<div class="empty-state">暂无该分类的鞋款</div>';
+        document.getElementById('loadMoreContainer').style.display = 'none';
         return;
       }
 
-      // 生成卡片 HTML
-      // map 会遍历每个鞋子，生成对应的 HTML 字符串
-      // join('') 把所有字符串合并成一个
-      gallery.innerHTML = filtered.map(shoe => `
+      // 重置分页，加载第一页（替换模式）
+      displayCount = 0;
+      loadMore(false);
+    }
+
+    /* ============================
+       11.3b 加载更多（分页核心）
+       ============================ */
+    function loadMore(append) {
+      if (isLoading) return;
+      if (!append && displayCount >= filteredShoes.length) return;
+
+      isLoading = true;
+      const batch = filteredShoes.slice(displayCount, displayCount + PAGE_SIZE);
+
+      if (batch.length === 0) {
+        isLoading = false;
+        document.getElementById('loadMoreContainer').style.display = 'none';
+        return;
+      }
+
+      const html = batch.map(shoe => `
         <div class="card" data-id="${shoe.id}">
           <img class="card-image" src="${getShoeImage(shoe)}" alt="${shoe.name}" loading="lazy">
           <div class="card-info">
@@ -1369,18 +1444,22 @@
         </div>
       `).join('');
 
-      // 给每个卡片绑定点击事件（打开弹窗）
-      document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('click', () => {
-          // 获取卡片的 data-id 属性值，转成数字
-          const id = parseInt(card.dataset.id);
-          openModal(id);  // 打开弹窗显示这张大图
-        });
-      });
+      if (append) {
+        gallery.insertAdjacentHTML('beforeend', html);
+      } else {
+        gallery.innerHTML = html;
+      }
+
+      displayCount += batch.length;
+      isLoading = false;
+
+      // 显示/隐藏加载更多按钮
+      const hasMore = displayCount < filteredShoes.length;
+      document.getElementById('loadMoreContainer').style.display = hasMore ? 'block' : 'none';
 
       // 更新搜索结果计数
       if (currentSearchTerm) {
-        searchResultsCount.textContent = `搜索 "${currentSearchTerm}" 找到 ${filtered.length} 个结果`;
+        searchResultsCount.textContent = `搜索 "${currentSearchTerm}" 找到 ${filteredShoes.length} 个结果`;
         searchResultsCount.style.display = 'block';
       } else {
         searchResultsCount.style.display = 'none';
@@ -1388,67 +1467,37 @@
     }
 
     /* ============================
-       11.4 搜索功能函数
-
-       功能：根据关键词搜索鞋款名称
-       搜索会匹配名称和价格
+       11.4 搜索功能函数【已修改：支持分页】
     ============================ */
     function performSearch(keyword) {
       currentSearchTerm = keyword.trim().toLowerCase();
 
       if (!currentSearchTerm) {
-        // 空关键词，显示当前分类的全部
+        // 空关键词，显示当前分类的全部（会重置分页）
         renderGallery(currentCategory);
         return;
       }
 
       // 先按分类筛选
-      let filtered = shoes;
+      let baseList = shoes;
       if (currentCategory !== 'all') {
         const categoryList = currentCategory.includes(',')
           ? currentCategory.split(',')
           : [currentCategory];
-        filtered = shoes.filter(shoe => categoryList.includes(shoe.category));
+        baseList = shoes.filter(shoe => categoryList.includes(shoe.category));
       }
 
-      // 再按关键词筛选（匹配名称和价格）
-      filtered = filtered.filter(shoe => {
+      // 再按关键词筛选
+      filteredShoes = baseList.filter(shoe => {
         const nameMatch = shoe.name.toLowerCase().includes(currentSearchTerm);
         const priceMatch = shoe.price.toLowerCase().includes(currentSearchTerm);
         const categoryMatch = shoe.category.toLowerCase().includes(currentSearchTerm);
         return nameMatch || priceMatch || categoryMatch;
       });
 
-      // 显示结果
-      if (filtered.length === 0) {
-        gallery.innerHTML = '<div class="empty-state">没有找到匹配的商品</div>';
-        searchResultsCount.textContent = `搜索 "${currentSearchTerm}" 没有找到结果`;
-        searchResultsCount.style.display = 'block';
-      } else {
-        gallery.innerHTML = filtered.map(shoe => `
-          <div class="card" data-id="${shoe.id}">
-            <img class="card-image" src="${getShoeImage(shoe)}" alt="${shoe.name}" loading="lazy">
-            <div class="card-info">
-              <h3 class="card-name">${shoe.name}</h3>
-              <p class="card-price">
-                ${shoe.specialPrice ? `<span class="original-price">${shoe.price}</span><span class="special-price">限时特惠价 ${shoe.specialPrice}</span>` : shoe.price}
-              </p>
-              <span class="card-category">${shoe.category}</span>
-            </div>
-          </div>
-        `).join('');
-
-        // 绑定点击事件
-        document.querySelectorAll('.card').forEach(card => {
-          card.addEventListener('click', () => {
-            const id = parseInt(card.dataset.id);
-            openModal(id);
-          });
-        });
-
-        searchResultsCount.textContent = `搜索 "${currentSearchTerm}" 找到 ${filtered.length} 个结果`;
-        searchResultsCount.style.display = 'block';
-      }
+      // 重置分页，加载第一页
+      displayCount = 0;
+      loadMore(false);
     }
 
     /* ============================
@@ -1638,6 +1687,22 @@
       } else {
         bottomBar.classList.remove('show');
       }
+    });
+
+    // 滚动触底自动加载更多
+    window.addEventListener('scroll', () => {
+      if (isLoading) return;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+      if (scrollTop + clientHeight >= scrollHeight - 300) {
+        loadMore(true);
+      }
+    });
+
+    // 加载更多按钮
+    document.getElementById('loadMoreBtn').addEventListener('click', () => {
+      loadMore(true);
     });
 
   </script>
