@@ -69,6 +69,68 @@ def parse_filename(filename):
 
     return name_without_ext, "面议", ""
 
+def collect_git_images():
+    """从 git 已跟踪/staged/未跟踪文件补充图片路径，绕过 Windows API 对某些中文目录名的不可见问题"""
+    import subprocess
+    paths = set()
+    for args in (['git', 'diff', '--cached', '--name-only'],
+                 ['git', 'ls-files', '-z'],
+                 ['git', 'ls-files', '-z', '--others', '--exclude-standard']):
+        try:
+            out = subprocess.check_output(args, stderr=subprocess.DEVNULL)
+        except Exception:
+            continue
+        if '-z' in args:
+            for raw in out.split(b'\x00'):
+                if raw:
+                    paths.add(raw.decode('utf-8', 'replace'))
+        else:
+            for line in out.decode('utf-8', 'replace').splitlines():
+                if line.strip():
+                    paths.add(line.strip())
+    return [p for p in paths if p.startswith('images/')]
+
+def merge_git_supplement(brands_with_subs, standalone_brands, shoes):
+    """把 git 中存在但 os.walk 漏扫的图片补进 shoes/nav（解决中文目录 Windows API 不可见）"""
+    ext = {'.jpg', '.jpeg', '.png', '.webp'}
+    seen = {s['image'] for s in shoes}
+    shoe_id = (max((s['id'] for s in shoes), default=0)) + 1
+    added = 0
+    for p in collect_git_images():
+        if not p.lower().endswith(tuple(ext)) or not p.startswith('images/'):
+            continue
+        if p in seen:
+            continue
+        parts = p.split('/')
+        brand = parts[1]
+        fname = parts[-1]
+        if len(parts) == 3:
+            subcat = None
+            display = brand.upper() if brand == 'lv' else brand.capitalize()
+            cat = display
+        elif len(parts) >= 4:
+            subcat = parts[2]
+            cat = subcat
+        else:
+            continue
+        shoe_name, shoe_price, special = parse_filename(fname)
+        shoes.append({
+            "id": shoe_id, "name": shoe_name, "category": cat,
+            "imgIndex": shoe_id, "price": shoe_price,
+            "special_price": special, "image": p
+        })
+        seen.add(p)
+        shoe_id += 1
+        added += 1
+        if subcat:
+            brands_with_subs.setdefault(brand, [])
+            if subcat not in brands_with_subs[brand]:
+                brands_with_subs[brand].append(subcat)
+        elif brand not in standalone_brands:
+            standalone_brands.append(brand)
+    if added:
+        print(f"[补充] 从 git 索引补录 {added} 张图(本地API不可见的中文目录)")
+
 def scan_directory():
     """
     自动扫描 images 目录，返回分类结构和图片数据
@@ -164,6 +226,9 @@ def scan_directory():
                         "image": f"{IMAGES_DIR}/{brand_name}/{f.name}"
                     })
                     shoe_id += 1
+
+    # 补充 git 中存在但本地 API 漏扫的图片（中文目录黑洞）
+    merge_git_supplement(brands_with_subs, standalone_brands, shoes)
 
     return brands_with_subs, standalone_brands, shoes
 
