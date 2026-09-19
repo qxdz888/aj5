@@ -211,7 +211,7 @@ def scan_directory():
 
             files = sorted(seen.values(), key=lambda f: f.stat().st_mtime, reverse=True)
             if files:
-                display_name = brand_name.upper() if brand_name == "lv" else brand_name.capitalize()
+                display_name = brand_name  # 平铺分类：原样用文件夹名
                 print(f"  [INFO] {brand_name}: {len(files)} 张图片")
 
                 for idx, f in enumerate(files, 1):
@@ -273,7 +273,7 @@ def generate_nav_html(brands_with_subs, standalone_brands):
                 break
 
         if has_images:
-            display_name = brand_folder.upper() if brand_folder == "lv" else brand_folder.capitalize()
+            display_name = brand_folder  # 原样用文件夹名
             nav_buttons.append(f'<button class="nav-btn" data-category="{display_name}">{display_name}</button>')
 
     return "\n        ".join(nav_buttons)
