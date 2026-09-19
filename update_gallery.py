@@ -33,6 +33,10 @@ from pathlib import Path
 IMAGES_DIR = "images"
 INDEX_FILE = "index.html"
 
+# 首屏内联策略：每个分类先取前几张（保证切任何分类都有内容），再按序补足到 INLINE_TOTAL
+INLINE_PER_CATEGORY = 3
+INLINE_TOTAL = 80
+
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG', '.WEBP'}
 
 def parse_filename(filename):
@@ -278,6 +282,63 @@ def generate_nav_html(brands_with_subs, standalone_brands):
 
     return "\n        ".join(nav_buttons)
 
+LAZY_START = "<!-- AUTO_LAZY_START -->"
+LAZY_END = "<!-- AUTO_LAZY_END -->"
+
+LAZY_BLOCK = LAZY_START + """
+    /* 首屏只内联部分数据（体积更小、渲染更快），全量数据后台静默加载 */
+    let allLoaded = false;
+    async function loadAllShoes() {
+      try {
+        const res = await fetch('manifest.json?t=' + Date.now());
+        const data = await res.json();
+        const known = new Set(shoes.map(s => s.id));
+        const add = (data.shoes || [])
+          .filter(s => !known.has(s.id))
+          .map(s => Object.assign({}, s, {
+            image: (s.image || '').replace(/^https?:\\/\\/[^/]+\\//, '')
+          }));
+        if (add.length) shoes.push(...add);
+        allLoaded = true;
+        if (currentSearchTerm) {
+          performSearch(searchInput.value);
+        } else if (currentCategory !== 'all') {
+          renderGallery(currentCategory);
+        } else {
+          const box = document.getElementById('loadMoreContainer');
+          if (box) box.style.display = displayCount < filteredShoes.length ? 'block' : 'none';
+        }
+        console.log('[aj5] 全量数据就绪：' + shoes.length + ' 件');
+      } catch (e) {
+        console.warn('[aj5] 全量数据加载失败，仅显示首屏数据', e);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadAllShoes);
+    } else {
+      setTimeout(loadAllShoes, 0);
+    }
+    """ + LAZY_END
+
+def build_inline(shoes):
+    """首屏内联数据：每分类前 N 张（保证切换任意分类都有内容）+ 按序补足"""
+    picked, seen = [], set()
+    by_cat = {}
+    for s in shoes:
+        by_cat.setdefault(s["category"], []).append(s)
+    for cat in sorted(by_cat):
+        for s in by_cat[cat][:INLINE_PER_CATEGORY]:
+            if s["id"] not in seen:
+                picked.append(s)
+                seen.add(s["id"])
+    for s in shoes:
+        if len(picked) >= INLINE_TOTAL:
+            break
+        if s["id"] not in seen:
+            picked.append(s)
+            seen.add(s["id"])
+    return picked
+
 def update_index_html(brands_with_subs, standalone_brands, shoes):
     """更新 index.html 中的导航和shoes数据"""
     with open(INDEX_FILE, 'r', encoding='utf-8') as f:
@@ -300,17 +361,38 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
     # 替换导航部分
     content = content[:start_idx + len(start_marker)] + "\n        " + new_nav + "\n        " + content[end_idx:]
 
-    # 生成shoes数据
+    # 生成 shoes 数据：仅内联首屏部分（其余后台从 manifest.json 加载）
+    inline = build_inline(shoes)
     js = "const shoes = [\n" + ",\n".join(
         f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", image: "{s["image"]}" }}'
-        for s in shoes
+        for s in inline
     ) + "\n];"
 
     # 替换shoes数据
     content = re.sub(r'const shoes = \[.*?\];', js, content, flags=re.DOTALL)
 
+    # 注入/更新后台全量加载逻辑（幂等，重复运行不会叠加）
+    ls, le = content.find(LAZY_START), content.find(LAZY_END)
+    if ls != -1 and le != -1:
+        content = content[:ls] + LAZY_BLOCK + content[le + len(LAZY_END):]
+    else:
+        pos = content.find(js)
+        if pos == -1:
+            print("[WARN] 未定位到内联 shoes 数据，跳过懒加载注入")
+        else:
+            content = content[:pos + len(js)] + "\n\n    " + LAZY_BLOCK + content[pos + len(js):]
+
+    # head 预取 manifest.json（只加一次）
+    if 'rel="prefetch" href="manifest.json"' not in content:
+        content = content.replace(
+            '</head>',
+            '  <link rel="prefetch" href="manifest.json">\n</head>', 1
+        )
+
     with open(INDEX_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
+    import os
+    print(f"[OK] 首屏内联 {len(inline)} 件（HTML {os.path.getsize(INDEX_FILE)/1024:.0f}KB），全量 {len(shoes)} 件后台加载")
 
     # 同时生成 manifest.json（供 520aj 等子站自动同步图片）
     import json
