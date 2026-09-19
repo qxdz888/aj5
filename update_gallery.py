@@ -29,6 +29,18 @@ images/
 """
 import os, re
 from pathlib import Path
+from urllib.parse import quote
+
+# 图片走 jsDelivr CDN（免备案、国内有节点），源文件仍在 GitHub 仓库 qxdz888/aj5 的 main 分支
+CDN_BASE = "https://cdn.jsdelivr.net/gh/qxdz888/aj5@main"
+
+def cdn_url(rel):
+    """相对路径 -> jsDelivr 绝对地址（中文路径做 percent-encode）"""
+    if not rel:
+        return ""
+    if rel.startswith('http'):
+        return rel
+    return CDN_BASE + '/' + quote(rel, safe='/')
 
 IMAGES_DIR = "images"
 INDEX_FILE = "index.html"
@@ -301,7 +313,7 @@ LAZY_BLOCK = LAZY_START + """
         const res = await fetch('manifest.json?t=' + Date.now());
         const data = await res.json();
         const known = new Set(shoes.map(s => s.id));
-        const strip = u => (u || '').replace(/^https?:\\/\\/[^/]+\\//, '');
+        const strip = u => (u || '').replace(/^https?:\\/\\/aj5\\.netlify\\.app\\//, '');
         const add = (data.shoes || [])
           .filter(s => !known.has(s.id))
           .map(s => Object.assign({}, s, {
@@ -374,7 +386,7 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
     # 生成 shoes 数据：仅内联首屏部分（其余后台从 manifest.json 加载）
     inline = build_inline(shoes)
     js = "const shoes = [\n" + ",\n".join(
-        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", image: "{s["image"]}", thumb: "{s.get("thumb", "")}" }}'
+        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", image: "{cdn_url(s["image"])}", thumb: "{cdn_url(s.get("thumb", ""))}" }}'
         for s in inline
     ) + "\n];"
 
@@ -408,14 +420,14 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
     import json
     manifest = {
         "generated_at": __import__('datetime').datetime.now().isoformat(),
-        "base_url": "https://aj5.netlify.app",
+        "base_url": CDN_BASE,
         "shoes": shoes
     }
     # 把 image 字段改成完整 URL
     for s in manifest["shoes"]:
-        s["image"] = f"https://aj5.netlify.app/{s['image']}"
+        s["image"] = cdn_url(s["image"])
         if s.get("thumb"):
-            s["thumb"] = f"https://aj5.netlify.app/{s['thumb']}"
+            s["thumb"] = cdn_url(s["thumb"])
 
     with open("manifest.json", 'w', encoding='utf-8') as f:
         json.dump(manifest, f, ensure_ascii=False, indent=2)
