@@ -39,6 +39,12 @@ INLINE_TOTAL = 80
 
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG', '.WEBP'}
 
+def thumb_path(image_rel):
+    """images/分类/文件.jpg -> thumbs/分类/文件.webp（列表用缩略图，弹窗才加载原图）"""
+    rel = image_rel.split('/', 1)[1] if image_rel.startswith('images/') else image_rel
+    stem = rel.rsplit('.', 1)[0]
+    return 'thumbs/' + stem + '.webp'
+
 def parse_filename(filename):
     """
     从文件名解析出名称和价格
@@ -121,7 +127,7 @@ def merge_git_supplement(brands_with_subs, standalone_brands, shoes):
         shoes.append({
             "id": shoe_id, "name": shoe_name, "category": cat,
             "imgIndex": shoe_id, "price": shoe_price,
-            "special_price": special, "image": p
+            "special_price": special, "image": p, "thumb": thumb_path(p)
         })
         seen.add(p)
         shoe_id += 1
@@ -196,7 +202,8 @@ def scan_directory():
                             "imgIndex": idx,
                             "price": shoe_price,
                             "special_price": special_price,
-                            "image": f"{IMAGES_DIR}/{brand_name}/{subcategory}/{f.name}"
+                            "image": f"{IMAGES_DIR}/{brand_name}/{subcategory}/{f.name}",
+                            "thumb": thumb_path(f"{IMAGES_DIR}/{brand_name}/{subcategory}/{f.name}")
                         })
                         shoe_id += 1
 
@@ -227,7 +234,8 @@ def scan_directory():
                         "imgIndex": idx,
                         "price": shoe_price,
                         "special_price": special_price,
-                        "image": f"{IMAGES_DIR}/{brand_name}/{f.name}"
+                        "image": f"{IMAGES_DIR}/{brand_name}/{f.name}",
+                        "thumb": thumb_path(f"{IMAGES_DIR}/{brand_name}/{f.name}")
                     })
                     shoe_id += 1
 
@@ -293,10 +301,12 @@ LAZY_BLOCK = LAZY_START + """
         const res = await fetch('manifest.json?t=' + Date.now());
         const data = await res.json();
         const known = new Set(shoes.map(s => s.id));
+        const strip = u => (u || '').replace(/^https?:\\/\\/[^/]+\\//, '');
         const add = (data.shoes || [])
           .filter(s => !known.has(s.id))
           .map(s => Object.assign({}, s, {
-            image: (s.image || '').replace(/^https?:\\/\\/[^/]+\\//, '')
+            image: strip(s.image),
+            thumb: strip(s.thumb)
           }));
         if (add.length) shoes.push(...add);
         allLoaded = true;
@@ -364,7 +374,7 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
     # 生成 shoes 数据：仅内联首屏部分（其余后台从 manifest.json 加载）
     inline = build_inline(shoes)
     js = "const shoes = [\n" + ",\n".join(
-        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", image: "{s["image"]}" }}'
+        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", image: "{s["image"]}", thumb: "{s.get("thumb", "")}" }}'
         for s in inline
     ) + "\n];"
 
@@ -404,6 +414,8 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
     # 把 image 字段改成完整 URL
     for s in manifest["shoes"]:
         s["image"] = f"https://aj5.netlify.app/{s['image']}"
+        if s.get("thumb"):
+            s["thumb"] = f"https://aj5.netlify.app/{s['thumb']}"
 
     with open("manifest.json", 'w', encoding='utf-8') as f:
         json.dump(manifest, f, ensure_ascii=False, indent=2)
