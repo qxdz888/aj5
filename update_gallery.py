@@ -31,11 +31,13 @@ import os, re
 from pathlib import Path
 from urllib.parse import quote
 
-# 图片走 jsDelivr CDN（免备案、国内有节点），源文件仍在 GitHub 仓库 qxdz888/aj5 的 main 分支
-CDN_BASE = "https://cdn.jsdelivr.net/gh/qxdz888/aj5@main"
+# 图片走国内 CDN：CloudBase 静态托管默认域名（免备案 + 国内节点，实测 0.5s vs jsDelivr 3.17s）
+CDN_BASE = "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com"
+# 回退源：CloudBase 免费环境万一到期/超额度，前端自动切回 jsDelivr（慢但不会白图）
+FALLBACK_BASE = "https://cdn.jsdelivr.net/gh/qxdz888/aj5@main"
 
 def cdn_url(rel):
-    """相对路径 -> jsDelivr 绝对地址（中文路径做 percent-encode）"""
+    """相对路径 -> 国内 CDN 绝对地址（中文路径做 percent-encode）"""
     if not rel:
         return ""
     if rel.startswith('http'):
