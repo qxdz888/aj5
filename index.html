@@ -1656,6 +1656,302 @@
       #festivalBanner .festival-title { font-size: 13px; }
       #festivalBanner .festival-cta { display: none; }  /* 小屏优先保证文案可读 */
     }
+  /* ==== MOBILE-ECO PATCH CSS ==== */
+    /* ============================================================
+       12. 移动端电商版式（脚本补丁注入）
+       ============================================================ */
+
+    /* ---- 12.1 设计令牌 ---- */
+    :root {
+      --m-bg:        #f5f6f8;
+      --m-surface:   #ffffff;
+      --m-text:      #1b1b1f;
+      --m-text-sub:  #8a8a93;
+      --m-line:      #ececf0;
+      --m-accent:    #ff4d4f;
+      --m-bar:       rgba(255, 255, 255, 0.96);
+      --m-shadow:    0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+    /* 节日模式令牌（由 body.festival-mode 驱动） */
+    body.festival-mode {
+      --m-bg:        #1a0508;
+      --m-surface:   #2a0d12;
+      --m-text:      #f7e9d0;
+      --m-text-sub:  #c9a97a;
+      --m-line:      rgba(232, 196, 106, 0.22);
+      --m-accent:    #e8c46a;
+      --m-bar:       rgba(26, 6, 9, 0.97);
+      --m-shadow:    0 2px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ---- 12.2 二级分类底部弹层（基础样式，桌面端由尾部规则隐藏） ---- */
+    #subSheet { display: block; }
+    body.sheet-locked { overflow: hidden !important; }
+    .sheet-mask {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.22s ease, visibility 0.22s;
+      z-index: 300;
+    }
+    .sheet-mask.show { opacity: 1; visibility: visible; }
+    .sheet-panel {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: var(--m-surface);
+      border-radius: 16px 16px 0 0;
+      padding: 14px 14px calc(16px + env(safe-area-inset-bottom, 0px));
+      transform: translateY(102%);
+      transition: transform 0.26s cubic-bezier(0.32, 0.72, 0.3, 1);
+      z-index: 301;
+      max-height: 62vh; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sheet-panel.show { transform: translateY(0); }
+    .sheet-handle {
+      width: 36px; height: 4px; border-radius: 2px;
+      background: var(--m-line); margin: 0 auto 12px;
+    }
+    .sheet-title {
+      font-size: 14px; font-weight: 700; color: var(--m-text);
+      margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sheet-title .sheet-close {
+      font-size: 20px; line-height: 1; color: var(--m-text-sub);
+      background: none; border: none; cursor: pointer; padding: 0 4px;
+    }
+    .sheet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .sheet-item {
+      padding: 11px 6px; border-radius: 10px;
+      border: 1px solid var(--m-line); background: transparent;
+      color: var(--m-text); font-size: 13px; cursor: pointer;
+      text-align: center; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+      -webkit-tap-highlight-color: transparent; min-height: 40px;
+    }
+    .sheet-item.active {
+      background: var(--m-accent); border-color: var(--m-accent);
+      color: #fff; font-weight: 600;
+    }
+    body.festival-mode .sheet-item.active { color: #1a0508; }
+
+    /* 联系客服弹层内容 */
+    .contact-sheet {
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px; padding: 4px 0 6px;
+    }
+    .contact-sheet-qr {
+      width: 168px; height: 168px; object-fit: contain;
+      border-radius: 12px; background: #fff; padding: 8px;
+      box-shadow: var(--m-shadow);
+    }
+    .contact-sheet-tip { font-size: 12px; color: var(--m-text-sub); margin: 0; }
+    .contact-sheet-id {
+      font-size: 17px; font-weight: 700; color: var(--m-text);
+      letter-spacing: 0.5px; margin: 0;
+    }
+    .contact-sheet-copy {
+      margin-top: 2px; padding: 11px 34px; border-radius: 999px;
+      border: none; background: var(--m-accent); color: #fff;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body.festival-mode .contact-sheet-copy { color: #1a0508; }
+
+    .bb-mobile { display: none !important; }
+
+    /* ---- 12.3 移动端整体骨架（≤768px 生效） ---- */
+    @media (max-width: 768px) {
+      body { background: var(--m-bg) !important; color: var(--m-text) !important; }
+
+      .nav-content { padding: 8px 10px 0 !important; }
+      .nav-top-row { display: flex; align-items: center; gap: 8px; }
+      .logo { font-size: 15px !important; letter-spacing: 0.5px !important; }
+
+      .search-container { flex: 1; }
+      .search-input {
+        width: 100% !important;
+        height: 36px !important;
+        border-radius: 999px !important;
+        background: var(--m-surface) !important;
+        border: 1px solid var(--m-line) !important;
+        color: var(--m-text) !important;
+        font-size: 14px !important;
+        padding: 0 34px 0 14px !important;
+      }
+      .search-input::placeholder { color: var(--m-text-sub) !important; }
+      .search-icon { color: var(--m-text-sub) !important; }
+
+      /* 一级分类横向滑动 */
+      .nav-bottom-row {
+        margin: 8px -10px 0 !important;
+        padding: 0 10px 8px !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .nav-bottom-row::-webkit-scrollbar { display: none; }
+      .nav-links { display: flex !important; flex-wrap: nowrap !important; gap: 8px !important; }
+      .nav-btn {
+        flex: 0 0 auto !important;
+        height: 32px !important;
+        padding: 0 14px !important;
+        border-radius: 999px !important;
+        background: var(--m-surface) !important;
+        border: 1px solid var(--m-line) !important;
+        color: var(--m-text) !important;
+        font-size: 13px !important;
+        white-space: nowrap !important;
+      }
+      .nav-btn.active {
+        background: var(--m-accent) !important;
+        border-color: var(--m-accent) !important;
+        color: #fff !important;
+        font-weight: 600;
+      }
+      body.festival-mode .nav-btn.active { color: #1a0508 !important; }
+      .nav-arrow { font-size: 9px; opacity: 0.6; }
+      .nav-dropdown { position: static !important; }
+      .nav-dropdown-content { display: none !important; }   /* 手机端不用桌面下拉 */
+
+      /* 主题切换按钮：移到右下角、缩小 */
+      #uiModeToggle {
+        top: auto !important;
+        right: 12px !important;
+        bottom: 68px !important;
+        height: 32px !important;
+        padding: 0 12px !important;
+        font-size: 12px !important;
+        border-radius: 999px !important;
+        z-index: 195 !important;
+      }
+
+      #festivalBanner { font-size: 12px !important; }
+      .banner { padding: 18px 14px !important; }
+      .banner-title { font-size: 20px !important; }
+      .banner-subtitle { font-size: 13px !important; }
+
+      .section-header { padding: 12px 12px 6px !important; }
+      .section-title { font-size: 16px !important; color: var(--m-text) !important; }
+
+      /* 2 列大图（电商主流） */
+      .gallery {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        padding: 0 10px 16px !important;
+      }
+      .card {
+        background: var(--m-surface) !important;
+        border: none !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: var(--m-shadow) !important;
+        margin: 0 !important;
+        cursor: pointer;
+      }
+      .card img {
+        width: 100% !important;
+        aspect-ratio: 1 / 1;
+        object-fit: cover !important;
+        display: block;
+      }
+      .card-info, .card-body { padding: 8px 10px 10px !important; }
+      .card-name {
+        font-size: 13px !important;
+        color: var(--m-text) !important;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .card-category { font-size: 11px !important; color: var(--m-text-sub) !important; }
+      .card-price {
+        font-size: 16px !important;
+        color: var(--m-accent) !important;
+        font-weight: 700;
+      }
+
+      /* 底部固定导航栏（像小程序） */
+      .bottom-bar {
+        position: fixed !important;
+        left: 0 !important; right: 0 !important; bottom: 0 !important; top: auto !important;
+        height: 56px;
+        display: flex !important;
+        align-items: stretch;
+        background: var(--m-bar) !important;
+        border-top: 1px solid var(--m-line) !important;
+        border-radius: 0 !important;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+        padding: 0 0 env(safe-area-inset-bottom, 0px) !important;
+        z-index: 190;
+        transform: none !important;
+        transition: transform 0.25s ease;
+      }
+      .bottom-bar.hidden { transform: translateY(100%) !important; }
+      .bottom-bar-item {
+        flex: 1;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 2px;
+        font-size: 11px !important;
+        color: var(--m-text-sub) !important;
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        padding: 0 !important;
+        border-radius: 0 !important;
+      }
+      .bottom-bar-item.active { color: var(--m-accent) !important; font-weight: 600; }
+      .bottom-bar-item .bb-icon { font-size: 17px; line-height: 1; }
+      .bottom-bar-item .bb-label { font-size: 10px; line-height: 1; }
+      .bottom-bar-recruitment { display: none !important; }   /* 手机端隐藏招商入口 */
+      .bb-mobile { display: flex !important; }
+
+      /* 底部弹层：手机端启用 */
+      #subSheet { display: block !important; }
+
+      /* 弹窗（大图）手机优化 */
+      .modal-content {
+        max-width: 100% !important; width: 100% !important;
+        border-radius: 16px !important;
+        max-height: 92vh; overflow-y: auto;
+      }
+      .modal-image { max-height: 52vh !important; object-fit: contain !important; }
+      .modal-name { font-size: 17px !important; }
+      .modal-price { font-size: 20px !important; }
+      .modal-close {
+        width: 34px !important; height: 34px !important;
+        font-size: 22px !important; line-height: 32px !important;
+      }
+
+      .load-more-btn { border-radius: 999px !important; padding: 11px 30px !important; font-size: 14px !important; }
+      .load-more-container { padding: 18px 12px 84px !important; }
+
+      /* 给底部栏留出空间 */
+      body { padding-bottom: 64px !important; }
+    }
+
+    /* ---- 12.4 桌面端：隐藏移动端专属元素 ---- */
+    @media (min-width: 769px) {
+      #subSheet { display: none !important; }
+      .bb-mobile { display: none !important; }
+    }
+
+    /* ---- 12.5 超小屏微调 ---- */
+    @media (max-width: 360px) {
+      .gallery { gap: 8px !important; padding: 0 8px 70px !important; }
+      .nav-content { padding: 8px 8px 0 !important; }
+      .nav-bottom-row { margin: 8px -8px 0 !important; padding: 0 8px 8px !important; }
+      .card-name { font-size: 12px !important; }
+    }
+
   </style>
   <link rel="prefetch" href="manifest.json">
 </head>
@@ -1684,7 +1980,7 @@
       <div class="nav-bottom-row">
         <div class="nav-links">
           <!-- AUTO_NAV_START -->
-        <button class="nav-btn active" data-top="all" data-category="all">全部</button>
+<button class="nav-btn active" data-top="all" data-category="all">全部</button>
         <div class="nav-dropdown">
       <button class="nav-btn nav-dropbtn" data-top="aj" data-children="312,adidas,lv,nk高帮,puma,wans,乔一,亚瑟,小空军,开拓者,空军,运动款">
         aj <span class="nav-arrow">▼</span>
@@ -1716,7 +2012,7 @@
         <button class="nav-btn" data-top="潮ng">潮ng</button>
         <button class="nav-btn" data-top="潮rez">潮rez</button>
         <button class="nav-btn" data-top="鸿b">鸿b</button>
-        <!-- AUTO_NAV_END -->
+<!-- AUTO_NAV_END -->
           </div>
       </div>
     </div>
@@ -1815,8 +2111,38 @@
     <!-- 招商与售后 -->
     <div class="bottom-bar-item bottom-bar-recruitment" onclick="window.location.href='recruitment.html'">
       <span>招商与售后</span>
-    </div>
+    
+    <!-- 移动端 4 入口 -->
+    <button class="bottom-bar-item bb-mobile" type="button" data-bb="home" id="bbHome">
+      <span class="bb-icon">🏠</span><span class="bb-label">首页</span>
+    </button>
+    <button class="bottom-bar-item bb-mobile" type="button" data-bb="cate" id="bbCate">
+      <span class="bb-icon">🗂</span><span class="bb-label">分类</span>
+    </button>
+    <button class="bottom-bar-item bb-mobile" type="button" data-bb="search" id="bbSearch">
+      <span class="bb-icon">🔍</span><span class="bb-label">搜索</span>
+    </button>
+    <button class="bottom-bar-item bb-mobile" type="button" data-bb="contact" id="bbContact">
+      <span class="bb-icon">💬</span><span class="bb-label">联系</span>
+    </button>
+</div>
 
+  </div>
+
+  <!-- ==== MOBILE-ECO PATCH HTML ==== -->
+  <!-- ============================
+       B. 移动端底部 4 入口（CSS 控制仅手机显示）
+       ============================ -->
+  <div id="subSheet">
+    <div class="sheet-mask" id="sheetMask"></div>
+    <div class="sheet-panel" id="sheetPanel" role="dialog" aria-modal="true" aria-label="选择子分类">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">
+        <span id="sheetTitle">选择分类</span>
+        <button class="sheet-close" type="button" id="sheetClose" aria-label="关闭">&times;</button>
+      </div>
+      <div class="sheet-grid" id="sheetGrid"></div>
+    </div>
   </div>
 
   <script>
@@ -1846,86 +2172,966 @@
        把 image 的值换成你自己的图片链接（支持网络图片或本地相对路径）
     */
     const shoes = [
-  { id: 1, name: "329白藏青", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 1, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/329%E7%99%BD%E8%97%8F%E9%9D%92-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/329%E7%99%BD%E8%97%8F%E9%9D%92-189.webp" },
-  { id: 2, name: "8020白奥利奥", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 2, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/8020%E7%99%BD%E5%A5%A5%E5%88%A9%E5%A5%A5-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/8020%E7%99%BD%E5%A5%A5%E5%88%A9%E5%A5%A5-189.webp" },
-  { id: 3, name: "8033冰蓝红", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 3, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/8033%E5%86%B0%E8%93%9D%E7%BA%A2-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/8033%E5%86%B0%E8%93%9D%E7%BA%A2-189.webp" },
-  { id: 239, name: "潮11928", category: "潮ng", topCategory: "潮ng", subCategory: "", imgIndex: 1, price: "219元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AEng/%E6%BD%AE11928-219.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AEng/%E6%BD%AE11928-219.webp" },
-  { id: 240, name: "c17", category: "潮rez", topCategory: "潮rez", subCategory: "", imgIndex: 1, price: "79元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AErez/c17-79.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AErez/c17-79.webp" },
-  { id: 241, name: "L256", category: "潮rez", topCategory: "潮rez", subCategory: "", imgIndex: 2, price: "79元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AErez/L256-79.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AErez/L256-79.webp" },
-  { id: 242, name: "L255", category: "潮rez", topCategory: "潮rez", subCategory: "", imgIndex: 3, price: "79元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AErez/L255-79.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AErez/L255-79.webp" },
-  { id: 257, name: "回力6012", category: "回力", topCategory: "自z", subCategory: "回力", imgIndex: 1, price: "129元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B6012-129.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B6012-129.webp" },
-  { id: 258, name: "回力5697", category: "回力", topCategory: "自z", subCategory: "回力", imgIndex: 2, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B5697-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B5697-159.webp" },
-  { id: 259, name: "m602", category: "皮鞋", topCategory: "自z", subCategory: "皮鞋", imgIndex: 1, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E7%9A%AE%E9%9E%8B/m602-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E7%9A%AE%E9%9E%8B/m602-159.webp" },
-  { id: 280, name: "鸿6610", category: "鸿b", topCategory: "鸿b", subCategory: "", imgIndex: 1, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E9%B8%BFb/%E9%B8%BF6610-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E9%B8%BFb/%E9%B8%BF6610-169.webp" },
-  { id: 281, name: "鸿棉24205", category: "鸿b", topCategory: "鸿b", subCategory: "", imgIndex: 2, price: "129元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E9%B8%BFb/%E9%B8%BF%E6%A3%8924205-129.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E9%B8%BFb/%E9%B8%BF%E6%A3%8924205-129.webp" },
-  { id: 282, name: "鸿815", category: "鸿b", topCategory: "鸿b", subCategory: "", imgIndex: 3, price: "109元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E9%B8%BFb/%E9%B8%BF815-109.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E9%B8%BFb/%E9%B8%BF815-109.webp" },
-  { id: 4, name: "8020白兰联名", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 4, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/8020%E7%99%BD%E5%85%B0%E8%81%94%E5%90%8D-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/8020%E7%99%BD%E5%85%B0%E8%81%94%E5%90%8D-189.webp" },
-  { id: 5, name: "2628黑烟灰", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 5, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/2628%E9%BB%91%E7%83%9F%E7%81%B0-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/2628%E9%BB%91%E7%83%9F%E7%81%B0-189.webp" },
-  { id: 6, name: "335白黑紫", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 6, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/335%E7%99%BD%E9%BB%91%E7%B4%AB-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/335%E7%99%BD%E9%BB%91%E7%B4%AB-189.webp" },
-  { id: 7, name: "cl20白黑联名", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 7, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/cl20%E7%99%BD%E9%BB%91%E8%81%94%E5%90%8D-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/cl20%E7%99%BD%E9%BB%91%E8%81%94%E5%90%8D-189.webp" },
-  { id: 8, name: "312海军蓝", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 8, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/312%E6%B5%B7%E5%86%9B%E8%93%9D-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/312%E6%B5%B7%E5%86%9B%E8%93%9D-189.webp" },
-  { id: 9, name: "312白橙黑", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 9, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/312%E7%99%BD%E6%A9%99%E9%BB%91-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/312%E7%99%BD%E6%A9%99%E9%BB%91-189.webp" },
-  { id: 10, name: "335白黑红", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 10, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/335%E7%99%BD%E9%BB%91%E7%BA%A2-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/335%E7%99%BD%E9%BB%91%E7%BA%A2-189.webp" },
-  { id: 11, name: "2510蓝爆裂", category: "312", topCategory: "aj", subCategory: "312", imgIndex: 11, price: "189元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/2510%E8%93%9D%E7%88%86%E8%A3%82-189.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/2510%E8%93%9D%E7%88%86%E8%A3%82-189.webp" },
-  { id: 12, name: "f168黑生胶", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 1, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/f168%E9%BB%91%E7%94%9F%E8%83%B6-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/f168%E9%BB%91%E7%94%9F%E8%83%B6-169.webp" },
-  { id: 13, name: "8819亮晶银", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 2, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%93%B6-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%93%B6-169.webp" },
-  { id: 14, name: "8819荼蘼盛开", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 3, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E8%8D%BC%E8%98%BC%E7%9B%9B%E5%BC%80-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E8%8D%BC%E8%98%BC%E7%9B%9B%E5%BC%80-169.webp" },
-  { id: 15, name: "8819兰生胶", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 4, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E5%85%B0%E7%94%9F%E8%83%B6-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E5%85%B0%E7%94%9F%E8%83%B6-169.webp" },
-  { id: 16, name: "8819粉屿星", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 5, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E7%B2%89%E5%B1%BF%E6%98%9F-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E7%B2%89%E5%B1%BF%E6%98%9F-169.webp" },
-  { id: 17, name: "8819午夜蓝", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 6, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E5%8D%88%E5%A4%9C%E8%93%9D-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E5%8D%88%E5%A4%9C%E8%93%9D-169.webp" },
-  { id: 18, name: "2688粉白", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 7, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/2688%E7%B2%89%E7%99%BD-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/2688%E7%B2%89%E7%99%BD-169.webp" },
-  { id: 19, name: "8819亮晶黑", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 8, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%BB%91-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%BB%91-169.webp" },
-  { id: 20, name: "8009黑白", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 9, price: "129元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E9%BB%91%E7%99%BD-129.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E9%BB%91%E7%99%BD-129.webp" },
-  { id: 21, name: "8009兰白", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 10, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E5%85%B0%E7%99%BD-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E5%85%B0%E7%99%BD-169.webp" },
-  { id: 22, name: "8819白金", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 11, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E7%99%BD%E9%87%91-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E7%99%BD%E9%87%91-169.webp" },
-  { id: 23, name: "8005酒红", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 12, price: "129元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8005%E9%85%92%E7%BA%A2-129.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8005%E9%85%92%E7%BA%A2-129.webp" },
-  { id: 24, name: "8819摩登白", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 13, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E6%91%A9%E7%99%BB%E7%99%BD-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E6%91%A9%E7%99%BB%E7%99%BD-169.webp" },
-  { id: 25, name: "8819黑色", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 14, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E9%BB%91%E8%89%B2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E9%BB%91%E8%89%B2-169.webp" },
-  { id: 26, name: "8009白黑", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 15, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E7%99%BD%E9%BB%91-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E7%99%BD%E9%BB%91-159.webp" },
-  { id: 27, name: "2226白蓝红", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 16, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/2226%E7%99%BD%E8%93%9D%E7%BA%A2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/2226%E7%99%BD%E8%93%9D%E7%BA%A2-169.webp" },
-  { id: 28, name: "8819摩登黑", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 17, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E6%91%A9%E7%99%BB%E9%BB%91-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E6%91%A9%E7%99%BB%E9%BB%91-169.webp" },
-  { id: 29, name: "2688黑白", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 18, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/2688%E9%BB%91%E7%99%BD-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/2688%E9%BB%91%E7%99%BD-169.webp" },
-  { id: 30, name: "8005桔色", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 19, price: "129元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8005%E6%A1%94%E8%89%B2-129.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8005%E6%A1%94%E8%89%B2-129.webp" },
-  { id: 31, name: "8819白黑金", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 20, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E7%99%BD%E9%BB%91%E9%87%91-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E7%99%BD%E9%BB%91%E9%87%91-169.webp" },
-  { id: 32, name: "8009水悦蓝", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 21, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E6%B0%B4%E6%82%A6%E8%93%9D-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E6%B0%B4%E6%82%A6%E8%93%9D-159.webp" },
-  { id: 33, name: "8819三叶草", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 22, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E4%B8%89%E5%8F%B6%E8%8D%89-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E4%B8%89%E5%8F%B6%E8%8D%89-169.webp" },
-  { id: 34, name: "0299白", category: "adidas", topCategory: "aj", subCategory: "adidas", imgIndex: 23, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/0299%E7%99%BD-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/0299%E7%99%BD-169.webp" },
-  { id: 35, name: "lv蓝白牛仔", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 1, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E8%93%9D%E7%99%BD%E7%89%9B%E4%BB%94-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E8%93%9D%E7%99%BD%E7%89%9B%E4%BB%94-169.webp" },
-  { id: 36, name: "LV黑", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 2, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/LV%E9%BB%91-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/LV%E9%BB%91-169.webp" },
-  { id: 37, name: "lv牛仔兰", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 3, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E7%89%9B%E4%BB%94%E5%85%B0-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E7%89%9B%E4%BB%94%E5%85%B0-169.webp" },
-  { id: 38, name: "lv灰水泥", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 4, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E7%81%B0%E6%B0%B4%E6%B3%A5-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E7%81%B0%E6%B0%B4%E6%B3%A5-169.webp" },
-  { id: 39, name: "810lv黑亮片", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 5, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/810lv%E9%BB%91%E4%BA%AE%E7%89%87-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/810lv%E9%BB%91%E4%BA%AE%E7%89%87-169.webp" },
-  { id: 40, name: "lv白灰", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 6, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E7%99%BD%E7%81%B0-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E7%99%BD%E7%81%B0-169.webp" },
-  { id: 41, name: "2503米蓝红", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 7, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/2503%E7%B1%B3%E8%93%9D%E7%BA%A2-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/2503%E7%B1%B3%E8%93%9D%E7%BA%A2-159.webp" },
-  { id: 42, name: "lv牛仔蓝米", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 8, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E7%89%9B%E4%BB%94%E8%93%9D%E7%B1%B3-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E7%89%9B%E4%BB%94%E8%93%9D%E7%B1%B3-169.webp" },
-  { id: 43, name: "2503米粉", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 9, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/2503%E7%B1%B3%E7%B2%89-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/2503%E7%B1%B3%E7%B2%89-169.webp" },
-  { id: 44, name: "2118黑钻", category: "lv", topCategory: "aj", subCategory: "lv", imgIndex: 10, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/2118%E9%BB%91%E9%92%BB-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/2118%E9%BB%91%E9%92%BB-169.webp" },
-  { id: 45, name: "8588白红灰", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 1, price: "129元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/8588%E7%99%BD%E7%BA%A2%E7%81%B0-129.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/8588%E7%99%BD%E7%BA%A2%E7%81%B0-129.webp" },
-  { id: 46, name: "S333大灌篮", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 2, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/S333%E5%A4%A7%E7%81%8C%E7%AF%AE-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/S333%E5%A4%A7%E7%81%8C%E7%AF%AE-169.webp" },
-  { id: 47, name: "9116炭猫", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 3, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/9116%E7%82%AD%E7%8C%AB-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/9116%E7%82%AD%E7%8C%AB-159.webp" },
-  { id: 48, name: "9116灰黑", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 4, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/9116%E7%81%B0%E9%BB%91-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/9116%E7%81%B0%E9%BB%91-159.webp" },
-  { id: 49, name: "s333深海迷踪", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 5, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/s333%E6%B7%B1%E6%B5%B7%E8%BF%B7%E8%B8%AA-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/s333%E6%B7%B1%E6%B5%B7%E8%BF%B7%E8%B8%AA-169.webp" },
-  { id: 50, name: "S333白黑蓝", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 6, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/S333%E7%99%BD%E9%BB%91%E8%93%9D-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/S333%E7%99%BD%E9%BB%91%E8%93%9D-169.webp" },
-  { id: 51, name: "9116黑白金", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 7, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/9116%E9%BB%91%E7%99%BD%E9%87%91-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/9116%E9%BB%91%E7%99%BD%E9%87%91-169.webp" },
-  { id: 52, name: "9116白灰红", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 8, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/9116%E7%99%BD%E7%81%B0%E7%BA%A2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/9116%E7%99%BD%E7%81%B0%E7%BA%A2-169.webp" },
-  { id: 53, name: "9116蓝灰红", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 9, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/9116%E8%93%9D%E7%81%B0%E7%BA%A2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/9116%E8%93%9D%E7%81%B0%E7%BA%A2-169.webp" },
-  { id: 54, name: "819周星驰同款", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 10, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/819%E5%91%A8%E6%98%9F%E9%A9%B0%E5%90%8C%E6%AC%BE-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/819%E5%91%A8%E6%98%9F%E9%A9%B0%E5%90%8C%E6%AC%BE-169.webp" },
-  { id: 55, name: "333白宝蓝双G", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 11, price: "159元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/333%E7%99%BD%E5%AE%9D%E8%93%9D%E5%8F%8CG-159.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/333%E7%99%BD%E5%AE%9D%E8%93%9D%E5%8F%8CG-159.webp" },
-  { id: 56, name: "31003蓝黑红", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 12, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/31003%E8%93%9D%E9%BB%91%E7%BA%A2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/31003%E8%93%9D%E9%BB%91%E7%BA%A2-169.webp" },
-  { id: 57, name: "333白黑联名", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 13, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/333%E7%99%BD%E9%BB%91%E8%81%94%E5%90%8D-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/333%E7%99%BD%E9%BB%91%E8%81%94%E5%90%8D-169.webp" },
-  { id: 58, name: "2871小金人", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 14, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/2871%E5%B0%8F%E9%87%91%E4%BA%BA-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/2871%E5%B0%8F%E9%87%91%E4%BA%BA-169.webp" },
-  { id: 59, name: "23002黑酒红", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 15, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/23002%E9%BB%91%E9%85%92%E7%BA%A2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/23002%E9%BB%91%E9%85%92%E7%BA%A2-169.webp" },
-  { id: 60, name: "31003黑白红", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 16, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/31003%E9%BB%91%E7%99%BD%E7%BA%A2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/31003%E9%BB%91%E7%99%BD%E7%BA%A2-169.webp" },
-  { id: 61, name: "31003黑蓝红", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 17, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/31003%E9%BB%91%E8%93%9D%E7%BA%A2-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/31003%E9%BB%91%E8%93%9D%E7%BA%A2-169.webp" },
-  { id: 62, name: "333深蓝高地", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 18, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/333%E6%B7%B1%E8%93%9D%E9%AB%98%E5%9C%B0-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/333%E6%B7%B1%E8%93%9D%E9%AB%98%E5%9C%B0-169.webp" },
-  { id: 63, name: "23002黑蓝", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 19, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/23002%E9%BB%91%E8%93%9D-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/23002%E9%BB%91%E8%93%9D-169.webp" },
-  { id: 64, name: "23002黑白", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 20, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/23002%E9%BB%91%E7%99%BD-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/23002%E9%BB%91%E7%99%BD-169.webp" },
-  { id: 65, name: "23002白兰", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 21, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/23002%E7%99%BD%E5%85%B0-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/23002%E7%99%BD%E5%85%B0-169.webp" },
-  { id: 66, name: "228白黑蓝", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 22, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/228%E7%99%BD%E9%BB%91%E8%93%9D-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/228%E7%99%BD%E9%BB%91%E8%93%9D-169.webp" },
-  { id: 67, name: "1910黑深蓝", category: "nk高帮", topCategory: "aj", subCategory: "nk高帮", imgIndex: 23, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/1910%E9%BB%91%E6%B7%B1%E8%93%9D-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/1910%E9%BB%91%E6%B7%B1%E8%93%9D-169.webp" },
-  { id: 68, name: "2528黑白", category: "puma", topCategory: "aj", subCategory: "puma", imgIndex: 1, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/puma/2528%E9%BB%91%E7%99%BD-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/puma/2528%E9%BB%91%E7%99%BD-169.webp" },
-  { id: 69, name: "2528米深兰", category: "puma", topCategory: "aj", subCategory: "puma", imgIndex: 2, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/puma/2528%E7%B1%B3%E6%B7%B1%E5%85%B0-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/puma/2528%E7%B1%B3%E6%B7%B1%E5%85%B0-169.webp" },
-  { id: 70, name: "2528白黑", category: "puma", topCategory: "aj", subCategory: "puma", imgIndex: 3, price: "169元", specialPrice: "129元", image: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/puma/2528%E7%99%BD%E9%BB%91-169.webp", thumb: "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/puma/2528%E7%99%BD%E9%BB%91-169.webp" }
+  {
+    "id": 1,
+    "name": "cl20白黑联名",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 1,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/cl20%E7%99%BD%E9%BB%91%E8%81%94%E5%90%8D-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/cl20%E7%99%BD%E9%BB%91%E8%81%94%E5%90%8D-189.webp"
+  },
+  {
+    "id": 2,
+    "name": "8033冰蓝红",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 2,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/8033%E5%86%B0%E8%93%9D%E7%BA%A2-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/8033%E5%86%B0%E8%93%9D%E7%BA%A2-189.webp"
+  },
+  {
+    "id": 3,
+    "name": "8020白奥利奥",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 3,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/8020%E7%99%BD%E5%A5%A5%E5%88%A9%E5%A5%A5-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/8020%E7%99%BD%E5%A5%A5%E5%88%A9%E5%A5%A5-189.webp"
+  },
+  {
+    "id": 12,
+    "name": "f168黑生胶",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 12,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/f168%E9%BB%91%E7%94%9F%E8%83%B6-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/f168%E9%BB%91%E7%94%9F%E8%83%B6-169.webp"
+  },
+  {
+    "id": 13,
+    "name": "8819黑色",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 13,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E9%BB%91%E8%89%B2-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E9%BB%91%E8%89%B2-169.webp"
+  },
+  {
+    "id": 14,
+    "name": "8819荼蘼盛开",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 14,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E8%8D%BC%E8%98%BC%E7%9B%9B%E5%BC%80-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E8%8D%BC%E8%98%BC%E7%9B%9B%E5%BC%80-169.webp"
+  },
+  {
+    "id": 35,
+    "name": "2503米蓝红",
+    "category": "lv",
+    "topCategory": "aj",
+    "subCategory": "lv",
+    "imgIndex": 35,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/2503%E7%B1%B3%E8%93%9D%E7%BA%A2-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/2503%E7%B1%B3%E8%93%9D%E7%BA%A2-159.webp"
+  },
+  {
+    "id": 36,
+    "name": "LV黑",
+    "category": "lv",
+    "topCategory": "aj",
+    "subCategory": "lv",
+    "imgIndex": 36,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/LV%E9%BB%91-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/LV%E9%BB%91-169.webp"
+  },
+  {
+    "id": 37,
+    "name": "lv蓝白牛仔",
+    "category": "lv",
+    "topCategory": "aj",
+    "subCategory": "lv",
+    "imgIndex": 37,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E8%93%9D%E7%99%BD%E7%89%9B%E4%BB%94-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E8%93%9D%E7%99%BD%E7%89%9B%E4%BB%94-169.webp"
+  },
+  {
+    "id": 45,
+    "name": "S333白黑蓝",
+    "category": "nk高帮",
+    "topCategory": "aj",
+    "subCategory": "nk高帮",
+    "imgIndex": 45,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/S333%E7%99%BD%E9%BB%91%E8%93%9D-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/S333%E7%99%BD%E9%BB%91%E8%93%9D-169.webp"
+  },
+  {
+    "id": 46,
+    "name": "s333深海迷踪",
+    "category": "nk高帮",
+    "topCategory": "aj",
+    "subCategory": "nk高帮",
+    "imgIndex": 46,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/s333%E6%B7%B1%E6%B5%B7%E8%BF%B7%E8%B8%AA-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/s333%E6%B7%B1%E6%B5%B7%E8%BF%B7%E8%B8%AA-169.webp"
+  },
+  {
+    "id": 47,
+    "name": "S333大灌篮",
+    "category": "nk高帮",
+    "topCategory": "aj",
+    "subCategory": "nk高帮",
+    "imgIndex": 47,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/S333%E5%A4%A7%E7%81%8C%E7%AF%AE-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/S333%E5%A4%A7%E7%81%8C%E7%AF%AE-169.webp"
+  },
+  {
+    "id": 68,
+    "name": "8902黑色",
+    "category": "puma",
+    "topCategory": "aj",
+    "subCategory": "puma",
+    "imgIndex": 68,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/puma/8902%E9%BB%91%E8%89%B2-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/puma/8902%E9%BB%91%E8%89%B2-169.webp"
+  },
+  {
+    "id": 69,
+    "name": "8902白兰",
+    "category": "puma",
+    "topCategory": "aj",
+    "subCategory": "puma",
+    "imgIndex": 69,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/puma/8902%E7%99%BD%E5%85%B0-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/puma/8902%E7%99%BD%E5%85%B0-169.webp"
+  },
+  {
+    "id": 70,
+    "name": "2528黑白",
+    "category": "puma",
+    "topCategory": "aj",
+    "subCategory": "puma",
+    "imgIndex": 70,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/puma/2528%E9%BB%91%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/puma/2528%E9%BB%91%E7%99%BD-169.webp"
+  },
+  {
+    "id": 80,
+    "name": "z008闪电白黑",
+    "category": "wans",
+    "topCategory": "aj",
+    "subCategory": "wans",
+    "imgIndex": 80,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/wans/z008%E9%97%AA%E7%94%B5%E7%99%BD%E9%BB%91-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/wans/z008%E9%97%AA%E7%94%B5%E7%99%BD%E9%BB%91-169.webp"
+  },
+  {
+    "id": 81,
+    "name": "a03黑方格",
+    "category": "wans",
+    "topCategory": "aj",
+    "subCategory": "wans",
+    "imgIndex": 81,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/wans/a03%E9%BB%91%E6%96%B9%E6%A0%BC-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/wans/a03%E9%BB%91%E6%96%B9%E6%A0%BC-169.webp"
+  },
+  {
+    "id": 82,
+    "name": "2610黑白",
+    "category": "wans",
+    "topCategory": "aj",
+    "subCategory": "wans",
+    "imgIndex": 82,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/wans/2610%E9%BB%91%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/wans/2610%E9%BB%91%E7%99%BD-169.webp"
+  },
+  {
+    "id": 94,
+    "name": "棉2868暗夜黑武士",
+    "category": "乔一",
+    "topCategory": "aj",
+    "subCategory": "乔一",
+    "imgIndex": 94,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%B9%94%E4%B8%80/%E6%A3%892868%E6%9A%97%E5%A4%9C%E9%BB%91%E6%AD%A6%E5%A3%AB-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%B9%94%E4%B8%80/%E6%A3%892868%E6%9A%97%E5%A4%9C%E9%BB%91%E6%AD%A6%E5%A3%AB-129.webp"
+  },
+  {
+    "id": 95,
+    "name": "棉228海军蓝",
+    "category": "乔一",
+    "topCategory": "aj",
+    "subCategory": "乔一",
+    "imgIndex": 95,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%B9%94%E4%B8%80/%E6%A3%89228%E6%B5%B7%E5%86%9B%E8%93%9D-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%B9%94%E4%B8%80/%E6%A3%89228%E6%B5%B7%E5%86%9B%E8%93%9D-159.webp"
+  },
+  {
+    "id": 96,
+    "name": "XZ59白雾灰",
+    "category": "乔一",
+    "topCategory": "aj",
+    "subCategory": "乔一",
+    "imgIndex": 96,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%B9%94%E4%B8%80/XZ59%E7%99%BD%E9%9B%BE%E7%81%B0-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%B9%94%E4%B8%80/XZ59%E7%99%BD%E9%9B%BE%E7%81%B0-129.webp"
+  },
+  {
+    "id": 178,
+    "name": "5199黑白",
+    "category": "亚瑟",
+    "topCategory": "aj",
+    "subCategory": "亚瑟",
+    "imgIndex": 178,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%BA%9A%E7%91%9F/5199%E9%BB%91%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%BA%9A%E7%91%9F/5199%E9%BB%91%E7%99%BD-169.webp"
+  },
+  {
+    "id": 179,
+    "name": "5199米黑金",
+    "category": "亚瑟",
+    "topCategory": "aj",
+    "subCategory": "亚瑟",
+    "imgIndex": 179,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%BA%9A%E7%91%9F/5199%E7%B1%B3%E9%BB%91%E9%87%91-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%BA%9A%E7%91%9F/5199%E7%B1%B3%E9%BB%91%E9%87%91-159.webp"
+  },
+  {
+    "id": 180,
+    "name": "5199米粉",
+    "category": "亚瑟",
+    "topCategory": "aj",
+    "subCategory": "亚瑟",
+    "imgIndex": 180,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%BA%9A%E7%91%9F/5199%E7%B1%B3%E7%B2%89-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%BA%9A%E7%91%9F/5199%E7%B1%B3%E7%B2%89-169.webp"
+  },
+  {
+    "id": 183,
+    "name": "8802芝士桃桃",
+    "category": "小空军",
+    "topCategory": "aj",
+    "subCategory": "小空军",
+    "imgIndex": 183,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/8802%E8%8A%9D%E5%A3%AB%E6%A1%83%E6%A1%83-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/8802%E8%8A%9D%E5%A3%AB%E6%A1%83%E6%A1%83-159.webp"
+  },
+  {
+    "id": 184,
+    "name": "8802白紫",
+    "category": "小空军",
+    "topCategory": "aj",
+    "subCategory": "小空军",
+    "imgIndex": 184,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/8802%E7%99%BD%E7%B4%AB-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/8802%E7%99%BD%E7%B4%AB-159.webp"
+  },
+  {
+    "id": 185,
+    "name": "8802甜心女大",
+    "category": "小空军",
+    "topCategory": "aj",
+    "subCategory": "小空军",
+    "imgIndex": 185,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/8802%E7%94%9C%E5%BF%83%E5%A5%B3%E5%A4%A7-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/8802%E7%94%9C%E5%BF%83%E5%A5%B3%E5%A4%A7-159.webp"
+  },
+  {
+    "id": 200,
+    "name": "kt2-1白橙",
+    "category": "开拓者",
+    "topCategory": "aj",
+    "subCategory": "开拓者",
+    "imgIndex": 200,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E5%BC%80%E6%8B%93%E8%80%85/kt2-1%E7%99%BD%E6%A9%99-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E5%BC%80%E6%8B%93%E8%80%85/kt2-1%E7%99%BD%E6%A9%99-159.webp"
+  },
+  {
+    "id": 201,
+    "name": "2956白黑",
+    "category": "开拓者",
+    "topCategory": "aj",
+    "subCategory": "开拓者",
+    "imgIndex": 201,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E5%BC%80%E6%8B%93%E8%80%85/2956%E7%99%BD%E9%BB%91-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E5%BC%80%E6%8B%93%E8%80%85/2956%E7%99%BD%E9%BB%91-159.webp"
+  },
+  {
+    "id": 202,
+    "name": "2956白红",
+    "category": "开拓者",
+    "topCategory": "aj",
+    "subCategory": "开拓者",
+    "imgIndex": 202,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E5%BC%80%E6%8B%93%E8%80%85/2956%E7%99%BD%E7%BA%A2-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E5%BC%80%E6%8B%93%E8%80%85/2956%E7%99%BD%E7%BA%A2-159.webp"
+  },
+  {
+    "id": 215,
+    "name": "飞h001-1绿",
+    "category": "空军",
+    "topCategory": "aj",
+    "subCategory": "空军",
+    "imgIndex": 215,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E7%A9%BA%E5%86%9B/%E9%A3%9Eh001-1%E7%BB%BF-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E7%A9%BA%E5%86%9B/%E9%A3%9Eh001-1%E7%BB%BF-169.webp"
+  },
+  {
+    "id": 216,
+    "name": "s233黑白豹纹",
+    "category": "空军",
+    "topCategory": "aj",
+    "subCategory": "空军",
+    "imgIndex": 216,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E7%A9%BA%E5%86%9B/s233%E9%BB%91%E7%99%BD%E8%B1%B9%E7%BA%B9-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E7%A9%BA%E5%86%9B/s233%E9%BB%91%E7%99%BD%E8%B1%B9%E7%BA%B9-169.webp"
+  },
+  {
+    "id": 217,
+    "name": "s233深蓝豹纹",
+    "category": "空军",
+    "topCategory": "aj",
+    "subCategory": "空军",
+    "imgIndex": 217,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E7%A9%BA%E5%86%9B/s233%E6%B7%B1%E8%93%9D%E8%B1%B9%E7%BA%B9-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E7%A9%BA%E5%86%9B/s233%E6%B7%B1%E8%93%9D%E8%B1%B9%E7%BA%B9-169.webp"
+  },
+  {
+    "id": 233,
+    "name": "h029绿",
+    "category": "运动款",
+    "topCategory": "aj",
+    "subCategory": "运动款",
+    "imgIndex": 233,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E8%BF%90%E5%8A%A8%E6%AC%BE/h029%E7%BB%BF-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E8%BF%90%E5%8A%A8%E6%AC%BE/h029%E7%BB%BF-129.webp"
+  },
+  {
+    "id": 234,
+    "name": "h028白橙",
+    "category": "运动款",
+    "topCategory": "aj",
+    "subCategory": "运动款",
+    "imgIndex": 234,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E8%BF%90%E5%8A%A8%E6%AC%BE/h028%E7%99%BD%E6%A9%99-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E8%BF%90%E5%8A%A8%E6%AC%BE/h028%E7%99%BD%E6%A9%99-129.webp"
+  },
+  {
+    "id": 235,
+    "name": "1666黑白",
+    "category": "运动款",
+    "topCategory": "aj",
+    "subCategory": "运动款",
+    "imgIndex": 235,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E8%BF%90%E5%8A%A8%E6%AC%BE/1666%E9%BB%91%E7%99%BD-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E8%BF%90%E5%8A%A8%E6%AC%BE/1666%E9%BB%91%E7%99%BD-159.webp"
+  },
+  {
+    "id": 239,
+    "name": "潮11928",
+    "category": "潮ng",
+    "topCategory": "潮ng",
+    "subCategory": "",
+    "imgIndex": 239,
+    "price": "219元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AEng/%E6%BD%AE11928-219.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AEng/%E6%BD%AE11928-219.webp"
+  },
+  {
+    "id": 240,
+    "name": "潮w8822",
+    "category": "潮rez",
+    "topCategory": "潮rez",
+    "subCategory": "",
+    "imgIndex": 240,
+    "price": "79元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AErez/%E6%BD%AEw8822-79.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AErez/%E6%BD%AEw8822-79.webp"
+  },
+  {
+    "id": 241,
+    "name": "潮856",
+    "category": "潮rez",
+    "topCategory": "潮rez",
+    "subCategory": "",
+    "imgIndex": 241,
+    "price": "79元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AErez/%E6%BD%AE856-79.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AErez/%E6%BD%AE856-79.webp"
+  },
+  {
+    "id": 242,
+    "name": "y107",
+    "category": "潮rez",
+    "topCategory": "潮rez",
+    "subCategory": "",
+    "imgIndex": 242,
+    "price": "79元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E6%BD%AErez/y107-79.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E6%BD%AErez/y107-79.webp"
+  },
+  {
+    "id": 257,
+    "name": "回力6012",
+    "category": "回力",
+    "topCategory": "自z",
+    "subCategory": "回力",
+    "imgIndex": 257,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B6012-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B6012-129.webp"
+  },
+  {
+    "id": 258,
+    "name": "回力5697",
+    "category": "回力",
+    "topCategory": "自z",
+    "subCategory": "回力",
+    "imgIndex": 258,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B5697-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E5%9B%9E%E5%8A%9B/%E5%9B%9E%E5%8A%9B5697-159.webp"
+  },
+  {
+    "id": 259,
+    "name": "m602",
+    "category": "皮鞋",
+    "topCategory": "自z",
+    "subCategory": "皮鞋",
+    "imgIndex": 259,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E7%9A%AE%E9%9E%8B/m602-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E7%9A%AE%E9%9E%8B/m602-159.webp"
+  },
+  {
+    "id": 260,
+    "name": "m601",
+    "category": "皮鞋",
+    "topCategory": "自z",
+    "subCategory": "皮鞋",
+    "imgIndex": 260,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E7%9A%AE%E9%9E%8B/m601-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E7%9A%AE%E9%9E%8B/m601-159.webp"
+  },
+  {
+    "id": 261,
+    "name": "自9869",
+    "category": "自z",
+    "topCategory": "自z",
+    "subCategory": "",
+    "imgIndex": 261,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E8%87%AA9869-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E8%87%AA9869-169.webp"
+  },
+  {
+    "id": 262,
+    "name": "自8101",
+    "category": "自z",
+    "topCategory": "自z",
+    "subCategory": "",
+    "imgIndex": 262,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E8%87%AA8101-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E8%87%AA8101-169.webp"
+  },
+  {
+    "id": 263,
+    "name": "自805",
+    "category": "自z",
+    "topCategory": "自z",
+    "subCategory": "",
+    "imgIndex": 263,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E8%87%AAz/%E8%87%AA805-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E8%87%AAz/%E8%87%AA805-169.webp"
+  },
+  {
+    "id": 280,
+    "name": "鸿棉24205",
+    "category": "鸿b",
+    "topCategory": "鸿b",
+    "subCategory": "",
+    "imgIndex": 280,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E9%B8%BFb/%E9%B8%BF%E6%A3%8924205-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E9%B8%BFb/%E9%B8%BF%E6%A3%8924205-129.webp"
+  },
+  {
+    "id": 281,
+    "name": "鸿815女",
+    "category": "鸿b",
+    "topCategory": "鸿b",
+    "subCategory": "",
+    "imgIndex": 281,
+    "price": "109元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E9%B8%BFb/%E9%B8%BF815%E5%A5%B3-109.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E9%B8%BFb/%E9%B8%BF815%E5%A5%B3-109.webp"
+  },
+  {
+    "id": 282,
+    "name": "鸿815",
+    "category": "鸿b",
+    "topCategory": "鸿b",
+    "subCategory": "",
+    "imgIndex": 282,
+    "price": "109元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/%E9%B8%BFb/%E9%B8%BF815-109.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/%E9%B8%BFb/%E9%B8%BF815-109.webp"
+  },
+  {
+    "id": 4,
+    "name": "8020白兰联名",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 4,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/8020%E7%99%BD%E5%85%B0%E8%81%94%E5%90%8D-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/8020%E7%99%BD%E5%85%B0%E8%81%94%E5%90%8D-189.webp"
+  },
+  {
+    "id": 5,
+    "name": "335白黑红",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 5,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/335%E7%99%BD%E9%BB%91%E7%BA%A2-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/335%E7%99%BD%E9%BB%91%E7%BA%A2-189.webp"
+  },
+  {
+    "id": 6,
+    "name": "335白黑紫",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 6,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/335%E7%99%BD%E9%BB%91%E7%B4%AB-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/335%E7%99%BD%E9%BB%91%E7%B4%AB-189.webp"
+  },
+  {
+    "id": 7,
+    "name": "329白藏青",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 7,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/329%E7%99%BD%E8%97%8F%E9%9D%92-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/329%E7%99%BD%E8%97%8F%E9%9D%92-189.webp"
+  },
+  {
+    "id": 8,
+    "name": "312白橙黑",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 8,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/312%E7%99%BD%E6%A9%99%E9%BB%91-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/312%E7%99%BD%E6%A9%99%E9%BB%91-189.webp"
+  },
+  {
+    "id": 9,
+    "name": "312海军蓝",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 9,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/312%E6%B5%B7%E5%86%9B%E8%93%9D-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/312%E6%B5%B7%E5%86%9B%E8%93%9D-189.webp"
+  },
+  {
+    "id": 10,
+    "name": "2628黑烟灰",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 10,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/2628%E9%BB%91%E7%83%9F%E7%81%B0-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/2628%E9%BB%91%E7%83%9F%E7%81%B0-189.webp"
+  },
+  {
+    "id": 11,
+    "name": "2510蓝爆裂",
+    "category": "312",
+    "topCategory": "aj",
+    "subCategory": "312",
+    "imgIndex": 11,
+    "price": "189元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/312/2510%E8%93%9D%E7%88%86%E8%A3%82-189.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/312/2510%E8%93%9D%E7%88%86%E8%A3%82-189.webp"
+  },
+  {
+    "id": 15,
+    "name": "8819粉屿星",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 15,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E7%B2%89%E5%B1%BF%E6%98%9F-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E7%B2%89%E5%B1%BF%E6%98%9F-169.webp"
+  },
+  {
+    "id": 16,
+    "name": "8819白黑金",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 16,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E7%99%BD%E9%BB%91%E9%87%91-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E7%99%BD%E9%BB%91%E9%87%91-169.webp"
+  },
+  {
+    "id": 17,
+    "name": "8819白金",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 17,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E7%99%BD%E9%87%91-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E7%99%BD%E9%87%91-169.webp"
+  },
+  {
+    "id": 18,
+    "name": "8819摩登黑",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 18,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E6%91%A9%E7%99%BB%E9%BB%91-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E6%91%A9%E7%99%BB%E9%BB%91-169.webp"
+  },
+  {
+    "id": 19,
+    "name": "8819摩登白",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 19,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E6%91%A9%E7%99%BB%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E6%91%A9%E7%99%BB%E7%99%BD-169.webp"
+  },
+  {
+    "id": 20,
+    "name": "8819午夜蓝",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 20,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E5%8D%88%E5%A4%9C%E8%93%9D-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E5%8D%88%E5%A4%9C%E8%93%9D-169.webp"
+  },
+  {
+    "id": 21,
+    "name": "8819兰生胶",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 21,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E5%85%B0%E7%94%9F%E8%83%B6-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E5%85%B0%E7%94%9F%E8%83%B6-169.webp"
+  },
+  {
+    "id": 22,
+    "name": "8819亮晶黑",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 22,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%BB%91-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%BB%91-169.webp"
+  },
+  {
+    "id": 23,
+    "name": "8819亮晶银",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 23,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%93%B6-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E4%BA%AE%E6%99%B6%E9%93%B6-169.webp"
+  },
+  {
+    "id": 24,
+    "name": "8819三叶草",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 24,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8819%E4%B8%89%E5%8F%B6%E8%8D%89-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8819%E4%B8%89%E5%8F%B6%E8%8D%89-169.webp"
+  },
+  {
+    "id": 25,
+    "name": "8009黑白",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 25,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E9%BB%91%E7%99%BD-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E9%BB%91%E7%99%BD-129.webp"
+  },
+  {
+    "id": 26,
+    "name": "8009白黑",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 26,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E7%99%BD%E9%BB%91-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E7%99%BD%E9%BB%91-159.webp"
+  },
+  {
+    "id": 27,
+    "name": "8009水悦蓝",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 27,
+    "price": "159元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E6%B0%B4%E6%82%A6%E8%93%9D-159.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E6%B0%B4%E6%82%A6%E8%93%9D-159.webp"
+  },
+  {
+    "id": 28,
+    "name": "8009兰白",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 28,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8009%E5%85%B0%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8009%E5%85%B0%E7%99%BD-169.webp"
+  },
+  {
+    "id": 29,
+    "name": "8005酒红",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 29,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8005%E9%85%92%E7%BA%A2-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8005%E9%85%92%E7%BA%A2-129.webp"
+  },
+  {
+    "id": 30,
+    "name": "8005桔色",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 30,
+    "price": "129元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/8005%E6%A1%94%E8%89%B2-129.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/8005%E6%A1%94%E8%89%B2-129.webp"
+  },
+  {
+    "id": 31,
+    "name": "2688黑白",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 31,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/2688%E9%BB%91%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/2688%E9%BB%91%E7%99%BD-169.webp"
+  },
+  {
+    "id": 32,
+    "name": "2688粉白",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 32,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/2688%E7%B2%89%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/2688%E7%B2%89%E7%99%BD-169.webp"
+  },
+  {
+    "id": 33,
+    "name": "2226白蓝红",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 33,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/2226%E7%99%BD%E8%93%9D%E7%BA%A2-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/2226%E7%99%BD%E8%93%9D%E7%BA%A2-169.webp"
+  },
+  {
+    "id": 34,
+    "name": "0299白",
+    "category": "adidas",
+    "topCategory": "aj",
+    "subCategory": "adidas",
+    "imgIndex": 34,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/adidas/0299%E7%99%BD-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/adidas/0299%E7%99%BD-169.webp"
+  },
+  {
+    "id": 38,
+    "name": "lv白灰",
+    "category": "lv",
+    "topCategory": "aj",
+    "subCategory": "lv",
+    "imgIndex": 38,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E7%99%BD%E7%81%B0-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E7%99%BD%E7%81%B0-169.webp"
+  },
+  {
+    "id": 39,
+    "name": "lv牛仔蓝米",
+    "category": "lv",
+    "topCategory": "aj",
+    "subCategory": "lv",
+    "imgIndex": 39,
+    "price": "169元",
+    "special_price": "129元",
+    "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/lv/lv%E7%89%9B%E4%BB%94%E8%93%9D%E7%B1%B3-169.webp",
+    "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/lv/lv%E7%89%9B%E4%BB%94%E8%93%9D%E7%B1%B3-169.webp"
+  }
 ];
 
     <!-- AUTO_LAZY_START -->
@@ -2589,6 +3795,216 @@
       applyUiMode(r.mode, r.promo);
       // 仅控制台提示：说明「主题」只影响皮肤，价格始终按当日日历计算
       console.log('[aj5] 主题:' + (r.mode === 'festival' ? '节日' : '日常') + '（价格始终按当日日历计算）');
+    })();
+
+  
+    /* ============================================================
+       13. 移动端电商交互（脚本补丁注入）
+       ============================================================
+       · 手机（≤768px）：点一级分类 → 底部弹层出二级；底部 4 入口可用；底部栏常驻
+       · 桌面（>768px）：完全沿用原有下拉逻辑，本段自动旁路
+       ============================================================ */
+    (function initMobileEcommerce() {
+      var mq = window.matchMedia('(max-width: 768px)');
+      var sheet      = document.getElementById('subSheet');
+      var sheetMask  = document.getElementById('sheetMask');
+      var sheetPanel = document.getElementById('sheetPanel');
+      var sheetTitle = document.getElementById('sheetTitle');
+      var sheetClose = document.getElementById('sheetClose');
+      var sheetGrid  = document.getElementById('sheetGrid');
+      var bottomBarEl = document.getElementById('bottomBar');
+      if (!sheet || !sheetGrid) return;
+
+      var openFlag = false;
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function openSheet(top, label, children) {
+        sheetTitle.textContent = label || '选择分类';
+        var subs = String(children || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+        var cur = (typeof currentSub !== 'undefined') ? currentSub : '';
+        var html = '<button class="sheet-item' + (cur ? '' : ' active') + '" type="button"'
+                 + ' data-top="' + top + '" data-sub="">全部</button>';
+        html += subs.map(function (s) {
+          return '<button class="sheet-item' + (cur === s ? ' active' : '') + '" type="button"'
+               + ' data-top="' + top + '" data-sub="' + s + '">' + escapeHtml(s) + '</button>';
+        }).join('');
+        sheetGrid.innerHTML = html;
+        if (sheetMask) sheetMask.classList.add('show');
+        if (sheetPanel) sheetPanel.classList.add('show');
+        sheet.classList.add('open');
+        document.body.classList.add('sheet-locked');
+        openFlag = true;
+      }
+
+      function closeSheet() {
+        if (sheetMask) sheetMask.classList.remove('show');
+        if (sheetPanel) sheetPanel.classList.remove('show');
+        sheet.classList.remove('open');
+        document.body.classList.remove('sheet-locked');
+        openFlag = false;
+      }
+
+      /* 弹层内点击二级项 → 切换分类 + 关弹层 */
+      sheetGrid.addEventListener('click', function (e) {
+        var item = e.target.closest('.sheet-item');
+        if (!item) return;
+        var top = item.dataset.top;
+        var sub = item.dataset.sub || '';
+        var label = sheetTitle.textContent || top;
+        closeSheet();
+        switchCategory(top, sub, sub ? sub : label);
+        var g = document.getElementById('gallery');
+        if (g) setTimeout(function () { g.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+      });
+
+      if (sheetMask) sheetMask.addEventListener('click', closeSheet);
+      if (sheetClose) sheetClose.addEventListener('click', closeSheet);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && openFlag) closeSheet();
+      });
+
+      /* 移动端：一级分类点击改为开弹层（捕获阶段抢先处理） */
+      var navLinks = document.querySelector('.nav-links');
+      if (navLinks) {
+        navLinks.addEventListener('click', function (e) {
+          if (!mq.matches) return;
+          var btn = e.target.closest('.nav-btn');
+          if (!btn) return;
+          if (btn.dataset.top === 'all') return;      // "全部" 交给原逻辑
+          var children = btn.dataset.children;
+          if (children) {
+            e.stopPropagation(); e.preventDefault();
+            var label = btn.textContent.replace('▼', '').trim();
+            openSheet(btn.dataset.top, label, children);
+          } else if (openFlag) {
+            closeSheet();
+          }
+        }, true);
+      }
+
+      /* 底部 4 入口 */
+      var bbHome = document.getElementById('bbHome');
+      var bbCate = document.getElementById('bbCate');
+      var bbSearch = document.getElementById('bbSearch');
+      var bbContact = document.getElementById('bbContact');
+
+      function setActiveBb(el) {
+        [bbHome, bbCate, bbSearch, bbContact].forEach(function (b) {
+          if (b) b.classList.toggle('active', b === el);
+        });
+      }
+
+      if (bbHome) bbHome.addEventListener('click', function () {
+        setActiveBb(bbHome); closeSheet();
+        switchCategory('all');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      if (bbCate) bbCate.addEventListener('click', function () {
+        setActiveBb(bbCate);
+        var target = document.querySelector('.nav-btn.active[data-top]:not([data-top="all"])');
+        if (!target || !target.dataset.children) {
+          target = document.querySelector('.nav-btn[data-children]');
+        }
+        if (target && target.dataset.children) {
+          var label = target.textContent.replace('▼', '').trim();
+          openSheet(target.dataset.top, label, target.dataset.children);
+        } else {
+          var nav = document.querySelector('.nav-bottom-row') || document.querySelector('.navbar');
+          if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+
+      if (bbSearch) bbSearch.addEventListener('click', function () {
+        setActiveBb(bbSearch); closeSheet();
+        var nav = document.querySelector('.navbar');
+        if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var si = document.getElementById('searchInput');
+        if (si) setTimeout(function () {
+          try { si.focus({ preventScroll: true }); } catch (err) { si.focus(); }
+        }, 260);
+      });
+
+      if (bbContact) bbContact.addEventListener('click', function () {
+        setActiveBb(bbContact); closeSheet();
+        openContactSheet();
+      });
+
+      function openContactSheet() {
+        var el = document.getElementById('wechatId');
+        var wechat = (el && el.textContent) ? el.textContent.trim() : 'xdq880406';
+        sheetTitle.textContent = '联系客服';
+        sheetGrid.innerHTML =
+          '<div class="contact-sheet">' +
+            '<img class="contact-sheet-qr" src="wechat-qr.png" alt="微信二维码"' +
+            ' onerror="this.style.display=\'none\'">' +
+            '<p class="contact-sheet-tip">扫码添加微信，或复制微信号</p>' +
+            '<p class="contact-sheet-id">' + escapeHtml(wechat) + '</p>' +
+            '<button class="contact-sheet-copy" type="button" id="contactSheetCopy">复制微信号</button>' +
+          '</div>';
+        if (sheetMask) sheetMask.classList.add('show');
+        if (sheetPanel) sheetPanel.classList.add('show');
+        sheet.classList.add('open');
+        document.body.classList.add('sheet-locked');
+        openFlag = true;
+        var copyBtn = document.getElementById('contactSheetCopy');
+        if (copyBtn) copyBtn.addEventListener('click', function () {
+          copyWechat();
+          copyBtn.textContent = '已复制 ✓';
+          setTimeout(function () { copyBtn.textContent = '复制微信号'; }, 1600);
+        });
+      }
+
+      /* 补齐原页面缺失的 copyWechat 实现（onclick="copyWechat()" 一直在引用它） */
+      if (typeof window.copyWechat !== 'function') {
+        window.copyWechat = function () {
+          var el = document.getElementById('wechatId');
+          var text = (el && el.textContent) ? el.textContent.trim() : 'xdq880406';
+          var done = function () {
+            var btn = document.querySelector('.modal-copy-btn');
+            if (btn) {
+              if (!btn.dataset.orig) btn.dataset.orig = btn.innerHTML;
+              btn.innerHTML = '已复制 ✓';
+              setTimeout(function () { btn.innerHTML = btn.dataset.orig; }, 1600);
+            }
+          };
+          var fallback = function (t) {
+            var ta = document.createElement('textarea');
+            ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(function () { fallback(text); done(); });
+          } else { fallback(text); done(); }
+        };
+      }
+
+      /* 底部栏：手机端常驻，桌面端保留原滚动显隐 */
+      function syncBottomBar() {
+        if (!bottomBarEl) return;
+        if (mq.matches) {
+          bottomBarEl.classList.add('show');
+          bottomBarEl.classList.remove('hidden');
+        } else {
+          bottomBarEl.classList.remove('show');
+          bottomBarEl.classList.remove('hidden');
+        }
+      }
+      syncBottomBar();
+      if (mq.addEventListener) mq.addEventListener('change', syncBottomBar);
+      else if (mq.addListener) mq.addListener(syncBottomBar);
+      window.addEventListener('resize', syncBottomBar);
+      window.addEventListener('orientationchange', syncBottomBar);
+
+      window.__aj5Mobile = { openSheet: openSheet, closeSheet: closeSheet, syncBottomBar: syncBottomBar };
+      console.log('[aj5] 移动端电商交互已就绪（≤768px 生效）');
     })();
 
   </script>
