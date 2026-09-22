@@ -5,6 +5,9 @@ on:
     branches: [ main ]
     paths:
       - 'images/**'
+      - 'index.html'
+      - 'manifest.json'
+      - 'update_gallery.py'
   workflow_dispatch:
 
 permissions:

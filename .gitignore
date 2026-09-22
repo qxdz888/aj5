@@ -2,3 +2,14 @@ images_archive/
 images_original_backup/
 dist-cloudbase/
 dist-cloudbase.zip
+_cleanup_backup_*/
+*.backup_*
+_sync_backup/
+_sync_clone/
+_old_scripts/
+_chk/
+_chk.js
+_qa_shots/
+__pycache__/
+*.pyc
+index.html.baseline_data337
