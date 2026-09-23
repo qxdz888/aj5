@@ -67,8 +67,29 @@ def _build_vendor():
                 if k in os.environ:
                     saved[k] = os.environ.pop(k)
             try:
+                # 修复：Git-Bash 子环境里 HOME 可能是 /c/Users/... 风格，paramiko 会据此把
+                # known_hosts 解析成原生 Windows 打不开的路径，open 时抛 Permission denied，
+                # 进而 host key 校验失败、握手被远端断开（表现为 get_refs "remote closed" /
+                # send_pack "Host key verification failed"）。
+                # 这里强制 HOME 指向 Windows 风格，并预加载本地 known_hosts，
+                # 使 connect() 不再回退去读默认（可能损坏的）known_hosts。
+                _win_home = os.environ.get("USERPROFILE") or r"C:\Users\Administrator.DESKTOP-K1RSGDC"
+                os.environ["HOME"] = _win_home
                 client = paramiko.SSHClient()
                 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                _kh = os.path.join(_win_home, ".ssh", "known_hosts")
+                try:
+                    if os.path.exists(_kh):
+                        client.load_system_host_keys(_kh)
+                        client.load_host_keys(_kh)
+                    else:
+                        # 没有已知 hosts 时也放一条占位，让 _system_host_keys 非空，
+                        # 阻止 connect() 回退重载默认文件
+                        client._system_host_keys = paramiko.HostKeys()
+                        client._system_host_keys["__placeholder__.invalid"] = {}
+                except Exception:
+                    client._system_host_keys = paramiko.HostKeys()
+                    client._system_host_keys["__placeholder__.invalid"] = {}
                 kw_extra = {}
                 if key_filename:
                     kw_extra['key_filename'] = key_filename
