@@ -547,21 +547,47 @@ def deploy_cloudbase(dry=False):
 
 # ═════════════════════════ 4. PUSH：增量推 Netlify(GitHub) ═════════════════════════
 def push_netlify():
-    hr("④ PUSH · 增量提交到 Netlify（GitHub）")
-    import importlib.util, sys as _s
-    mod_path = BASE / "git_push_helper.py"
-    if not mod_path.exists():
-        log("未找到 git_push_helper.py，跳过 Netlify 推送", "!!")
+    hr("④ PUSH · 提交并推送到 Netlify（GitHub main）")
+    import subprocess, shutil
+    # 精确范围提交，避免误提交 _qa_* 等临时文件
+    assets = [
+        "index.html", "manifest.json", "netlify.toml",
+        "update_gallery.py", "sync.py", "git_push_helper.py",
+        ".github/workflows/auto-update.yml", ".gitignore",
+        "images", "thumbs",
+    ]
+    git = shutil.which("git")
+    if not git:
+        log("环境中找不到 git 命令，跳过推送（请确认系统已安装 Git 并在 PATH 中）", "!!")
         return False
-    spec = importlib.util.spec_from_file_location("gph", mod_path)
-    gph = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(gph)
-    return gph.incremental_push(BASE, CLONE_DIR, GIT_REPO, GIT_BRANCH,
-                                subdirs=["images", "thumbs", ".github/workflows"],
-                                files=["index.html", "manifest.json", "netlify.toml",
-                                       "update_gallery.py", ".gitignore",
-                                       "_mobile_patch.py", "_ui_variants_patch.py",
-                                       "sync.py", "git_push_helper.py"])
+    try:
+        # 1) 暂存网站资产（images/thumbs 作为目录整体 add，会自动 stage 新增/修改/删除）
+        subprocess.run([git, "-C", str(BASE), "add", *assets],
+                       check=True, capture_output=True, text=True)
+        # 2) 有无可提交内容
+        st = subprocess.run([git, "-C", str(BASE), "status", "--porcelain"],
+                            capture_output=True, text=True)
+        if not st.stdout.strip():
+            log("无变更，跳过提交", "✓")
+            return True
+        # 3) 提交
+        msg = f"sync: 自动同步（{datetime.now():%Y-%m-%d %H:%M}）"
+        c = subprocess.run([git, "-C", str(BASE), "commit", "-m", msg],
+                           capture_output=True, text=True)
+        if c.returncode != 0:
+            log(f"commit 失败：{c.stderr[:300]}", "!!")
+            return False
+        # 4) 推送
+        p = subprocess.run([git, "-C", str(BASE), "push", "origin", GIT_BRANCH],
+                           capture_output=True, text=True)
+        if p.returncode != 0:
+            log(f"push 失败：{p.stderr[:400]}", "!!")
+            return False
+        log(f"已提交并推送 → origin/{GIT_BRANCH}", "✓")
+        return True
+    except Exception as e:
+        log(f"push 异常：{e}", "!!")
+        return False
 
 
 # ═════════════════════════ 5. CLEANUP：清理线上冗余旧路径 ═════════════════════════
