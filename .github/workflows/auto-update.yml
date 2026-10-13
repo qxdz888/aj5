@@ -1,13 +1,9 @@
 name: Auto Update Shoes Gallery
 
+# 2026-10-13 停用自动触发：该 Action 每次 push 后会重跑 update_gallery.py 并只 git add index.html，
+# 生成的首屏内联数据不含新增商品（如鸿26056），会覆盖手动/同步脚本推送的正确版本，造成反复覆盖循环。
+# 现由 sync.py 全权负责 scan→build→deploy→push，故此 Action 仅保留手动触发（workflow_dispatch），不再自动跑。
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'images/**'
-      - 'index.html'
-      - 'manifest.json'
-      - 'update_gallery.py'
   workflow_dispatch:
 
 permissions:
