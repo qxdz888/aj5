@@ -336,6 +336,13 @@ def apply_badges(shoes):
     print(f"[OK] 角标合并：{hit} 款（新款/热销）")
     return shoes
 
+def sort_new_first(shoes):
+    """首页排序：新款（badge=new）优先展示，其余保持原相对顺序；不改 id（分享链接不失效）"""
+    new_ones = [s for s in shoes if s.get("badge") == "new"]
+    rest = [s for s in shoes if s.get("badge") != "new"]
+    ordered = new_ones + rest
+    return ordered
+
 def build_inline(shoes):
     """首屏内联数据：每大分类前 N 张（保证切换任意分类都有内容）+ 按序补足"""
     picked, seen = [], set()
@@ -439,6 +446,7 @@ if __name__ == "__main__":
 
     brands_with_subs, standalone_brands, shoes = scan_directory()
     shoes = apply_badges(shoes)
+    shoes = sort_new_first(shoes)
 
     if not shoes:
         print("\n[ERR] 无数据！")

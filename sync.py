@@ -297,6 +297,7 @@ def scan_local():
     try:
         import update_gallery
         shoes = update_gallery.apply_badges(shoes)
+        shoes = update_gallery.sort_new_first(shoes)  # 首页新款优先展示
     except Exception as e:
         log(f"角标合并失败（不影响主流程）：{e}", "!!")
         for s in shoes:
