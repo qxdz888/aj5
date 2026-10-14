@@ -23,12 +23,13 @@
   - hash 路由 `#p-商品id` 可刷新/分享直达详情页
   - 列表卡片同步双行价格；layout-shelf/list 浅色布局的 `.price-plain` 必须补 var(--v-price) 覆盖（否则白字白底）
 - **新款/热销角标规则（2026-10-14 上线，老板确认：不要滞销，只要新款+热销）**：
-  - 新款 = 销售软件 goods.**create_at** 最新30个线上在售款式；热销 = sale_items 累计销量前40款；关联键 (goods.name, sale_price) ↔ 网站 (name, price)
+  - 新款 = 销售软件 goods.**create_at** 最新30个线上在售款式；**热销（2026-10-14 晚改口径）= 近30天有销量（sale_items JOIN sales，s.in_out=1 且 opt_date≥now-30d）且总销量≥20双，按总销量降序取30款**（口径对齐桌面 `滞销分析报表.py`；实测恰好30款候选）；关联键 (goods.name, sale_price) ↔ 网站 (name, price)
   - 生成器 `gen_badges.py` → `badges.json`（{name|price: new/hot}）；`update_gallery.apply_badges()` 与 **sync.py scan_local 两条链路都要合并**（sync.py 有独立 build，只在 update_gallery 加会被洗掉）
   - 已删除 sync.py scan_local 的 mtime isNew 逻辑（转图时间≠上架时间，口径错误）
   - 前端：卡片右上角 absolute（`.card-badge--new` 蓝 #1677ff / `.card-badge--topsell` 红 #f53f3f）；详情页名称后 static；函数 newBadge()/hotBadge()，副站同构
   - 副站数据自动跟主站 manifest（fetch aj5.netlify.app/manifest.json），无需单独生成
   - **首页新款优先（2026-10-14）**：`sort_new_first()` 把 badge=new 整批前置（只改顺序不改 id）；build_inline 也必须让新款整批先入选首屏80件，否则"每分类前3+补足"会把新款打散
+  - **补货脚本已集成角标自动更新（2026-10-14 晚）**：`auto_sync()` 第2步跑 `gen_badges.py`（scan+build 之后），badges.json 内容有变则再 build 一次合入，且角标变化会强制触发同步（无新图也推）；`_run_py()`/`_badges_dict()` 为新增辅助函数；以后老板双击补货脚本 = 图库→角标→网站全自动
 - **补货脚本一键全链路**（老板的 `Desktop\补货脚本最终版.py`）：`__main__` 已串成 `sync_gallery()` → `main()` → `auto_sync()`
   - `sync_gallery()`：销售软件 DB(clothing.db)+productImg(421张) → `Desktop\图库`（增量复制 + 下架/改价旧图移回收站，不删除）；**分类映射**：软件分类名 → `图库\aj\<分类>\`（12个aj子类）/ `图库\自z\<分类>\`（回力皮鞋）/ 其余一级平铺，由 `gallery_subdir()` 统一处理
   - `main()`：读图库按款式加尺码文字导出到 `Desktop\日期\`（补货）
@@ -40,6 +41,8 @@
   - ⚠️ 历史乌龙（2026-10-13）：曾误以为"9-19 把导航改平铺了"，实际线上导航/图片路径一直是 aj 两级，乱的只是桌面图库平铺+空壳；已迁移对齐
   - 现环境 managed venv 已装 Pillow，可在 WorkBuddy 直接跑 `sync.py` 全流程（不用等老板双击）
   - ⚠️ 同步推送机制（2026-10-13 修正）：`sync.py` 的 `push_netlify()` 已改为**直接用本地 git 命令行**（`git -C BASE add 网站资产 + commit + push origin main`），不再用 `git_push_helper.incremental_push`（dulwich 独立 clone 推送，会漏提交 index.html 且吞异常）；同时**已禁用 `.github/workflows/auto-update.yml` 的自动触发**（`on:` 仅 `workflow_dispatch`），否则每次 push 被它重跑 `update_gallery.py` 只 `git add index.html` 覆盖正确版本 → 死循环
+  - ⚠️ **sync.py main() 多命令 bug（2026-10-14 晚修复）**：原 main() 只取 `args[0]`，`sync.py deploy push cleanup verify` 实际**只跑 deploy**，push/cleanup/verify 全被静默跳过（auto_sync 第3步就是这个四命令调用 → 角标刷新后 push 从未执行，commit 停留旧口径）→ 已改为 for 循环遍历 args 依次执行；**教训：验证"已推送"不能只看 deploy 退出码，要 `git log` 核对 commit 内容**
+  - sync.py 的 `parse_filename` 曾写死 `special_price="129元"`（与 update_gallery 口径不一致，2026-10-14 晚清空）；前端 calcPrice 不读 special_price，特惠价按 topCategory 决定，清了不影响显示
 
 ## 国内部署包（CloudBase）
 - 用 `build_cloudbase_package.py` 生成 `dist-cloudbase.zip`（图片改回相对路径，全站自包含）
