@@ -27,7 +27,7 @@ images/
 ├── puma/           ← 直接放图片，生成单个按钮
 └── wans/           ← 直接放图片，生成单个按钮
 """
-import os, re
+import os, re, json
 from pathlib import Path
 from urllib.parse import quote
 
@@ -308,6 +308,34 @@ LAZY_BLOCK = LAZY_START + """
     }
     """ + LAZY_END
 
+def load_badges():
+    """读取 gen_badges.py 生成的 badges.json，返回 {"名称|价格整数": "new"/"hot"}"""
+    bf = Path(__file__).resolve().parent / 'badges.json'
+    if not bf.exists():
+        return {}
+    try:
+        return json.load(open(bf, encoding='utf-8')).get('badges', {})
+    except Exception as e:
+        print(f"[WARN] badges.json 读取失败：{e}")
+        return {}
+
+def apply_badges(shoes):
+    """给每项商品合并 badge 字段（新款/热销角标；无 DB 环境不影响）"""
+    badges = load_badges()
+    if not badges:
+        for s in shoes:
+            s["badge"] = ""
+        return shoes
+    hit = 0
+    for s in shoes:
+        p = s["price"].replace("元", "")
+        key = f'{s["name"]}|{p}' if p.isdigit() else ""
+        s["badge"] = badges.get(key, "") if key else ""
+        if s["badge"]:
+            hit += 1
+    print(f"[OK] 角标合并：{hit} 款（新款/热销）")
+    return shoes
+
 def build_inline(shoes):
     """首屏内联数据：每大分类前 N 张（保证切换任意分类都有内容）+ 按序补足"""
     picked, seen = [], set()
@@ -352,7 +380,7 @@ def update_index_html(brands_with_subs, standalone_brands, shoes):
     # 生成 shoes 数据：仅内联首屏部分（其余后台从 manifest.json 加载）
     inline = build_inline(shoes)
     js = "const shoes = [\n" + ",\n".join(
-        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", topCategory: "{s["topCategory"]}", subCategory: "{s["subCategory"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", image: "{cdn_url(s["image"])}", thumb: "{cdn_url(s.get("thumb", ""))}" }}'
+        f'  {{ id: {s["id"]}, name: "{s["name"]}", category: "{s["category"]}", topCategory: "{s["topCategory"]}", subCategory: "{s["subCategory"]}", imgIndex: {s["imgIndex"]}, price: "{s["price"]}", specialPrice: "{s.get("special_price", "")}", badge: "{s.get("badge", "")}", image: "{cdn_url(s["image"])}", thumb: "{cdn_url(s.get("thumb", ""))}" }}'
         for s in inline
     ) + "\n];"
 
@@ -410,6 +438,7 @@ if __name__ == "__main__":
     print("【全自动模式】扫描 images/ 下所有文件夹...\n")
 
     brands_with_subs, standalone_brands, shoes = scan_directory()
+    shoes = apply_badges(shoes)
 
     if not shoes:
         print("\n[ERR] 无数据！")

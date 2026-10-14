@@ -551,8 +551,8 @@ def push_netlify():
     import subprocess, shutil
     # 精确范围提交，避免误提交 _qa_* 等临时文件
     assets = [
-        "index.html", "manifest.json", "netlify.toml",
-        "update_gallery.py", "sync.py", "git_push_helper.py",
+        "index.html", "manifest.json", "badges.json", "netlify.toml",
+        "update_gallery.py", "sync.py", "git_push_helper.py", "gen_badges.py",
         ".github/workflows/auto-update.yml", ".gitignore",
         "images", "thumbs",
     ]
