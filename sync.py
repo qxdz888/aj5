@@ -426,6 +426,10 @@ def build_inline(shoes):
     """首屏内联：每分类前 3 张 + 补足到 80（与 update_gallery.py 策略一致）"""
     per_cat, total = 3, 80
     by_cat, picked, seen = {}, [], set()
+    # 新款优先整批进入首屏内联（排序后 shoes 前段即新款，保证首页新款扎堆）
+    for s in shoes:
+        if s.get('badge') == 'new' and s['id'] not in seen:
+            picked.append(s); seen.add(s['id'])
     for s in shoes:
         key = s['topCategory'] + '/' + s['subCategory']
         by_cat.setdefault(key, []).append(s)
@@ -433,10 +437,6 @@ def build_inline(shoes):
         for s in arr[:per_cat]:
             if s['id'] not in seen:
                 picked.append(s); seen.add(s['id'])
-    # 新款优先进入首屏内联
-    for s in shoes:
-        if s.get('isNew') and s['id'] not in seen:
-            picked.append(s); seen.add(s['id'])
     for s in shoes:
         if len(picked) >= total:
             break

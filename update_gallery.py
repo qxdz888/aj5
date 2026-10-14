@@ -344,8 +344,12 @@ def sort_new_first(shoes):
     return ordered
 
 def build_inline(shoes):
-    """首屏内联数据：每大分类前 N 张（保证切换任意分类都有内容）+ 按序补足"""
+    """首屏内联数据：新款优先整批入选，再每大分类前 N 张（保证切换任意分类都有内容）+ 按序补足"""
     picked, seen = [], set()
+    # 新款优先（排序后 shoes 前段即新款），保证首页新款扎堆展示
+    for s in shoes:
+        if s.get("badge") == "new" and s["id"] not in seen:
+            picked.append(s); seen.add(s["id"])
     by_cat = {}
     for s in shoes:
         by_cat.setdefault(s["topCategory"], []).append(s)
