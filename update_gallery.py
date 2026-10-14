@@ -86,10 +86,8 @@ def parse_filename(filename):
             else:
                 price = price_raw
 
-            # 计算特惠价（固定129元）
-            special_price = "129元"
-
-            return shoe_name, price, special_price
+            # 特惠价由前端按分类规则统一决定（aj 恒 129，非 aj 无特惠价），数据层不写死
+            return shoe_name, price, ""
 
     return name_without_ext, "面议", ""
 
