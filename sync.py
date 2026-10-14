@@ -292,12 +292,15 @@ def scan_local():
             for f in files:
                 shoes.append(mk_shoe(sid, top.name, "", f))
                 sid += 1
-    # 新款标识：最近修改的 30 款打 isNew（卡片"新款"角标用）
-    newest = sorted(shoes, key=lambda s: s.get('mtime', 0), reverse=True)[:30]
-    for s in newest:
-        s['isNew'] = True
-    for s in shoes:
-        s.pop('mtime', None)
+    # 新款/热销角标：合并 badges.json（gen_badges.py 按销售软件 create_at/销量生成）
+    # 注意：不再用文件 mtime 打 isNew（那是转图时间，不是软件上架时间），统一走 badge 字段
+    try:
+        import update_gallery
+        shoes = update_gallery.apply_badges(shoes)
+    except Exception as e:
+        log(f"角标合并失败（不影响主流程）：{e}", "!!")
+        for s in shoes:
+            s.setdefault("badge", "")
     return brands_with_subs, standalone_brands, shoes
 
 
@@ -475,7 +478,7 @@ def local_assets():
                 rel = prefix + '/' + p.relative_to(root).as_posix()
                 out[rel] = (p, md5_file(p))
     # 站点静态文件
-    for f in ("index.html", "manifest.json", "recruitment.html", "wechat-qr.png",
+    for f in ("index.html", "manifest.json", "badges.json", "recruitment.html", "wechat-qr.png",
               "wechat-icon.png", "netlify.toml"):
         p = BASE / f
         if p.exists():
