@@ -28,6 +28,7 @@
   - 已删除 sync.py scan_local 的 mtime isNew 逻辑（转图时间≠上架时间，口径错误）
   - 前端：卡片右上角 absolute（`.card-badge--new` 蓝 #1677ff / `.card-badge--topsell` 红 #f53f3f）；详情页名称后 static；函数 newBadge()/hotBadge()，副站同构
   - 副站数据自动跟主站 manifest（fetch aj5.netlify.app/manifest.json），无需单独生成
+  - **首页新款优先（2026-10-14）**：`sort_new_first()` 把 badge=new 整批前置（只改顺序不改 id）；build_inline 也必须让新款整批先入选首屏80件，否则"每分类前3+补足"会把新款打散
 - **补货脚本一键全链路**（老板的 `Desktop\补货脚本最终版.py`）：`__main__` 已串成 `sync_gallery()` → `main()` → `auto_sync()`
   - `sync_gallery()`：销售软件 DB(clothing.db)+productImg(421张) → `Desktop\图库`（增量复制 + 下架/改价旧图移回收站，不删除）；**分类映射**：软件分类名 → `图库\aj\<分类>\`（12个aj子类）/ `图库\自z\<分类>\`（回力皮鞋）/ 其余一级平铺，由 `gallery_subdir()` 统一处理
   - `main()`：读图库按款式加尺码文字导出到 `Desktop\日期\`（补货）
