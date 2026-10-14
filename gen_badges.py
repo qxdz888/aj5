@@ -3,7 +3,8 @@
 生成商品角标 badges.json（新款/热销）
 数据源：销售软件 clothing.db
   - 新款：goods.create_at 最新的 30 个线上在售款式
-  - 热销：sale_items 累计销量（SUM qty）最高的 40 个线上在售款式
+  - 热销：最近30天有销量 且 总销量>=20双，按总销量从高到低取 30 个线上在售款式
+    （口径与桌面「滞销分析报表.py」一致：30天销量过滤 in_out=1，总销量含退货冲减）
 输出：badges.json  {"<名称>|<价格整数>": "new"|"hot", ...}
 由 update_gallery.py 在 build manifest 时合并进每项商品数据。
 """
@@ -16,7 +17,7 @@ BASE = Path(__file__).resolve().parent
 DB = r'D:\zgzn-common\Programs\clothing-13638000210-1\data\clothing.db'
 MANIFEST = BASE / 'manifest.json'
 BADGES = BASE / 'badges.json'
-NEW_N, HOT_N = 30, 40
+NEW_N, HOT_N, HOT_MIN_TOTAL = 30, 30, 20
 
 
 def main():
@@ -47,6 +48,14 @@ def main():
                    JOIN goods g ON g.fingerprint = si.good_fingerprint
                    WHERE si.is_deleted = 0 GROUP BY g.name""")
     sales = {n: q or 0 for n, q in cur.fetchall() if n}
+
+    # 按 name 聚合近30天销量（只计销售单 in_out=1，与滞销分析报表.py 口径一致）
+    cur.execute("""SELECT g.name, SUM(si.qty) FROM sale_items si
+                   JOIN goods g ON g.fingerprint = si.good_fingerprint
+                   JOIN sales s ON si.sale_fingerprint = s.fingerprint
+                   WHERE s.in_out = 1 AND s.opt_date >= date('now', '-30 day')
+                   GROUP BY g.name""")
+    sales30 = {n: q or 0 for n, q in cur.fetchall() if n}
     conn.close()
 
     # 新款：create_at 最新 30 款（线上在售）
@@ -54,10 +63,12 @@ def main():
         ((name_ctime[n], n, p) for (n, p) in online if n in name_ctime),
         reverse=True)[:NEW_N]
 
-    # 热销：累计销量前 40 款（线上在售）
-    hot_rank = sorted(
-        ((sales.get(n, 0), n, p) for (n, p) in online),
-        reverse=True)[:HOT_N]
+    # 热销：近30天有销量 且 总销量>=20双，按总销量降序取 30 款（线上在售）
+    hot_candidates = [
+        (sales.get(n, 0), n, p) for (n, p) in online
+        if sales30.get(n, 0) > 0 and sales.get(n, 0) >= HOT_MIN_TOTAL
+    ]
+    hot_rank = sorted(hot_candidates, reverse=True)[:HOT_N]
 
     badges = {}
     for _, n, p in new_rank:

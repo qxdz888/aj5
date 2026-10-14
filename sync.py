@@ -313,7 +313,8 @@ def parse_filename(filename):
         if m:
             price_raw = m.group(2)
             price = f"{price_raw}元" if price_raw.isdigit() else price_raw
-            return m.group(1).strip(), price, "129元"
+            # special_price 不再写死：特惠价由前端按 topCategory 决定（aj 恒129）
+            return m.group(1).strip(), price, ""
     return stem, "面议", ""
 
 
@@ -793,36 +794,32 @@ def main():
     t0 = time.time()
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     dry = '--dry' in sys.argv or '--dry-run' in sys.argv
-    cmd = args[0] if args else 'all'
+    if not args:
+        args = ['all']
 
-    hr(f"一口价鞋款站点 · 统一同步脚本   [{cmd}]" + ("  (DRY RUN)" if dry else ""))
+    hr(f"一口价鞋款站点 · 统一同步脚本   [{' → '.join(args)}]" + ("  (DRY RUN)" if dry else ""))
     log(f"项目目录: {BASE}")
     log(f"图库目录: {GALLERY}")
 
-    if cmd == 'status':
-        status()
-    elif cmd == 'scan':
-        sync_files_to_local()
-    elif cmd == 'build':
-        build_manifest_and_index()
-    elif cmd == 'deploy':
-        deploy_cloudbase(dry=dry)
-    elif cmd == 'push':
-        push_netlify()
-    elif cmd == 'cleanup':
-        cleanup_cloudbase(dry=dry)
-    elif cmd == 'verify':
-        verify_online()
-    elif cmd == 'all':
-        sync_files_to_local()
-        build_manifest_and_index()
-        deploy_cloudbase(dry=dry)
-        push_netlify()
-        cleanup_cloudbase(dry=dry)
-        verify_online()
-    else:
-        print(__doc__)
-        return
+    # 支持多命令串联（如 deploy push cleanup verify 依次执行）
+    for cmd in args:
+        if cmd == 'status':
+            status()
+        elif cmd == 'scan':
+            sync_files_to_local()
+        elif cmd == 'build':
+            build_manifest_and_index()
+        elif cmd == 'deploy':
+            deploy_cloudbase(dry=dry)
+        elif cmd == 'push':
+            push_netlify()
+        elif cmd == 'cleanup':
+            cleanup_cloudbase(dry=dry)
+        elif cmd == 'verify':
+            verify_online()
+        else:
+            print(__doc__)
+            return
 
     hr(f"完成，用时 {time.time() - t0:.1f}s")
 
