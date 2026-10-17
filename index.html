@@ -750,18 +750,6 @@
       line-height: 1.1;
     }
 
-    /* 节日特惠小标签 */
-    .price-promo-tag {
-      font-size: 11px;
-      font-weight: 700;
-      color: #b45309;
-      background: #fdf0dc;
-      border: 1px solid #f3dcb8;
-      border-radius: 999px;
-      padding: 2px 10px;
-      margin-right: 2px;
-    }
-
     /* 运费说明（浅面板深字） */
     .modal-shipping {
       margin-top: 14px;
@@ -1131,6 +1119,142 @@
       --f-text-main: #FFF5E6;    /* 主文字 on #140808 ≈ 17.2:1 */
       --f-text-sub: #D4C4B0;     /* 次级文字 ≈ 11.4:1 */
       --f-text-muted: #9A8A7A;   /* 弱化文字 ≈ 5.1:1 */
+
+      /* 横幅专用令牌（每个节日主题覆盖下面整套） */
+      --f-banner-bg: linear-gradient(135deg, #8B1A1A 0%, #C1272D 50%, #8B1A1A 100%);
+      --f-banner-line: rgba(232, 196, 106, 0.55);   /* 横幅上下描边 */
+      --f-banner-glow: rgba(193, 39, 45, 0.28);     /* 横幅外发光 */
+      --f-banner-shine: rgba(255, 217, 122, 0.26);  /* 流光扫过色 */
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFD97A 55%, #E8C46A 100%);
+      --f-banner-title-glow: rgba(232, 196, 106, 0.5);
+      --f-banner-desc: #FFE9C8;
+      --f-page-glow: rgba(232, 196, 106, 0.13);     /* 页面顶部辉光 */
+    }
+
+    /* ======================================================================
+       节日专属主题（2026-10-17 老板定：每个节日做一版 UI）
+       由 JS 按命中的节日给 body 挂 .festival-<key>，覆盖上面整套令牌。
+       未命中任何节日表时（手动/预览开节日）默认 cny 红金主题。
+       各主题均保持「暗色底 + 单一强调色」体系，文字对比度 ≥ 4.5:1。
+       ====================================================================== */
+
+    /* ① 元旦：新年玫红 + 金 */
+    body.festival-mode.festival-newyear {
+      --f-bg-page: #14060C;  --f-bg-card: #200A14;  --f-bg-elevated: #2C1020;
+      --f-bg-nav: rgba(20, 6, 12, 0.95);
+      --f-gold: #F2C94C;  --f-gold-bright: #FFD97A;  --f-gold-deep: #B8902F;
+      --f-gold-line: rgba(242, 201, 76, 0.28);  --f-gold-glow: rgba(242, 201, 76, 0.22);
+      --f-red-deep: #7A1330;  --f-red-main: #B4254F;  --f-red-bright: #E13E6E;
+      --f-banner-bg: linear-gradient(135deg, #6E1030 0%, #B4254F 50%, #6E1030 100%);
+      --f-banner-line: rgba(242, 201, 76, 0.55);
+      --f-banner-glow: rgba(180, 37, 79, 0.30);
+      --f-banner-shine: rgba(255, 217, 122, 0.26);
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFD97A 55%, #F2C94C 100%);
+      --f-banner-title-glow: rgba(242, 201, 76, 0.5);
+      --f-banner-desc: #FFE0EC;
+      --f-page-glow: rgba(242, 201, 76, 0.13);
+    }
+
+    /* ② 年货节：灯笼红金（默认主题，最浓年味） */
+    body.festival-mode.festival-cny {
+      --f-bg-page: #150606;  --f-bg-card: #210B0B;  --f-bg-elevated: #2D1010;
+      --f-bg-nav: rgba(21, 6, 6, 0.95);
+      --f-gold: #FFD24D;  --f-gold-bright: #FFE680;  --f-gold-deep: #C9931F;
+      --f-gold-line: rgba(255, 210, 77, 0.28);  --f-gold-glow: rgba(255, 210, 77, 0.22);
+      --f-red-deep: #7A1414;  --f-red-main: #B01F24;  --f-red-bright: #D6382E;
+      --f-banner-bg: linear-gradient(135deg, #7A1414 0%, #B01F24 50%, #7A1414 100%);
+      --f-banner-line: rgba(255, 210, 77, 0.55);
+      --f-banner-glow: rgba(176, 31, 36, 0.30);
+      --f-banner-shine: rgba(255, 230, 128, 0.26);
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFE680 55%, #FFD24D 100%);
+      --f-banner-title-glow: rgba(255, 210, 77, 0.5);
+      --f-banner-desc: #FFE9C8;
+      --f-page-glow: rgba(255, 210, 77, 0.13);
+    }
+
+    /* ③ 劳动节：荣誉橙黄 */
+    body.festival-mode.festival-labor {
+      --f-bg-page: #150D06;  --f-bg-card: #211408;  --f-bg-elevated: #2D1B0B;
+      --f-bg-nav: rgba(21, 13, 6, 0.95);
+      --f-gold: #FFB13D;  --f-gold-bright: #FFD08A;  --f-gold-deep: #D97A16;
+      --f-gold-line: rgba(255, 177, 61, 0.28);  --f-gold-glow: rgba(255, 177, 61, 0.22);
+      --f-red-deep: #8A4A0E;  --f-red-main: #C76A17;  --f-red-bright: #F08A2E;
+      --f-banner-bg: linear-gradient(135deg, #8A4A0E 0%, #D97A16 50%, #8A4A0E 100%);
+      --f-banner-line: rgba(255, 177, 61, 0.55);
+      --f-banner-glow: rgba(215, 122, 22, 0.30);
+      --f-banner-shine: rgba(255, 208, 138, 0.26);
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFD08A 55%, #FFB13D 100%);
+      --f-banner-title-glow: rgba(255, 177, 61, 0.5);
+      --f-banner-desc: #FFE8CC;
+      --f-page-glow: rgba(255, 177, 61, 0.13);
+    }
+
+    /* ④ 618：电商亮红 */
+    body.festival-mode.festival-midyear {
+      --f-bg-page: #0F0505;  --f-bg-card: #1B0808;  --f-bg-elevated: #260D0D;
+      --f-bg-nav: rgba(15, 5, 5, 0.95);
+      --f-gold: #FF7A6B;  --f-gold-bright: #FFA899;  --f-gold-deep: #D64A3C;
+      --f-gold-line: rgba(255, 122, 107, 0.28);  --f-gold-glow: rgba(255, 122, 107, 0.22);
+      --f-red-deep: #8F120C;  --f-red-main: #E1251B;  --f-red-bright: #FF4D3D;
+      --f-banner-bg: linear-gradient(135deg, #8F120C 0%, #E1251B 50%, #8F120C 100%);
+      --f-banner-line: rgba(255, 122, 107, 0.55);
+      --f-banner-glow: rgba(225, 37, 27, 0.30);
+      --f-banner-shine: rgba(255, 168, 153, 0.26);
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFA899 55%, #FF7A6B 100%);
+      --f-banner-title-glow: rgba(255, 122, 107, 0.5);
+      --f-banner-desc: #FFD9D2;
+      --f-page-glow: rgba(255, 122, 107, 0.13);
+    }
+
+    /* ⑤ 国庆节：国旗红 + 荣誉金 */
+    body.festival-mode.festival-nationalday {
+      --f-bg-page: #100404;  --f-bg-card: #1C0707;  --f-bg-elevated: #280A0A;
+      --f-bg-nav: rgba(16, 4, 4, 0.95);
+      --f-gold: #FFD700;  --f-gold-bright: #FFF3A0;  --f-gold-deep: #C7A400;
+      --f-gold-line: rgba(255, 215, 0, 0.28);  --f-gold-glow: rgba(255, 215, 0, 0.22);
+      --f-red-deep: #8C1A08;  --f-red-main: #DE2910;  --f-red-bright: #FF4A2B;
+      --f-banner-bg: linear-gradient(135deg, #8C1A08 0%, #DE2910 50%, #8C1A08 100%);
+      --f-banner-line: rgba(255, 215, 0, 0.55);
+      --f-banner-glow: rgba(222, 41, 16, 0.30);
+      --f-banner-shine: rgba(255, 243, 160, 0.26);
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFF3A0 55%, #FFD700 100%);
+      --f-banner-title-glow: rgba(255, 215, 0, 0.5);
+      --f-banner-desc: #FFE9B8;
+      --f-page-glow: rgba(255, 215, 0, 0.13);
+    }
+
+    /* ⑥ 双11：天猫红 */
+    body.festival-mode.festival-double11 {
+      --f-bg-page: #0D0405;  --f-bg-card: #190709;  --f-bg-elevated: #230A10;
+      --f-bg-nav: rgba(13, 4, 5, 0.95);
+      --f-gold: #FF6B85;  --f-gold-bright: #FFA0B0;  --f-gold-deep: #D63354;
+      --f-gold-line: rgba(255, 107, 133, 0.28);  --f-gold-glow: rgba(255, 107, 133, 0.22);
+      --f-red-deep: #7A0A14;  --f-red-main: #C81623;  --f-red-bright: #FF3D55;
+      --f-banner-bg: linear-gradient(135deg, #7A0A14 0%, #C81623 50%, #7A0A14 100%);
+      --f-banner-line: rgba(255, 107, 133, 0.55);
+      --f-banner-glow: rgba(200, 22, 35, 0.30);
+      --f-banner-shine: rgba(255, 160, 176, 0.26);
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFA0B0 55%, #FF6B85 100%);
+      --f-banner-title-glow: rgba(255, 107, 133, 0.5);
+      --f-banner-desc: #FFD9DF;
+      --f-page-glow: rgba(255, 107, 133, 0.13);
+    }
+
+    /* ⑦ 双12：淘宝橙 */
+    body.festival-mode.festival-double12 {
+      --f-bg-page: #120604;  --f-bg-card: #1E0B06;  --f-bg-elevated: #2A1008;
+      --f-bg-nav: rgba(18, 6, 4, 0.95);
+      --f-gold: #FF8A3D;  --f-gold-bright: #FFB887;  --f-gold-deep: #E06A1A;
+      --f-gold-line: rgba(255, 138, 61, 0.28);  --f-gold-glow: rgba(255, 138, 61, 0.22);
+      --f-red-deep: #9C3208;  --f-red-main: #FF5000;  --f-red-bright: #FF7A33;
+      --f-banner-bg: linear-gradient(135deg, #9C3208 0%, #FF5000 50%, #9C3208 100%);
+      --f-banner-line: rgba(255, 138, 61, 0.55);
+      --f-banner-glow: rgba(255, 80, 0, 0.30);
+      --f-banner-shine: rgba(255, 184, 135, 0.26);
+      --f-banner-title: linear-gradient(180deg, #FFF8E8 0%, #FFB887 55%, #FF8A3D 100%);
+      --f-banner-title-glow: rgba(255, 138, 61, 0.5);
+      --f-banner-desc: #FFE0C2;
+      --f-page-glow: rgba(255, 138, 61, 0.13);
     }
 
     /* --- 页面整体：暗红炭黑底 + 顶部金色辉光 --- */
@@ -1139,8 +1263,8 @@
       color: var(--f-text-main);
       background-image:
         radial-gradient(ellipse 900px 420px at 50% -80px,
-          rgba(232, 196, 106, 0.13) 0%,
-          rgba(232, 196, 106, 0.05) 45%,
+          var(--f-page-glow) 0%,
+          var(--f-page-glow) 45%,
           transparent 75%);
       background-repeat: no-repeat;
       background-attachment: fixed;
@@ -1626,15 +1750,15 @@
          原 .banner 只有 70px 且自身高 500px 所以看不出问题，
          横幅很矮，必须给足，否则文字会被导航栏切掉。 */
       margin-top: 102px;
-      background: linear-gradient(135deg, #8B1A1A 0%, #C1272D 50%, #8B1A1A 100%);
+      background: var(--f-banner-bg);
       color: #FFF5E6;
       text-align: center;
       padding: 14px 20px;
       overflow: hidden;
-      border-top: 1px solid rgba(232, 196, 106, 0.55);
-      border-bottom: 1px solid rgba(232, 196, 106, 0.55);
+      border-top: 1px solid var(--f-banner-line);
+      border-bottom: 1px solid var(--f-banner-line);
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45),
-                  0 0 32px rgba(193, 39, 45, 0.28);
+                  0 0 32px var(--f-banner-glow);
       transform: translateY(-100%);
       opacity: 0;
     }
@@ -1666,9 +1790,9 @@
       height: 100%;
       background: linear-gradient(105deg,
           transparent 0%,
-          rgba(255, 217, 122, 0.20) 45%,
-          rgba(255, 217, 122, 0.32) 50%,
-          rgba(255, 217, 122, 0.20) 55%,
+          var(--f-banner-shine) 45%,
+          var(--f-banner-shine) 50%,
+          var(--f-banner-shine) 55%,
           transparent 100%);
       animation: bannerShine 4s ease-in-out infinite;
       pointer-events: none;          /* 不挡点击 */
@@ -1700,23 +1824,23 @@
       flex-wrap: wrap;
     }
 
-    /* 节日名主标题：金色渐变字 */
+    /* 节日名主标题：强调色渐变字 */
     #festivalBanner .festival-title {
       font-size: 17px;
       font-weight: 800;
       letter-spacing: 2px;
-      background: linear-gradient(180deg, #FFF8E8 0%, #FFD97A 55%, #E8C46A 100%);
+      background: var(--f-banner-title);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 0 12px rgba(232, 196, 106, 0.5));
+      filter: drop-shadow(0 0 12px var(--f-banner-title-glow));
       white-space: nowrap;
     }
 
-    /* 活动副文案：暖浅金，红底对比 ≈ 6.9:1 */
+    /* 活动副文案：浅暖色，红底对比 ≈ 6.9:1 */
     #festivalBanner .festival-desc {
       font-size: 13px;
-      color: #FFE9C8;
+      color: var(--f-banner-desc);
       letter-spacing: 1px;
     }
 
@@ -1742,9 +1866,17 @@
     }
 
     #festivalBanner .festival-cta:hover {
-      background: #FFD97A;
-      border-color: #FFD97A;
+      background: var(--f-gold-bright);
+      border-color: var(--f-gold-bright);
       color: #2A1206;
+    }
+
+    /* 横幅左侧节日 emoji（不走渐变字，保持彩色） */
+    #festivalBanner .festival-emoji {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 10px var(--f-banner-title-glow));
     }
 
     /* 横幅手机端适配 */
@@ -2762,7 +2894,7 @@
        ============================ -->
   <div id="festivalBanner" role="region" aria-label="节日活动公告">
     <div class="banner-inner">
-      <span aria-hidden="true">🎊</span>
+      <span class="festival-emoji" id="festivalEmoji" aria-hidden="true">🎊</span>
       <span class="festival-title" id="festivalTitle">节日特惠</span>
       <span class="festival-sep" aria-hidden="true"></span>
       <span class="festival-desc" id="festivalDesc">限时特惠进行中</span>
@@ -4170,15 +4302,18 @@
     // 节日表（每年自动生效：按页面当前年份动态构造区间，一次配置永久有效）
     // 实际特惠区间 = 节日区间 + 节前 5 天 + 节后 1 天（PROMO_DAYS_BEFORE / PROMO_DAYS_AFTER）
     // 双11/双12/618/年货节为促销区间；元旦/劳动节/国庆按法定假期常用区间内置
+    // 节日表（2026-10-17 起每节日一版 UI：key 对应 CSS .festival-<key> 主题，emoji/desc 驱动横幅）
     const FESTIVALS = [
-      { key: 'newyear',     name: '元旦',   start: '01-01', end: '01-03', promoLabel: '节日特惠价' },
-      { key: 'cny',         name: '年货节', start: '01-15', end: '02-15', promoLabel: '年货特惠价' },
-      { key: 'labor',       name: '劳动节', start: '05-01', end: '05-05', promoLabel: '节日特惠价' },
-      { key: 'midyear',     name: '618',    start: '06-01', end: '06-20', promoLabel: '年中大促价' },
-      { key: 'nationalday', name: '国庆节', start: '10-01', end: '10-07', promoLabel: '节日特惠价' },
-      { key: 'double11',    name: '双11',   start: '11-01', end: '11-11', promoLabel: '双11狂欢价' },
-      { key: 'double12',    name: '双12',   start: '12-01', end: '12-12', promoLabel: '双12年终价' }
+      { key: 'newyear',     name: '元旦',   start: '01-01', end: '01-03', promoLabel: '元旦特惠价',   emoji: '🎊', desc: '新年焕新季' },
+      { key: 'cny',         name: '年货节', start: '01-15', end: '02-15', promoLabel: '年货特惠价',   emoji: '🧨', desc: '年货囤货季 · 过年提前穿新鞋' },
+      { key: 'labor',       name: '劳动节', start: '05-01', end: '05-05', promoLabel: '劳动节特惠价', emoji: '🛠️', desc: '劳动光荣 · 致敬奋斗者' },
+      { key: 'midyear',     name: '618',    start: '06-01', end: '06-20', promoLabel: '年中大促价',   emoji: '🎁', desc: '年中狂欢 · 全场放价' },
+      { key: 'nationalday', name: '国庆节', start: '10-01', end: '10-07', promoLabel: '国庆特惠价',   emoji: '🎆', desc: '国庆钜惠 · 共庆华诞' },
+      { key: 'double11',    name: '双11',   start: '11-01', end: '11-11', promoLabel: '双11狂欢价',   emoji: '🔥', desc: '双11狂欢 · 一年一度' },
+      { key: 'double12',    name: '双12',   start: '12-01', end: '12-12', promoLabel: '双12年终价',   emoji: '🎉', desc: '双12年终盛典' }
     ];
+    // 所有节日主题 class（切换时先清干净，避免主题残留）
+    const FESTIVAL_KEYS = FESTIVALS.map(f => 'festival-' + f.key).join(' ');
 
     // 把 "YYYY-MM-DD" 转成当天 00:00 的本地 Date（避免 UTC 解析导致的差一天）
     function parseDay(str) {
@@ -4306,19 +4441,20 @@
      * 把 calcPrice 的结果渲染成价格 HTML（列表卡片与详情页共用）。
      * - aj：零售价（划线）+ 特惠价 129（红色大字）
      * - 非 aj 平时：仅零售价
-     * - 非 aj 节日特惠期：零售价（划线）+ 节日特惠价
+     * - 节日特惠期：零售价（划线）+ 节日特惠价（promoLabel 直接替代「特惠价」字样，不并排两个价标签）
      */
     function priceHTML(price) {
       const label = (t) => `<span class="price-label">${t}</span>`;
       if (!price) return '';
+      // 节日特惠期用 promoLabel（如「双11狂欢价」）当标签，覆盖「特惠价」
+      const specialTag = (price.isPromo && price.promoLabel) ? price.promoLabel : '特惠价';
       if (price.isAj) {
-        const tag = price.promoLabel ? `<span class="price-promo-tag">${price.promoLabel}</span>` : '';
         return `<span class="price-line">${label('零售价')}<span class="price-origin">${price.original}</span></span>`
-             + `<span class="price-line">${tag}${label('特惠价')}<span class="special-price">${price.special}</span></span>`;
+             + `<span class="price-line">${label(specialTag)}<span class="special-price">${price.special}</span></span>`;
       }
       if (price.isPromo) {
         return `<span class="price-line">${label('零售价')}<span class="price-origin">${price.original}</span></span>`
-             + `<span class="price-line"><span class="price-promo-tag">${price.promoLabel}</span>${label('特惠价')}<span class="special-price">${price.special}</span></span>`;
+             + `<span class="price-line">${label(specialTag)}<span class="special-price">${price.special}</span></span>`;
       }
       return `<span class="price-line">${label('零售价')}<span class="price-plain">${price.original}</span></span>`;
     }
@@ -4725,6 +4861,7 @@
     const uiModeToggleText  = document.getElementById('uiModeToggleText');
     const festivalTitleEl   = document.getElementById('festivalTitle');
     const festivalDescEl    = document.getElementById('festivalDesc');
+    const festivalEmojiEl   = document.getElementById('festivalEmoji');
     const festivalCtaEl     = document.getElementById('festivalCta');
 
     /**
@@ -4746,10 +4883,19 @@
     /**
      * 根据「用户偏好 + 当前节日状态」算出实际应使用的模式。
      * @returns {{mode:'daily'|'festival', promo:object}} promo 为 isPromoNow() 的返回值
+     * URL 预览参数：?fest=<key>（如 ?fest=double11）强制指定节日主题，
+     * 未指定则按真实节日表；daily 偏好优先于预览参数。
      */
     function resolveUiMode() {
       const saved = getSavedUiMode();           // 用户偏好
-      const promo = isPromoNow();               // 复用价格引擎：当前是否特惠期
+      let promo = isPromoNow();                 // 复用价格引擎：当前是否特惠期
+      let forcedFest = null;
+      try {
+        forcedFest = new URLSearchParams(location.search).get('fest');
+      } catch (e) {}
+      if (forcedFest && FESTIVALS.some(f => f.key === forcedFest)) {
+        promo = { active: true, festival: FESTIVALS.find(f => f.key === forcedFest) };
+      }
       let mode;
       if (saved === 'daily') {
         mode = 'daily';                         // 用户明确选了日常 → 始终保持日常
@@ -4762,9 +4908,22 @@
     }
 
     /**
-     * 应用 UI 模式：把 festival-mode 类挂到 body 上，并同步按钮和横幅文案。
+     * 预览用：不在真实节日区间内时，按「当前或下一个节日」选主题，
+     * 让手动/预览打开的节日皮肤跟季节对口（12 月下旬开 → 元旦主题）。
+     */
+    function previewFestivalKey(now) {
+      const today = dayStart(now || new Date());
+      const upcoming = FESTIVALS
+        .map(f => ({ key: f.key, start: parseDay(f.start) }))
+        .filter(f => f.start >= today)
+        .sort((a, b) => a.start - b.start);
+      return upcoming.length ? upcoming[0].key : FESTIVALS[0].key;
+    }
+
+    /**
+     * 应用 UI 模式：挂 festival-mode + 节日专属主题 class，同步按钮和横幅文案。
      * @param {'daily'|'festival'} mode
-     * @param {object} promo isPromoNow() 的返回值（用于取节日名）
+     * @param {object} promo isPromoNow() 的返回值（用于取节日名/主题 key）
      */
     function applyUiMode(mode, promo) {
       const isFestival = (mode === 'festival');
@@ -4772,31 +4931,40 @@
       // ① 核心：切换 body 上的 class —— 所有节日皮肤都由它驱动
       document.body.classList.toggle('festival-mode', isFestival);
 
-      // ② 运费/价格规则跟随当前模式：
-      //     节日模式一律按特惠口径（手动/预览开的补一个通用节日标签），日常模式关闭特惠
+      // ② 节日专属主题 class（festival-<key>）：一节日一版 UI 的关键
+      document.body.classList.remove.apply(document.body.classList, FESTIVAL_KEYS.split(' '));
+
+      // ③ 运费/价格规则跟随当前模式；同时定下本次生效的节日对象
+      let festival = null;
       if (isFestival) {
-        currentPromo = (promo && promo.active && promo.festival)
-          ? promo
-          : { active: true, festival: { name: '节日', promoLabel: '节日特惠价' } };
+        if (promo && promo.active && promo.festival && promo.festival.key) {
+          festival = promo.festival;                       // 真实命中节日表
+        } else {
+          // 手动/预览开节日：补一个「应季」节日对象（含 key/emoji/desc）
+          const pk = previewFestivalKey();
+          festival = FESTIVALS.find(f => f.key === pk) || FESTIVALS[1];
+        }
+        currentPromo = { active: true, festival: festival };
+        document.body.classList.add('festival-' + festival.key);
       } else {
         currentPromo = { active: false, festival: null };
       }
 
-      // ② 切换按钮的图标与文字（措辞用「主题」，明确只换皮肤、不改价格口径）
-      if (uiModeToggleIcon) uiModeToggleIcon.textContent = isFestival ? '🎊' : '🌤';
-      if (uiModeToggleText) uiModeToggleText.textContent = isFestival ? '节日主题' : '日常主题';
+      // ④ 切换按钮的图标与文字（措辞用「主题」，明确只换皮肤、不改价格口径）
+      if (uiModeToggleIcon) uiModeToggleIcon.textContent = isFestival ? (festival.emoji || '🎊') : '🌤';
+      if (uiModeToggleText) uiModeToggleText.textContent = isFestival ? (festival.name + '主题') : '日常主题';
       if (uiModeToggle) uiModeToggle.setAttribute('aria-pressed', String(isFestival));
 
-      // ③ 横幅文案：用节日的真实名字动态生成，不写死
-      const festivalName = (promo && promo.festival) ? promo.festival.name : '节日';
-      if (festivalTitleEl) festivalTitleEl.textContent = festivalName + '特惠';
+      // ⑤ 横幅三件套：emoji（彩色不渐变）+ 节日名标题 + 副文案
+      if (festivalEmojiEl) festivalEmojiEl.textContent = isFestival ? (festival.emoji || '🎊') : '🎊';
+      if (festivalTitleEl) festivalTitleEl.textContent = (festival ? festival.name : '节日') + '特惠';
       if (festivalDescEl) {
-        // 特惠期：显示包邮规则；非特惠期（用户手动开节日）：显示通用文案
-        festivalDescEl.textContent = (promo && promo.active)
-          ? '限时特惠 · 两双以上包邮'
+        // 真实特惠期：节日专属文案 + 包邮规则；手动开：通用文案
+        festivalDescEl.textContent = (promo && promo.active && festival.desc)
+          ? festival.desc + ' · 两双以上包邮'
           : '限时特惠进行中';
       }
-      // ④ 横幅显隐完全交给 CSS（body.festival-mode #festivalBanner），此处不碰 display
+      // ⑥ 横幅显隐完全交给 CSS（body.festival-mode #festivalBanner），此处不碰 display
     }
 
     /** 切换按钮点击：在两种模式间切换，并记录用户偏好 */
@@ -4834,12 +5002,21 @@
     // 节日/日常自动切换守护（auto 模式）：每 60s 核对一次，跨过节日界限立即切换，
     // 并刷新已渲染的卡片价格与已打开详情页的运费文案（用户无需手动刷新页面）
     (function startUiModeGuard() {
+      // 记录「是否节日 + 哪个节日主题」：跨节日界限（如双11→双12）也要重挂主题
+      function currentFestivalKey() {
+        const m = document.body.className.match(/festival-(\w+)/);
+        return document.body.classList.contains('festival-mode') ? (m ? m[1] : 'cny') : null;
+      }
       let lastFestival = document.body.classList.contains('festival-mode');
+      let lastKey = currentFestivalKey();
       setInterval(function () {
         const r = resolveUiMode();
         const nowFestival = (r.mode === 'festival');
-        if (nowFestival === lastFestival) return;   // 状态没变，什么都不做
-        lastFestival = nowFestival;
+        const nowKey = nowFestival
+          ? ((r.promo.festival && r.promo.festival.key) || 'cny')
+          : null;
+        if (nowFestival === lastFestival && nowKey === lastKey) return;  // 没变，什么都不做
+        lastFestival = nowFestival; lastKey = nowKey;
         applyUiMode(r.mode, r.promo);
         try { renderGallery(); } catch (e) {}       // 重渲染卡片（节日价/日常价）
         // 详情页开着的话，重算价格与运费
