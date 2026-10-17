@@ -4821,6 +4821,12 @@
     (function initUiMode() {
       const r = resolveUiMode();
       applyUiMode(r.mode, r.promo);
+      // hash 直开详情页（#p-xx）时，openDetailFromHash 可能先于本初始化执行，
+      // 用的是旧特惠状态；模式刚切换，按新模式重算一次价格与运费
+      if (modal.classList.contains('active')) {
+        const hm = (location.hash.match(/^#p-(\d+)$/) || [])[1];
+        if (hm) openModal(parseInt(hm, 10));
+      }
       // 仅控制台提示：说明「主题」只影响皮肤，价格始终按当日日历计算
       console.log('[aj5] 主题:' + (r.mode === 'festival' ? '节日' : '日常') + '（价格始终按当日日历计算）');
     })();
