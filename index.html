@@ -4234,16 +4234,20 @@
       return m ? Number(m[0]) : 0;
     }
 
+    // 当前生效的特惠状态：随 UI 模式走（auto 模式由真实节日时间决定；
+    // 手动/预览切到节日模式时，运费与价格特惠一并跟随，所见即所得）
+    let currentPromo = isPromoNow();
+
     /**
      * 计算某双鞋当前应展示的价格。
      * @param {object} shoe 商品对象
-     * @param {Date} [date] 可选，指定「今天」；不传则用页面打开当天的系统日期
+     * @param {Date} [date] 可选，指定「今天」；不传则用当前生效模式的特惠状态
      * @returns {{isAj:boolean, display:string, original:string|null, special:string|null,
      *            promoLabel:string|null, isPromo:boolean, festival:object|null}}
      *   display —— 直接铺进卡片的 HTML 片段
      */
     function calcPrice(shoe, date) {
-      const promo = isPromoNow(date);
+      const promo = (typeof currentPromo !== 'undefined' && currentPromo) ? currentPromo : isPromoNow(date);
       const isAj = shoe.topCategory === 'aj';
 
       if (isAj) {
@@ -4767,6 +4771,16 @@
 
       // ① 核心：切换 body 上的 class —— 所有节日皮肤都由它驱动
       document.body.classList.toggle('festival-mode', isFestival);
+
+      // ② 运费/价格规则跟随当前模式：
+      //     节日模式一律按特惠口径（手动/预览开的补一个通用节日标签），日常模式关闭特惠
+      if (isFestival) {
+        currentPromo = (promo && promo.active && promo.festival)
+          ? promo
+          : { active: true, festival: { name: '节日', promoLabel: '节日特惠价' } };
+      } else {
+        currentPromo = { active: false, festival: null };
+      }
 
       // ② 切换按钮的图标与文字（措辞用「主题」，明确只换皮肤、不改价格口径）
       if (uiModeToggleIcon) uiModeToggleIcon.textContent = isFestival ? '🎊' : '🌤';
