@@ -2820,7 +2820,7 @@
           <h2 class="modal-name" id="modalName"></h2><span id="modalBadge"></span>
           <!-- 价格：零售价（划线）+ 特惠价（aj 恒 129）；非 aj 只显示零售价 -->
           <div class="modal-price" id="modalPrice"></div>
-          <!-- 运费说明：平时 7 元，节日特惠期两双以上包邮 -->
+          <!-- 运费说明：日常 7 元/两双以上 10 元封顶；节日 单双 7 元/两双以上包邮（内置时间自动切换） -->
           <p class="modal-shipping" id="modalShipping"></p>
           <!-- 退换货说明 -->
           <p class="modal-return" id="modalReturn">退换货运费买家承担！</p>
@@ -4144,11 +4144,15 @@
             平时   —— 只显示零售价（无特惠价）
             特惠期 —— 显示零售价 + 节日特惠价（原价 − 10 元），无价格下限保护
        3) 特惠区间：节前 5 天（含） → 节日结束 → 节后 1 天（含）
-          例：中秋 9/25–9/27 → 9/20 ~ 9/28（含两端）
-       4) 全部按页面加载当天的本地日期动态计算，不写死
-       5) 详情页另展示：运费 7 元、退换货说明「退换货运费买家承担！」
-
-       节假日来源：国务院办公厅国办发明电〔2025〕7号
+          例：双11 11/1–11/11 → 10/27 ~ 11/12（含两端）
+       4) 节日表内置且每年自动生效（元旦/年货节/劳动节/618/国庆/双11/双12），
+          按页面当前年份动态构造区间；节日期间自动挂 body.festival-mode 节日皮肤，
+          并有 60s 轮询守护，跨过节日界限立即切换（含已打开详情页的运费重算）
+       5) 详情页运费（2026-10-17 老板定）：
+          日常 —— 运费 7 元，两双以上 10 元封顶
+          节日活动 —— 单双运费 7 元，两双以上包邮
+       6) 退换货说明「退换货运费买家承担！」
+       7) 预览/验证可用 URL 参数：?mode=festival 强制节日、?mode=daily 强制日常、?mode=auto 默认
     */
 
     // AJ 系列的固定展示价（平时与特惠期都是这个价）
@@ -4163,12 +4167,17 @@
     // 节后延迟几天结束特惠
     const PROMO_DAYS_AFTER = 1;
 
-    // 节日表（清明用「踏青特惠价」，其余用「节日特惠价」）
+    // 节日表（每年自动生效：按页面当前年份动态构造区间，一次配置永久有效）
+    // 实际特惠区间 = 节日区间 + 节前 5 天 + 节后 1 天（PROMO_DAYS_BEFORE / PROMO_DAYS_AFTER）
+    // 双11/双12/618/年货节为促销区间；元旦/劳动节/国庆按法定假期常用区间内置
     const FESTIVALS = [
-      { year: 2026, key: 'midautumn',   name: '中秋节', start: '2026-09-25', end: '2026-09-27', promoLabel: '节日特惠价' },
-      { year: 2026, key: 'nationalday', name: '国庆节', start: '2026-10-01', end: '2026-10-07', promoLabel: '节日特惠价' },
-      { year: 2027, key: 'newyear',     name: '元旦',   start: '2027-01-01', end: '2027-01-03', promoLabel: '节日特惠价' },
-      { year: 2027, key: 'qingming',    name: '清明节', start: '2027-04-04', end: '2027-04-06', promoLabel: '踏青特惠价' }
+      { key: 'newyear',     name: '元旦',   start: '01-01', end: '01-03', promoLabel: '节日特惠价' },
+      { key: 'cny',         name: '年货节', start: '01-15', end: '02-15', promoLabel: '年货特惠价' },
+      { key: 'labor',       name: '劳动节', start: '05-01', end: '05-05', promoLabel: '节日特惠价' },
+      { key: 'midyear',     name: '618',    start: '06-01', end: '06-20', promoLabel: '年中大促价' },
+      { key: 'nationalday', name: '国庆节', start: '10-01', end: '10-07', promoLabel: '节日特惠价' },
+      { key: 'double11',    name: '双11',   start: '11-01', end: '11-11', promoLabel: '双11狂欢价' },
+      { key: 'double12',    name: '双12',   start: '12-01', end: '12-12', promoLabel: '双12年终价' }
     ];
 
     // 把 "YYYY-MM-DD" 转成当天 00:00 的本地 Date（避免 UTC 解析导致的差一天）
@@ -4201,9 +4210,10 @@
      */
     function isPromoNow(date) {
       const today = dayStart(date || new Date());
+      const y = today.getFullYear();
       for (const f of FESTIVALS) {
-        const promoStart = addDays(parseDay(f.start), -PROMO_DAYS_BEFORE); // 节前 5 天
-        const promoEnd = addDays(parseDay(f.end), PROMO_DAYS_AFTER);       // 节后 1 天
+        const promoStart = addDays(parseDay(y + '-' + f.start), -PROMO_DAYS_BEFORE); // 节前 5 天
+        const promoEnd = addDays(parseDay(y + '-' + f.end), PROMO_DAYS_AFTER);       // 节后 1 天
         if (today >= promoStart && today <= promoEnd) {
           return {
             active: true,
@@ -4309,9 +4319,13 @@
       return `<span class="price-line">${label('零售价')}<span class="price-plain">${price.original}</span></span>`;
     }
 
-    // 运费文案：平时 7 元，特惠期两双以上包邮
+    // 运费规则（2026-10-17 老板定，随节日时间自动切换）：
+    //   日常     —— 运费 7 元，两双以上 10 元封顶
+    //   节日活动 —— 单双运费 7 元，两双以上包邮
     function getShippingText(isPromo) {
-      return isPromo ? '一双运费 7 元 · 两双以上包邮' : '运费 7 元';
+      return isPromo
+        ? '节日活动 · 单双运费 7 元 · 两双以上包邮'
+        : '运费 7 元 · 两双以上 10 元封顶';
     }
 
     /* ============================
@@ -4712,8 +4726,14 @@
     /**
      * 读取用户保存的模式偏好。
      * @returns {'auto'|'daily'|'festival'} 默认 'auto'
+     * 优先读 URL 参数 ?mode=daily|festival|auto（预览/验证用，不写 localStorage），
+     * 其次读 localStorage 偏好。
      */
     function getSavedUiMode() {
+      try {
+        const q = (location.search.match(/[?&]mode=(daily|festival|auto)/) || [])[1];
+        if (q) return q;
+      } catch (e) {}
       let v = 'auto';
       try { v = localStorage.getItem(UI_MODE_KEY) || 'auto'; } catch (e) {}
       return (v === 'daily' || v === 'festival') ? v : 'auto';
@@ -4789,6 +4809,25 @@
       applyUiMode(r.mode, r.promo);
       // 仅控制台提示：说明「主题」只影响皮肤，价格始终按当日日历计算
       console.log('[aj5] 主题:' + (r.mode === 'festival' ? '节日' : '日常') + '（价格始终按当日日历计算）');
+    })();
+
+    // 节日/日常自动切换守护（auto 模式）：每 60s 核对一次，跨过节日界限立即切换，
+    // 并刷新已渲染的卡片价格与已打开详情页的运费文案（用户无需手动刷新页面）
+    (function startUiModeGuard() {
+      let lastFestival = document.body.classList.contains('festival-mode');
+      setInterval(function () {
+        const r = resolveUiMode();
+        const nowFestival = (r.mode === 'festival');
+        if (nowFestival === lastFestival) return;   // 状态没变，什么都不做
+        lastFestival = nowFestival;
+        applyUiMode(r.mode, r.promo);
+        try { renderGallery(); } catch (e) {}       // 重渲染卡片（节日价/日常价）
+        // 详情页开着的话，重算价格与运费
+        if (modal.classList.contains('active')) {
+          const m = (location.hash.match(/^#p-(\d+)$/) || [])[1];
+          if (m && typeof openModal === 'function') openModal(m);
+        }
+      }, 60000);
     })();
 
   
