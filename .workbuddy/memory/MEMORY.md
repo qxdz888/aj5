@@ -21,7 +21,9 @@
   - **currentPromo 机制**：运费与价格特惠跟随当前生效 UI 模式（`applyUiMode` 时更新），手动/预览开节日也全套联动；非aj 节日价 = 原价−10，aj 恒129+节日标签
   - **运费双规则 `getShippingText(isPromo)`**：日常「运费 7 元 · 两双以上 10 元 封顶」/ 节日「单双运费 7 元 · 两双以上包邮」；节日态详情页运费加 `.promo` 琥珀高亮
   - 时序坑：hash 直开详情页先于 initUiMode 执行会用旧特惠状态 → initUiMode 里 modal 激活时按新模式重开一次（已修）
-  - 副站 520aj 无节日皮肤体系，只有轻量运费切换（FESTIVALS_520/isPromoNow520/getShippingText520）
+  - **每节日一版 UI（2026-10-17 老板定）**：CSS 令牌体系 `--f-*` 上加 `body.festival-mode.festival-<key>` 7 套覆盖块（元旦玫红金/年货节灯笼红金/劳动节橙/618亮红/国庆国旗红+荣誉金/双11天猫红/双12淘宝橙），banner 全套变量化 `--f-banner-*`（背景渐变/流光/标题渐变字）；FESTIVALS 表每项带 emoji/desc，applyUiMode 挂 `festival-<key>` class + 横幅三件套（emoji 独立 span 不走渐变字，否则被 text-fill-color 裁掉）；`previewFestivalKey()` 给手动/预览选应季主题（默认 cny）；guard 比对「节日 key」而非布尔（双11→双12 要重挂）；**`?fest=<key>` 强制指定节日主题预览**（如 `?fest=double11`），daily 偏好优先
+  - **节日特惠价覆盖特惠价（2026-10-17）**：priceHTML 节日期用 promoLabel（「双11狂欢价」等）当 label 替代「特惠价」字样，不并排两个价标签（删了 price-promo-tag 小标签及 CSS）；效果：节日 aj「零售价169元 双11狂欢价129元」/ 日常 aj「零售价169元 特惠价129元」/ 非aj 节日「零售价159元 双11狂欢价149元」
+  - 副站 520aj 轻量节日化：7 主题 banner 令牌 + #festivalBanner（nav 后 margin-top:70px 避让 fixed navbar，节日时 .banner margin-top 清零）；FESTIVALS_520 带 emoji/desc/promoLabel，isPromoNow520 返回 {active,festival}；IIFE initFestivalTheme520 + 60s 守护；支持 ?fest=
 - **价格与详情页规则（2026-10-14 上线，老板确认）**：
   - 零售价 = 图片文件名后缀（`8033冰蓝红-189.webp` → name=8033冰蓝红, price=189元），由 parse_filename 拆解
   - 特惠价规则收敛在**前端** `calcPrice()`：`topCategory==='aj'` 恒 129 元（双行展示：零售价划线+特惠价红字）；非 aj（潮ng/潮rez/鸿b/自z）只显示零售价；节日特惠期非aj减10元的逻辑保留
