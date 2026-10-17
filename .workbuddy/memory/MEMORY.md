@@ -15,6 +15,13 @@
 - 本地放图目录：`Desktop\图库\<大分类>\<小分类>\`（原图 jpg/png 即可），sync.py 自动转 webp + 生成 400px 缩略图
 - **图库两级结构（2026-10-13 定型，老板确认 adidas 归 aj）**：`图库\aj\<子分类>\`（12 类：312/adidas/lv/nk高帮/puma/wans/乔一/亚瑟/小空军/开拓者/空军/运动款，240张）；`图库\自z\<回力|皮鞋>\`（自z 直接17张+两子类4张）；潮ng/潮rez/鸿b 保持一级平铺。共 336 张，与 `images/` 结构一一对应
 - 单步可拆：`sync.py scan|build|deploy|push|cleanup|verify|status`
+- **节日模式与运费规则（2026-10-17 上线，老板定）**：
+  - **FESTIVALS 表 7 节日每年自动生效**：元旦 1/1-1/3、年货节 1/15-2/15、劳动节 5/1-5/5、618 6/1-6/20、国庆 10/1-10/7、双11 11/1-11/11、双12 12/1-12/12；`isPromoNow()` 按页面当前年份构造区间（一次配置永久有效）；实际特惠区间 = 节日 + 节前5天 + 节后1天
+  - `body.festival-mode` 节日皮肤由 `resolveUiMode()` 驱动：localStorage `aj5_ui_mode` = auto（默认，跟随时间）/daily/festival；**URL 参数 `?mode=` 优先**（预览用）；`startUiModeGuard()` 每 60s 轮询，跨节日界限自动切+重渲染
+  - **currentPromo 机制**：运费与价格特惠跟随当前生效 UI 模式（`applyUiMode` 时更新），手动/预览开节日也全套联动；非aj 节日价 = 原价−10，aj 恒129+节日标签
+  - **运费双规则 `getShippingText(isPromo)`**：日常「运费 7 元 · 两双以上 10 元 封顶」/ 节日「单双运费 7 元 · 两双以上包邮」；节日态详情页运费加 `.promo` 琥珀高亮
+  - 时序坑：hash 直开详情页先于 initUiMode 执行会用旧特惠状态 → initUiMode 里 modal 激活时按新模式重开一次（已修）
+  - 副站 520aj 无节日皮肤体系，只有轻量运费切换（FESTIVALS_520/isPromoNow520/getShippingText520）
 - **价格与详情页规则（2026-10-14 上线，老板确认）**：
   - 零售价 = 图片文件名后缀（`8033冰蓝红-189.webp` → name=8033冰蓝红, price=189元），由 parse_filename 拆解
   - 特惠价规则收敛在**前端** `calcPrice()`：`topCategory==='aj'` 恒 129 元（双行展示：零售价划线+特惠价红字）；非 aj（潮ng/潮rez/鸿b/自z）只显示零售价；节日特惠期非aj减10元的逻辑保留
