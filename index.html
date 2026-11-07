@@ -751,6 +751,11 @@
     }
 
     /* 运费说明（浅面板深字） */
+    /* AJ5 SIZES PATCH CSS START */
+    .modal-sizes { margin: 10px 0 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .modal-sizes .sz-label { font-size: 13px; color: #555; margin-right: 4px; }
+    .modal-sizes .sz-chip { display: inline-block; min-width: 30px; padding: 3px 7px; border: 1px solid #d8d8d8; border-radius: 4px; font-size: 12px; color: #333; background: #fafafa; text-align: center; }
+    /* AJ5 SIZES PATCH CSS END */
     .modal-shipping {
       margin-top: 14px;
       font-size: 14px;
@@ -2952,6 +2957,9 @@
           <h2 class="modal-name" id="modalName"></h2><span id="modalBadge"></span>
           <!-- 价格：零售价（划线）+ 特惠价（aj 恒 129）；非 aj 只显示零售价 -->
           <div class="modal-price" id="modalPrice"></div>
+          <!-- AJ5 SIZES PATCH HTML START -->
+          <div class="modal-sizes" id="modalSizes" style="display:none"></div>
+          <!-- AJ5 SIZES PATCH HTML END -->
           <!-- 运费说明：日常 7 元/两双以上 10 元封顶；节日 单双 7 元/两双以上包邮（内置时间自动切换） -->
           <p class="modal-shipping" id="modalShipping"></p>
           <!-- 退换货说明 -->
@@ -4212,6 +4220,15 @@
         const res = await fetch('manifest.json?t=' + Date.now());
         const data = await res.json();
         const known = new Set(shoes.map(s => s.id));
+        /* AJ5 SIZES PATCH MERGE START */
+        {
+          const byId = new Map(shoes.map(s => [s.id, s]));
+          (data.shoes || []).forEach(function (s) {
+            const hit = byId.get(s.id);
+            if (hit && Array.isArray(s.sizes)) hit.sizes = s.sizes;
+          });
+        }
+        /* AJ5 SIZES PATCH MERGE END */
         const strip = u => (u || '').replace(/^https?:\/\/aj5\.netlify\.app\//, '');
         const add = (data.shoes || [])
           .filter(s => !known.has(s.id))
@@ -4646,6 +4663,26 @@
       // 价格：统一走价格引擎（AJ 显示零售价 + 特惠价129；非 aj 平时只显示零售价、特惠期显示原价+节日特惠价）
       const price = calcPrice(shoe);
       modalPrice.innerHTML = priceHTML(price);
+      /* AJ5 SIZES PATCH JS START */
+      {
+        const box = document.getElementById('modalSizes');
+        const list = Array.isArray(shoe.sizes) ? shoe.sizes : [];
+        box.innerHTML = '';
+        if (list.length) {
+          const lbl = document.createElement('span');
+          lbl.className = 'sz-label'; lbl.textContent = '可选尺码';
+          box.appendChild(lbl);
+          list.forEach(function (s) {
+            const chip = document.createElement('span');
+            chip.className = 'sz-chip'; chip.textContent = String(s);
+            box.appendChild(chip);
+          });
+          box.style.display = 'flex';
+        } else {
+          box.style.display = 'none';
+        }
+      }
+      /* AJ5 SIZES PATCH JS END */
 
       // 运费：平时 7 元；节日特惠期两双以上包邮
       modalShipping.textContent = getShippingText(price.isPromo);
