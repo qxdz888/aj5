@@ -2816,6 +2816,32 @@
     margin-left: 8px; vertical-align: middle;
     height: 20px; font-size: 11px;
   }
+    /* AJ5 SIZE GRID PATCH CSS START */
+    /* 尺码网格：三态只读展示。必须放 </style> 前压过前面同特异性 @media 规则 */
+    .modal-sizes { margin: 14px 0 6px; display: none; }
+    .modal-sizes .szg-title { font-size: 13px; font-weight: 600; color: #1B1B1F; margin: 0 0 8px; }
+    .modal-sizes .szg-grid { display: grid; grid-template-columns: repeat(8, minmax(0,1fr)); gap: 8px; }
+    .modal-sizes .szg-cell {
+      box-sizing: border-box; height: 56px; border: 1px solid #C7CDD6; border-radius: 6px;
+      background: #FFFFFF; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; overflow: hidden;
+    }
+    .modal-sizes .szg-cell .szg-code { font-size: 15px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
+    .modal-sizes .szg-cell .szg-state { font-size: 11px; font-weight: 500; line-height: 1.2; margin-top: 3px; white-space: nowrap; }
+    .modal-sizes .szg-cell.szg-stock .szg-code { color: #1B1B1F; }
+    .modal-sizes .szg-cell.szg-stock .szg-state { color: #2F6B4E; }
+    .modal-sizes .szg-cell.szg-call .szg-code { color: #6B7280; }
+    .modal-sizes .szg-cell.szg-call .szg-state { color: #7A5C24; }
+    .modal-sizes .szg-cell.szg-none { border-style: dashed; border-color: #B9C6D6; background: #F4F7FB; }
+    .modal-sizes .szg-cell.szg-none .szg-code { color: #1D4E89; opacity: .55; }
+    .modal-sizes .szg-cell.szg-none .szg-state { color: #1D4E89; opacity: .55; }
+    .modal-sizes .szg-extra { font-size: 11px; font-weight: 500; color: #6B7280; margin-top: 8px; }
+    .modal-sizes .szg-note { font-size: 12px; color: #6B7280; padding: 10px 12px; border: 1px dashed #C7CDD6; border-radius: 6px; }
+    /* <=360px 降级 4 列两行；!important 压过基础 8 列规则、自动换行 */
+    @media (max-width: 360px) {
+      .modal-sizes .szg-grid { grid-template-columns: repeat(4, minmax(0,1fr)) !important; }
+    }
+    /* AJ5 SIZE GRID PATCH CSS END */
   </style>
   <link rel="prefetch" href="manifest.json">
 </head>
@@ -2958,7 +2984,7 @@
           <!-- 价格：零售价（划线）+ 特惠价（aj 恒 129）；非 aj 只显示零售价 -->
           <div class="modal-price" id="modalPrice"></div>
           <!-- AJ5 SIZES PATCH HTML START -->
-          <div class="modal-sizes" id="modalSizes" style="display:none"></div>
+          <div class="modal-sizes" id="modalSizes"></div>
           <!-- AJ5 SIZES PATCH HTML END -->
           <!-- 运费说明：日常 7 元/两双以上 10 元封顶；节日 单双 7 元/两双以上包邮（内置时间自动切换） -->
           <p class="modal-shipping" id="modalShipping"></p>
@@ -4220,6 +4246,68 @@
       });
     })();
     /* AJ5 SIZES PATCH INLINE END */
+    /* AJ5 SIZE GRID PATCH INLINE START */
+    (function(){
+      var GRID_MAP = {"12":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"13":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"14":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"15":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"35":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"call","39":"stock","40":"stock","41":"call","42":"stock","43":"call"},"extra":[],"note":""},"36":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"call","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"51":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"call","39":"stock","40":"call","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"86":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"88":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"stock","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"100":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"113":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"call","43":"stock"},"extra":[],"note":""},"120":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"158":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"call","43":"stock"},"extra":[],"note":""},"174":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"call","39":"stock","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"246":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"267":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"268":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"287":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"288":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"289":{"codes":["36","37","38","39"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock"},"extra":[],"note":""},"290":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"294":{"codes":["39","40","41","42","43"],"cells":{"39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"323":{"codes":["39","40","41","42","43"],"cells":{"39":"call","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"324":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"325":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"call","43":"stock"},"extra":[],"note":""},"326":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"327":{"codes":["36","37","38","39"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call"},"extra":[],"note":""},"331":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"332":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"333":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"49":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"50":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"87":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"stock","39":"stock","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"1":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"call","43":"call"},"extra":[],"note":""},"2":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"3":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"39":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"40":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"call","39":"call","40":"call","41":"call","42":"call","43":"none"},"extra":[],"note":""},"41":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"call","40":"stock","41":"call","42":"call","43":"call"},"extra":[],"note":""},"74":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"75":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"call","39":"stock","40":"stock","41":"call","42":"stock","43":"call"},"extra":[],"note":""},"76":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"call","39":"stock","40":"call","41":"call","42":"call","43":"stock"},"extra":[],"note":""},"185":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"186":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"call","39":"stock","40":"stock","41":"call","42":"call","43":"call"},"extra":[],"note":""},"187":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"190":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"191":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"192":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"207":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"stock","38":"call","39":"call","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"208":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"209":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"stock","39":"call","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"222":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"none","37":"none","38":"none","39":"none","40":"stock","41":"none","42":"none","43":"none"},"extra":[],"note":""},"223":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"stock","39":"stock","40":"stock","41":"call","42":"call","43":"call"},"extra":[],"note":""},"224":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"stock","39":"stock","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"240":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"stock","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"241":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"call","40":"call","41":"call","42":"stock","43":"call"},"extra":[],"note":""},"242":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"stock","38":"call","39":"call","40":"stock","41":"call","42":"stock","43":"call"},"extra":[],"note":""},"247":{"codes":["38","39","40","41","42"],"cells":{"38":"call","39":"stock","40":"call","41":"stock","42":"call"},"extra":[],"note":""},"248":{"codes":["35","36","37","38","39"],"cells":{"35":"stock","36":"stock","37":"stock","38":"stock","39":"stock"},"extra":[],"note":""},"249":{"codes":["35","36","37","38"],"cells":{"35":"call","36":"stock","37":"stock","38":"stock"},"extra":[],"note":""},"250":{"codes":["35","36","37","38"],"cells":{"35":"call","36":"call","37":"call","38":"call"},"extra":[],"note":""},"265":{"codes":["38","39","40","41","42","43"],"cells":{"38":"call","39":"stock","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""},"266":{"codes":["39","40","41","42","43"],"cells":{"39":"call","40":"stock","41":"stock","42":"call","43":"call"},"extra":[],"note":""},"269":{"codes":["39","40","41","42","43"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"270":{"codes":["39","40","41","42"],"cells":{"39":"stock","40":"stock","41":"stock","42":"stock"},"extra":[],"note":""},"271":{"codes":["38","39","40","41","42","43"],"cells":{"38":"call","39":"stock","40":"stock","41":"stock","42":"call","43":"call"},"extra":[],"note":""},"4":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"stock","39":"call","40":"stock","41":"stock","42":"call","43":"call"},"extra":[],"note":""},"5":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"6":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"7":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"8":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"stock"},"extra":[],"note":""},"9":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"call","41":"call","42":"stock","43":"stock"},"extra":[],"note":""},"10":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"stock","38":"call","39":"call","40":"call","41":"call","42":"call","43":"stock"},"extra":[],"note":""},"11":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"call","39":"call","40":"call","41":"call","42":"stock","43":"call"},"extra":[],"note":""},"16":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"17":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"stock"},"extra":[],"note":""},"18":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"call","38":"stock","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"19":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"call","37":"call","38":"call","39":"call","40":"call","41":"call","42":"call","43":"call"},"extra":[],"note":""},"20":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"call","40":"stock","41":"stock","42":"stock","43":"call"},"extra":["44"],"note":""},"21":{"codes":["36","37","38","39","40","41","42","43"],"cells":{"36":"stock","37":"stock","38":"stock","39":"stock","40":"stock","41":"stock","42":"stock","43":"call"},"extra":[],"note":""}};
+      shoes.forEach(function(s){
+        var v = GRID_MAP[s.id];
+        if (v) s.sizeGrid = v;
+      });
+    })();
+    /* AJ5 SIZE GRID PATCH INLINE END */
+    /* AJ5 SIZE GRID PATCH RENDER START */
+    function renderSizes(shoe) {
+      const box = document.getElementById('modalSizes');
+      if (!box) return;
+      box.innerHTML = '';
+      const g = shoe && shoe.sizeGrid;
+      if (!g) { box.style.display = 'none'; return; }
+      box.style.display = 'block';
+      const title = document.createElement('div');
+      title.className = 'szg-title';
+      title.textContent = '可选尺码';
+      box.appendChild(title);
+      if (g.note) {
+        const note = document.createElement('div');
+        note.className = 'szg-note';
+        note.textContent = g.note;
+        box.appendChild(note);
+        return;
+      }
+      const codes = Array.isArray(g.codes) ? g.codes : [];
+      if (!codes.length) { box.style.display = 'none'; return; }
+      const grid = document.createElement('div');
+      grid.className = 'szg-grid';
+      /* 固定 8 列等宽：非 aj 只渲染前 N 格、右侧留空（不显示占位空格、不硬套 36~43） */
+      const cells = g.cells || {};
+      const cn = { stock: '有货', call: '调货', none: '无此码' };
+      codes.forEach(function (code) {
+        const st = cells[code] || 'none';
+        const cls = st === 'stock' ? 'szg-stock' : (st === 'call' ? 'szg-call' : 'szg-none');
+        const label = cn[st] || '无此码';
+        const cell = document.createElement('div');
+        cell.className = 'szg-cell ' + cls;
+        cell.setAttribute('role', 'img');
+        cell.setAttribute('aria-label', '尺码 ' + String(code) + ' ' + label);
+        const c = document.createElement('span');
+        c.className = 'szg-code'; c.textContent = String(code);
+        const s = document.createElement('span');
+        s.className = 'szg-state'; s.textContent = label;
+        cell.appendChild(c); cell.appendChild(s);
+        grid.appendChild(cell);
+      });
+      box.appendChild(grid);
+      if (Array.isArray(g.extra) && g.extra.length) {
+        const shown = g.extra.filter(function (c) { return codes.indexOf(String(c)) === -1; });
+        if (shown.length) {
+          const ex = document.createElement('div');
+          ex.className = 'szg-extra';
+          ex.textContent = '另有 ' + shown.join('、') + ' 码可咨询';
+          box.appendChild(ex);
+        }
+      }
+    }
+    /* AJ5 SIZE GRID PATCH RENDER END */
 
     <!-- AUTO_LAZY_START -->
     /* 首屏只内联部分数据（体积更小、渲染更快），全量数据后台静默加载 */
@@ -4234,7 +4322,9 @@
           const byId = new Map(shoes.map(s => [s.id, s]));
           (data.shoes || []).forEach(function (s) {
             const hit = byId.get(s.id);
-            if (hit && Array.isArray(s.sizes)) hit.sizes = s.sizes;
+            if (!hit) return;
+            if (Array.isArray(s.sizes)) hit.sizes = s.sizes;
+            if (s.sizeGrid) hit.sizeGrid = s.sizeGrid;
           });
         }
         /* AJ5 SIZES PATCH MERGE END */
@@ -4247,6 +4337,15 @@
           }));
         if (add.length) shoes.push(...add);
         allLoaded = true;
+        /* AJ5 SIZE GRID PATCH REFRESH START */
+        if (modal.classList.contains('active')) {
+          const hm = (location.hash.match(/^#p-(\d+)$/) || [])[1];
+          if (hm) {
+            const cur = shoes.find(s => s.id === parseInt(hm, 10));
+            if (cur) renderSizes(cur);
+          }
+        }
+        /* AJ5 SIZE GRID PATCH REFRESH END */
         if (currentSearchTerm) {
           performSearch(searchInput.value);
         } else if (currentCategory !== 'all') {
@@ -4673,24 +4772,7 @@
       const price = calcPrice(shoe);
       modalPrice.innerHTML = priceHTML(price);
       /* AJ5 SIZES PATCH JS START */
-      {
-        const box = document.getElementById('modalSizes');
-        const list = Array.isArray(shoe.sizes) ? shoe.sizes : [];
-        box.innerHTML = '';
-        if (list.length) {
-          const lbl = document.createElement('span');
-          lbl.className = 'sz-label'; lbl.textContent = '可选尺码';
-          box.appendChild(lbl);
-          list.forEach(function (s) {
-            const chip = document.createElement('span');
-            chip.className = 'sz-chip'; chip.textContent = String(s);
-            box.appendChild(chip);
-          });
-          box.style.display = 'flex';
-        } else {
-          box.style.display = 'none';
-        }
-      }
+      renderSizes(shoe);
       /* AJ5 SIZES PATCH JS END */
 
       // 运费：平时 7 元；节日特惠期两双以上包邮
