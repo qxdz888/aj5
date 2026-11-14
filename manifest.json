@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12T16:59:54",
+  "generated": "2026-11-14T14:28:54",
   "count": 349,
   "categories": {
     "aj": [
@@ -90,7 +90,7 @@
           "43"
         ],
         "cells": {
-          "36": "call",
+          "36": "stock",
           "37": "stock",
           "38": "stock",
           "39": "stock",
@@ -129,7 +129,7 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
+          "37": "stock",
           "38": "stock",
           "39": "call",
           "40": "call",
@@ -206,10 +206,10 @@
         "cells": {
           "36": "stock",
           "37": "stock",
-          "38": "call",
+          "38": "stock",
           "39": "stock",
           "40": "stock",
-          "41": "call",
+          "41": "stock",
           "42": "stock",
           "43": "call"
         },
@@ -439,7 +439,7 @@
           "40": "stock",
           "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -552,7 +552,7 @@
           "39": "stock",
           "40": "stock",
           "41": "stock",
-          "42": "call",
+          "42": "stock",
           "43": "stock"
         },
         "extra": [],
@@ -585,8 +585,8 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
-          "38": "call",
+          "37": "stock",
+          "38": "stock",
           "39": "stock",
           "40": "stock",
           "41": "stock",
@@ -1451,7 +1451,7 @@
           "38": "call",
           "39": "call",
           "40": "call",
-          "41": "call",
+          "41": "stock",
           "42": "stock",
           "43": "stock"
         },
@@ -1715,11 +1715,11 @@
           "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
           "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [
           "44"
@@ -1911,7 +1911,7 @@
           "40": "stock",
           "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -2018,7 +2018,7 @@
           "43"
         ],
         "cells": {
-          "36": "stock",
+          "36": "call",
           "37": "stock",
           "38": "stock",
           "39": "stock",
@@ -2590,8 +2590,8 @@
         "cells": {
           "36": "stock",
           "37": "stock",
-          "38": "call",
-          "39": "call",
+          "38": "stock",
+          "39": "stock",
           "40": "stock",
           "41": "stock",
           "42": "stock",
@@ -2780,7 +2780,7 @@
         "cells": {
           "36": "stock",
           "37": "stock",
-          "38": "call",
+          "38": "stock",
           "39": "stock",
           "40": "stock",
           "41": "stock",
@@ -2913,13 +2913,13 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
+          "37": "stock",
           "38": "call",
-          "39": "call",
-          "40": "call",
-          "41": "call",
-          "42": "call",
-          "43": "call"
+          "39": "stock",
+          "40": "stock",
+          "41": "stock",
+          "42": "stock",
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -2953,7 +2953,7 @@
           "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
           "41": "stock",
           "42": "stock",
@@ -3065,11 +3065,11 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
+          "37": "stock",
           "38": "stock",
-          "39": "call",
-          "40": "call",
-          "41": "call",
+          "39": "stock",
+          "40": "stock",
+          "41": "stock",
           "42": "stock",
           "43": "stock"
         },
@@ -3141,13 +3141,13 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
-          "38": "call",
+          "37": "stock",
+          "38": "stock",
           "39": "stock",
-          "40": "call",
-          "41": "call",
-          "42": "call",
-          "43": "call"
+          "40": "stock",
+          "41": "stock",
+          "42": "stock",
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -3351,13 +3351,13 @@
         ],
         "cells": {
           "36": "call",
-          "37": "stock",
+          "37": "call",
           "38": "stock",
           "39": "stock",
           "40": "stock",
           "41": "stock",
-          "42": "call",
-          "43": "call"
+          "42": "stock",
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -3410,9 +3410,9 @@
         "cells": {
           "36": "stock",
           "37": "stock",
-          "38": "stock",
+          "38": "call",
           "39": "stock",
-          "40": "call",
+          "40": "stock",
           "41": "stock",
           "42": "stock",
           "43": "call"
@@ -3449,9 +3449,9 @@
           "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
-          "41": "call",
+          "41": "stock",
           "42": "stock",
           "43": "call"
         },
@@ -3523,13 +3523,13 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
-          "38": "call",
-          "39": "call",
+          "37": "stock",
+          "38": "stock",
+          "39": "stock",
           "40": "call",
           "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -3547,7 +3547,7 @@
       "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/nk%E9%AB%98%E5%B8%AE/1910%E9%BB%91%E6%B7%B1%E8%93%9D-169.webp",
       "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/nk%E9%AB%98%E5%B8%AE/1910%E9%BB%91%E6%B7%B1%E8%93%9D-169.webp",
       "mtime": 1789984019.9298885,
-      "badge": "hot",
+      "badge": "",
       "sizeGrid": {
         "codes": [
           "36",
@@ -3560,13 +3560,13 @@
           "43"
         ],
         "cells": {
-          "36": "call",
-          "37": "call",
+          "36": "stock",
+          "37": "stock",
           "38": "stock",
           "39": "stock",
-          "40": "call",
+          "40": "stock",
           "41": "stock",
-          "42": "call",
+          "42": "stock",
           "43": "stock"
         },
         "extra": [],
@@ -3636,7 +3636,7 @@
           "43"
         ],
         "cells": {
-          "36": "call",
+          "36": "stock",
           "37": "stock",
           "38": "stock",
           "39": "stock",
@@ -3675,13 +3675,13 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
-          "38": "call",
+          "37": "stock",
+          "38": "stock",
           "39": "stock",
           "40": "stock",
-          "41": "call",
+          "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -4244,14 +4244,14 @@
           "43"
         ],
         "cells": {
-          "36": "call",
+          "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
-          "41": "call",
+          "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -4499,28 +4499,10 @@
       "mtime": 1789984055.1047833,
       "badge": "",
       "sizeGrid": {
-        "codes": [
-          "36",
-          "37",
-          "38",
-          "39",
-          "40",
-          "41",
-          "42",
-          "43"
-        ],
-        "cells": {
-          "36": "none",
-          "37": "call",
-          "38": "none",
-          "39": "none",
-          "40": "none",
-          "41": "none",
-          "42": "none",
-          "43": "none"
-        },
+        "codes": [],
+        "cells": {},
         "extra": [],
-        "note": ""
+        "note": "尺码信息建档中"
       }
     },
     {
@@ -4704,10 +4686,10 @@
           "37": "stock",
           "38": "stock",
           "39": "stock",
-          "40": "call",
+          "40": "stock",
           "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -5043,7 +5025,7 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
+          "37": "stock",
           "38": "stock",
           "39": "stock",
           "40": "stock",
@@ -5122,9 +5104,9 @@
           "37": "stock",
           "38": "stock",
           "39": "stock",
-          "40": "call",
-          "41": "stock",
-          "42": "call",
+          "40": "stock",
+          "41": "call",
+          "42": "stock",
           "43": "call"
         },
         "extra": [],
@@ -5349,11 +5331,11 @@
           "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
-          "40": "call",
+          "39": "stock",
+          "40": "stock",
           "41": "stock",
-          "42": "call",
-          "43": "call"
+          "42": "stock",
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -5537,8 +5519,8 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
-          "38": "call",
+          "37": "stock",
+          "38": "stock",
           "39": "stock",
           "40": "stock",
           "41": "stock",
@@ -5675,7 +5657,7 @@
       "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%B9%94%E4%B8%80/858%E7%99%BD%E5%85%B0%E7%BA%A2-159.webp",
       "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%B9%94%E4%B8%80/858%E7%99%BD%E5%85%B0%E7%BA%A2-159.webp",
       "mtime": 1789984046.4165764,
-      "badge": "",
+      "badge": "hot",
       "sizeGrid": {
         "codes": [
           "36",
@@ -5727,7 +5709,7 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "stock",
+          "37": "call",
           "38": "stock",
           "39": "stock",
           "40": "stock",
@@ -5805,7 +5787,7 @@
           "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
           "41": "stock",
           "42": "stock",
@@ -5993,8 +5975,8 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
-          "38": "call",
+          "37": "stock",
+          "38": "stock",
           "39": "call",
           "40": "stock",
           "41": "stock",
@@ -6071,7 +6053,7 @@
           "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
           "41": "stock",
           "42": "stock",
@@ -6697,13 +6679,13 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
+          "37": "stock",
           "38": "stock",
           "39": "stock",
-          "40": "call",
-          "41": "call",
+          "40": "stock",
+          "41": "stock",
           "42": "stock",
-          "43": "call"
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -6850,7 +6832,7 @@
         "cells": {
           "36": "stock",
           "37": "stock",
-          "38": "call",
+          "38": "stock",
           "39": "stock",
           "40": "stock",
           "41": "stock",
@@ -6886,7 +6868,7 @@
           "43"
         ],
         "cells": {
-          "36": "call",
+          "36": "stock",
           "37": "stock",
           "38": "stock",
           "39": "stock",
@@ -7177,7 +7159,7 @@
       "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E4%B9%94%E4%B8%80/228%E7%88%B1%E5%9B%BD%E8%80%85-169.webp",
       "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E4%B9%94%E4%B8%80/228%E7%88%B1%E5%9B%BD%E8%80%85-169.webp",
       "mtime": 1789984035.2352333,
-      "badge": "hot",
+      "badge": "",
       "sizeGrid": {
         "codes": [
           "36",
@@ -7380,8 +7362,8 @@
           "43"
         ],
         "cells": {
-          "36": "call",
-          "37": "call",
+          "36": "stock",
+          "37": "stock",
           "38": "stock",
           "39": "stock",
           "40": "stock",
@@ -7938,7 +7920,7 @@
           "39": "stock",
           "40": "stock",
           "41": "stock",
-          "42": "call",
+          "42": "stock",
           "43": "call"
         },
         "extra": [],
@@ -8149,7 +8131,7 @@
       "image": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/images/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/2321%E7%99%BD%E7%BA%A2%E9%BB%91-159.webp",
       "thumb": "https://workbuddy-d5g0sqo2r36ca45b3-1253831416.tcloudbaseapp.com/thumbs/aj/%E5%B0%8F%E7%A9%BA%E5%86%9B/2321%E7%99%BD%E7%BA%A2%E9%BB%91-159.webp",
       "mtime": 1789984057.8877966,
-      "badge": "",
+      "badge": "hot",
       "sizeGrid": {
         "codes": [
           "36",
@@ -8163,7 +8145,7 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "stock",
+          "37": "call",
           "38": "stock",
           "39": "stock",
           "40": "stock",
@@ -8242,7 +8224,7 @@
           "37": "stock",
           "38": "stock",
           "39": "stock",
-          "40": "call",
+          "40": "stock",
           "41": "stock",
           "42": "stock",
           "43": "stock"
@@ -9115,9 +9097,9 @@
           "36": "stock",
           "37": "call",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
-          "41": "call",
+          "41": "stock",
           "42": "stock",
           "43": "call"
         },
@@ -9152,10 +9134,10 @@
         "cells": {
           "36": "stock",
           "37": "stock",
-          "38": "call",
+          "38": "stock",
           "39": "stock",
-          "40": "call",
-          "41": "call",
+          "40": "stock",
+          "41": "stock",
           "42": "stock",
           "43": "call"
         },
@@ -9229,11 +9211,11 @@
           "36": "stock",
           "37": "stock",
           "38": "stock",
-          "39": "call",
+          "39": "stock",
           "40": "stock",
           "41": "stock",
-          "42": "call",
-          "43": "call"
+          "42": "stock",
+          "43": "stock"
         },
         "extra": [],
         "note": ""
@@ -9341,7 +9323,7 @@
         ],
         "cells": {
           "36": "stock",
-          "37": "call",
+          "37": "stock",
           "38": "stock",
           "39": "stock",
           "40": "stock",
@@ -9610,7 +9592,7 @@
           "37": "call",
           "38": "call",
           "39": "call",
-          "40": "call",
+          "40": "stock",
           "41": "call",
           "42": "call",
           "43": "call"
@@ -9633,28 +9615,10 @@
       "mtime": 1789984071.2782817,
       "badge": "",
       "sizeGrid": {
-        "codes": [
-          "36",
-          "37",
-          "38",
-          "39",
-          "40",
-          "41",
-          "42",
-          "43"
-        ],
-        "cells": {
-          "36": "call",
-          "37": "call",
-          "38": "call",
-          "39": "call",
-          "40": "call",
-          "41": "call",
-          "42": "stock",
-          "43": "call"
-        },
+        "codes": [],
+        "cells": {},
         "extra": [],
-        "note": ""
+        "note": "尺码信息建档中"
       }
     },
     {
@@ -11543,7 +11507,7 @@
           "40": "call",
           "41": "stock",
           "42": "stock",
-          "43": "stock"
+          "43": "call"
         },
         "extra": [],
         "note": ""
